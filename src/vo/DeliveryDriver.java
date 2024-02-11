@@ -1,4 +1,4 @@
 package vo;
 //배송기사
-public class DeliveryDriver implements User{
+public class DeliveryDriver extends User{
 }
