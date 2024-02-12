@@ -11,11 +11,9 @@ import java.sql.SQLException;
 
 //창고
 public class WarehouseDao {
-    BufferedReader bufferedReader;
     Connection connection;
 
     public WarehouseDao() {
-        this.bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         this.connection = JdbcConnection.getInstance().getConnection();
     }
 
@@ -24,7 +22,8 @@ public class WarehouseDao {
                 "VALUES (?, ?, ?)";
 
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))
         ) {
 
             System.out.print("창고 이름을 입력하세요: ");
