@@ -2,20 +2,16 @@ package view;
 
 import service.WarehouseService;
 import service.WarehouseServiceImpl;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import config.GetTexts;
 
 public class StockServiceMenu {
     public static void stockServiceMenu(){
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         WarehouseService warehouseService = new WarehouseServiceImpl();
         int menuno = 0;
         System.out.println("1. 재고 조회 2. 재고 실사 목록 추가 3. 재고 실사 목록 수정 4. 재고 실사 목록 삭제 5. 재고 실사 목록 조회 6. 이전 메뉴로 돌아가기");
         try {
-            menuno = Integer.parseInt(br.readLine());
-        } catch (IOException e) {
+            menuno = Integer.parseInt(GetTexts.getInstance().readLine());
+        } catch (NumberFormatException e) {
             System.out.println("잘못 입력하셨습니다.");
         }
         switch (menuno) {
