@@ -3,7 +3,7 @@ package vo;
 import lombok.Data;
 
 @Data
-public class Membership_Status {
+public class MembershipStatus {
     private int no;
     private String name;
 }
