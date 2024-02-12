@@ -2,8 +2,17 @@ package vo;
 
 import lombok.Data;
 
+import java.sql.Blob;
+
 //공지사항
 @Data
-public class Notice extends Board{
+public class Notice{
+    private int no;
+    private String administratorId;
+    private String type;
+    private String title;
+    private String content;
+    private Blob attach;
+    private int userId;
 
 }

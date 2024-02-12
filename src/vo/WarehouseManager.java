@@ -4,5 +4,8 @@ import lombok.Data;
 
 //창고관리자
 @Data
-public class WarehouseManager extends User{
+public class WarehouseManager{
+    private int id;
+    private int userId;
+    private int warehouseId;
 }
