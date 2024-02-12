@@ -1,5 +1,9 @@
 package vo;
+
+import lombok.Data;
+
 //공지사항
-public class Notice implements Board{
+@Data
+public class Notice extends Board{
 
 }

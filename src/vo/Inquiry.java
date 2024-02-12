@@ -1,4 +1,8 @@
 package vo;
+
+import lombok.Data;
+
 //문의글
-public class Inquiry implements Board{
+@Data
+public class Inquiry extends Board{
 }
