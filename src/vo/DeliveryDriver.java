@@ -1,4 +1,10 @@
 package vo;
+
+import lombok.Data;
+
 //배송기사
-public class DeliveryDriver extends User{
+@Data
+public class DeliveryDriver {
+    private int id;
+    private int userNo;
 }

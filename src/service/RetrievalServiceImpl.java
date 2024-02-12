@@ -1,7 +1,7 @@
 package service;
 
-import vo.ShippingOrder;
 import config.GetTexts;
+import vo.ShippingOrders;
 
 public class RetrievalServiceImpl implements RetrievalService {
     @Override
@@ -12,7 +12,7 @@ public class RetrievalServiceImpl implements RetrievalService {
 
     @Override
     public void requestRetrieval() {
-        ShippingOrder shippingOrder = new ShippingOrder();
+        ShippingOrders shippingOrder = new ShippingOrders();
         /** set 함수로 출고 신청 양식 작성해서 보내기*/
 
         boolean flag = approveRetrievalRequest();

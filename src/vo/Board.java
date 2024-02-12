@@ -1,4 +1,7 @@
 package vo;
-//게시판
-public interface Board {
+
+import lombok.Data;
+
+@Data
+public abstract class Board {
 }

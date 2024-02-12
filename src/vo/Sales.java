@@ -2,10 +2,10 @@ package vo;
 
 import lombok.Data;
 
-//창고관리자
 @Data
-public class WarehouseManager{
+public class Sales {
     private int id;
-    private int userId;
     private int warehouseId;
+    private int amount;
+    private String type;
 }
