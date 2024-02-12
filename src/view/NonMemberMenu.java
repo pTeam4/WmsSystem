@@ -1,13 +1,9 @@
 package view;
 
 import service.*;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import config.GetTexts;
 
 public class NonMemberMenu {
-    private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static LoginService loginService = new LoginServiceImpl();
     private static UserService userService = new UserServiceImpl();
     private static VendorService vendorService = new VendorServiceImpl();
@@ -23,8 +19,8 @@ public class NonMemberMenu {
 
         int menuno = 0;
         try {
-            menuno = Integer.parseInt(br.readLine());
-        } catch (IOException e) {
+            menuno = Integer.parseInt(GetTexts.getInstance().readLine());
+        } catch (NumberFormatException e) {
             System.out.println("잘못 입력하셨습니다.");
         }
         switch (menuno) {

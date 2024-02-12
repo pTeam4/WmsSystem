@@ -2,20 +2,16 @@ package view;
 
 import service.VendorService;
 import service.VendorServiceImpl;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import config.GetTexts;
 
 public class ContractServiceMenu {
     public static void contractServiceMenu() {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         VendorService vendorService = new VendorServiceImpl();
         int menuno = 0;
         System.out.println("1. 계약 조회 2. 계약 승인 3. 계약 취소 4. 신청 계약 정보 조회 5. 계약 정보 캘린더 관리 6. 이전 메뉴로 돌아가기");
         try {
-            menuno = Integer.parseInt(br.readLine());
-        } catch (IOException e) {
+            menuno = Integer.parseInt(GetTexts.getInstance().readLine());
+        } catch (NumberFormatException e) {
             System.out.println("잘못 입력하셨습니다.");
         }
         switch (menuno) {
