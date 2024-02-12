@@ -5,11 +5,9 @@ import config.JdbcConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 //창고
 public class WarehouseDao {
-    PreparedStatement preparedStatement;
     BufferedReader bufferedReader;
     Connection connection;
 
