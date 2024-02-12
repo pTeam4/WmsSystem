@@ -2,11 +2,10 @@ package vo;
 
 import lombok.Data;
 
-//재고
 @Data
-public class Stock {
+public class ShippingOrdersDetail {
     private int id;
-    private int warehouseId;
+    private int shippingOrdersId;
     private int productId;
     private int quantity;
 }
