@@ -46,7 +46,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/맑음/JAVA국비/lib/lombok.jar!/" />
+
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -55,7 +55,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/맑음/JAVA국비/lib/mysql-connector-java-8.0.28.jar!/" />
+
         </CLASSES>
         <JAVADOC />
         <SOURCES />
