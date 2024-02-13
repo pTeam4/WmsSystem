@@ -2,14 +2,12 @@ package service;
 
 import config.GetTexts;
 import dao.ExpenseDao;
+import dao.SalesDao;
 import vo.Expense;
-
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 public class FinanceServiceImpl implements FinanceService {
     ExpenseDao expenseDao = new ExpenseDao();
+    SalesDao salesDao = new SalesDao();
     @Override
     public void getExpenseRecords() {
         System.out.print("지출 내역을 조회하고 싶은 창고번호를 입력하세요.");
@@ -74,12 +72,14 @@ public class FinanceServiceImpl implements FinanceService {
     }
 
     @Override
-    public void getRevenueRecords() {
-
+    public void getSalesRecords() {
+        System.out.print("매출 내역을 조회하고 싶은 창고번호를 입력하세요.");
+        int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
+        salesDao.salesSelect(warehouseNo);
     }
 
     @Override
-    public void getRevenueGraph() {
+    public void getSalesGraph() {
 
     }
 
