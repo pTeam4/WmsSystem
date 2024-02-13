@@ -91,21 +91,21 @@ public class ExpenseDao {
         }
         return expense;
     }
-    public void expenseSelectByYear(String year)
+    public void expenseSelectByYear(String year, int warehouseId)
     {
         conn = JdbcConnection.getInstance().getConnection();
-        String sql = "select * from Expense where year(expense_date) = ?";
+        String sql = "select * from Expense where year(expense_date) = ? and warehouse_id = ?";
 
         try(
                 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         )
         {
             pstmt.setString(1, year);
+            pstmt.setInt(2, warehouseId);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next())
             {
                 int id = rs.getInt("id");
-                int warehouseId= rs.getInt("warehouse_id");
                 String type = rs.getString("type");
                 int cost = rs.getInt("cost");
                 Date expenseDate = rs.getDate("expense_date");
@@ -230,6 +230,30 @@ public class ExpenseDao {
         try(PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             pstmt.setInt(1, warehouseId);
+            ResultSet rs = pstmt.executeQuery();
+            int totalcost = 0;
+            if(rs.next())
+            {
+                totalcost = rs.getInt("sum(cost)");
+            }
+            return totalcost;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public int expenseSumByYear(int warehouseId, String year)
+    {
+        conn = JdbcConnection.getInstance().getConnection();
+        String sql = "select sum(cost) from expense where warehouse_id = ? and year(expense_date) = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.setInt(1, warehouseId);
+            pstmt.setString(2, year);
             ResultSet rs = pstmt.executeQuery();
             int totalcost = 0;
             if(rs.next())
