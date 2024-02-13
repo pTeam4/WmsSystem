@@ -16,7 +16,7 @@ public class ExpenseDao {
     {
         conn = JdbcConnection.getInstance().getConnection();
         String sql = "Insert into Expense(warehouse_id, type, cost, expense_date) "
-                + "values (?, ?, ?, now())";
+                + "values (?, ?, ?, ?)";
 
         try(
                 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -25,6 +25,7 @@ public class ExpenseDao {
             pstmt.setInt(1, expense.getWarehouseId());
             pstmt.setString(2, expense.getType());
             pstmt.setInt(3, expense.getCost());
+            pstmt.setDate(4, (java.sql.Date) expense.getExpenseDate());
             pstmt.executeUpdate();
         }
         catch (SQLException e)
