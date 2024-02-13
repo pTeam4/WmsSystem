@@ -12,7 +12,6 @@ public class Notice{
     private String type;
     private String title;
     private String content;
-    private Blob attach;
     private int userId;
 
 }
