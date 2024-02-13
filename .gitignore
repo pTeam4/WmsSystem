@@ -15,7 +15,7 @@
 # AWS User-specific
 .idea/**/aws.xml
 # iml file
-WMSProject.iml
+*.iml
 
 
 # Generated files
