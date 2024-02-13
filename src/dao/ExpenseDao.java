@@ -122,7 +122,7 @@ public class ExpenseDao {
     public void expenseDelete(int id)
     {
         conn = JdbcConnection.getInstance().getConnection();
-        String sql = "select * from Expense where id = ?";
+        String sql = "delete from Expense where id = ?";
 
         try(
                 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
