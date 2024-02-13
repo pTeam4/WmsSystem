@@ -12,7 +12,9 @@ public class FinanceServiceImpl implements FinanceService {
     ExpenseDao expenseDao = new ExpenseDao();
     @Override
     public void getExpenseRecords() {
-        expenseDao.expenseSelect();
+        System.out.print("지출 내역을 조회하고 싶은 창고번호를 입력하세요.");
+        int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
+        expenseDao.expenseSelect(warehouseNo);
     }
 
     @Override
