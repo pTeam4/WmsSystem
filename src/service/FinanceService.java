@@ -13,9 +13,9 @@ public interface FinanceService {
 
     public void removeExpenseRecord();
 
-    public void getRevenueRecords();
+    void getSalesRecords();
 
-    public void getRevenueGraph();
+    void getSalesGraph();
 
     public void getTotalSettlementRecords();
 }

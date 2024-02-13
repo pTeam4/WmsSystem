@@ -39,7 +39,7 @@ public class FinanceServiceMenu {
                 financeServiceMenu();
             }
             case 6 ->{
-                financeService.getRevenueRecords();
+                financeService.getSalesRecords();
                 financeServiceMenu();
             }
             case 7 ->{
