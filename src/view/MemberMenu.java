@@ -1,6 +1,5 @@
 package view;
 
-import service.EstimateService;
 import service.LoginService;
 import service.LoginServiceImpl;
 
@@ -56,7 +55,7 @@ public class MemberMenu {
                 memberMainMenu();
             }
             case 10 -> {
-                InqueryServiceMenu.inqueryServiceMenu();
+                InquiryServiceMenu.inquiryServiceMenu();
                 memberMainMenu();
             }
             case 11 -> {
