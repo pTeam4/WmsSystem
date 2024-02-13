@@ -70,7 +70,7 @@ public class FinanceServiceImpl implements FinanceService {
             System.out.println("해당 내역이 존재하지 않습니다.");
             return;
         }
-        expenseDao.expenseUpdate(id);
+        expenseDao.expenseUpdate(expense);
     }
 
 
