@@ -1,10 +1,7 @@
 package dao;
 
 import config.JdbcConnection;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import vo.Warehouse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -17,31 +14,23 @@ public class WarehouseDao {
         this.connection = JdbcConnection.getInstance().getConnection();
     }
 
-    private void warehouseInsert() {
+    public void warehouseInsert(Warehouse warehouse) {
         String sql = "INSERT INTO warehouse (name, location, type)" +
                 "VALUES (?, ?, ?)";
 
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            System.out.print("창고 이름을 입력하세요: ");
-            String name = bufferedReader.readLine();
+            preparedStatement.setString(1, warehouse.getName());
+            preparedStatement.setString(2, warehouse.getLocation());
+            preparedStatement.setString(3, warehouse.getType());
 
-            System.out.print("창고 위치를 입력하세요: ");
-            String location = bufferedReader.readLine();
+            int row = preparedStatement.executeUpdate();
 
-            System.out.print("창고 종류를 입력하세요: ");
-            String type = bufferedReader.readLine();
-
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, location);
-            preparedStatement.setString(3, type);
+            System.out.printf("창고 %d개가 등록되었습니다.%n", row);
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
