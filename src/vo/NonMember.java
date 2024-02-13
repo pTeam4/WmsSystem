@@ -4,7 +4,7 @@ import lombok.Data;
 
 //비회원
 @Data
-public class NonMember extends User{
+public class NonMember{
     private int id;
     private int userId;
 }
