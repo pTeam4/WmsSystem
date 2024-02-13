@@ -6,8 +6,9 @@ import lombok.Data;
 @Data
 public class Vehicle {
     private String num;
-    private int driverId;
+    private int deliveryDriverId;
     private String type;
     private int contact1;
     private int contact2;
+    private int status;
 }

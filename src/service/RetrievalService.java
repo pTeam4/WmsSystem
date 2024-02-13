@@ -8,7 +8,7 @@ public interface RetrievalService {
 
     public void requestRetrieval();
 
-    public boolean approveRetrievalRequest();
+    public void approveRetrievalRequest();
 
     public void getRetrievalOrder();
 
@@ -16,7 +16,7 @@ public interface RetrievalService {
 
     public void searchRetrievalGoods();
 
-    public void addVehicleDispatching();
+    public void addVehicleDispatching(String vehicleNum);
 
     public void addWaybill();
 

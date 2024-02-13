@@ -13,4 +13,5 @@ public class ShippingOrders {
     private Date orderDate;
     private Date deliveryDate;
     private int status;
+    private int approved_status;
 }

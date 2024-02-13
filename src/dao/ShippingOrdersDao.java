@@ -2,12 +2,10 @@ package dao;
 
 import config.JdbcConnection;
 import vo.ShippingOrders;
-import vo.ShippingOrdersDetail;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShippingOrdersDao {
     PreparedStatement pstmt;
@@ -16,29 +14,102 @@ public class ShippingOrdersDao {
     public ShippingOrdersDao() {
         this.conn = JdbcConnection.getInstance().getConnection();
     }
-    public void getShippingOrdersList() {
+
+    public List<ShippingOrders> getShippingOrdersList() {
+        List<ShippingOrders> shippingOrdersList = new ArrayList<>();
         ShippingOrders shippingOrders = new ShippingOrders();
         StringBuilder stringBuilder = new StringBuilder();
-        String sql = stringBuilder.append("select * from Shipping_Orders")
+        String sql = stringBuilder.append("select * from Shipping_Orders ")
+                .append("where approved_status = 1")
                 .toString();
         try {
             pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                System.out.printf(
-                        "%-6s%-12s%-10s%-25s%-16s%-16s%n",
-                        rs.getInt("id"),
-                        rs.getInt("shipping_orders_id"),
-                        rs.getInt("product_id"),
-                        rs.getInt("quantity")
-                );
+                shippingOrders.setId(rs.getInt("id"));
+                shippingOrders.setDeliveryAddress(rs.getString("delivery_address"));
+                shippingOrders.setOrderDate(rs.getDate("order_date"));
+                shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
+                shippingOrders.setStatus(rs.getInt("status"));
+                shippingOrders.setApproved_status(rs.getInt("approved_status"));
+
+                shippingOrdersList.add(shippingOrders);
             }
-            System.out.println("-----------------------------------");
             pstmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return shippingOrdersList;
+    }
 
+    public int requestRetrieval(ShippingOrders shippingOrders) {
+        int shippingOrdersId = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        String sql = stringBuilder.append("Insert into Shipping_Orders(customer_id, delivery_address, order_date, delivery_date) ")
+                + "values (?,?,?,?)";
+        try {
+            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1, shippingOrders.getCustomerId());
+            pstmt.setString(2, shippingOrders.getDeliveryAddress());
+            java.sql.Date orderDate = new java.sql.Date(shippingOrders.getOrderDate().getTime());
+            pstmt.setDate(3, orderDate);
+            java.sql.Date deliveryDate = new java.sql.Date(shippingOrders.getDeliveryDate().getTime());
+            pstmt.setDate(4, deliveryDate);
+            pstmt.executeUpdate();
 
+            ResultSet generatedKeys = pstmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                shippingOrdersId = generatedKeys.getInt(1); // shipping_orders_id 값
+            }
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shippingOrdersId;
+    }
+
+    public void approveRetrievalRequest(int shippingOrdersId) {
+        try {
+            StringBuilder stringBuilder = new StringBuilder();
+            String sql = stringBuilder.append("UPDATE Shipping_Orders SET ")
+                    .append("approved_status = 1")
+                    .append("where shipping_orders_id = ?")
+                    .toString();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, shippingOrdersId);
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 출고 승인을 기다리고 있는 목록 리스트
+     */
+    public List<ShippingOrders> getAwaitedShippingOrdersList() {
+        List<ShippingOrders> shippingOrdersList = new ArrayList<>();
+        ShippingOrders shippingOrders = new ShippingOrders();
+        StringBuilder stringBuilder = new StringBuilder();
+        String sql = stringBuilder.append("select * from Shipping_Orders ")
+                .append("where approved_status = 0")
+                .toString();
+        try {
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                shippingOrders.setId(rs.getInt("id"));
+                shippingOrders.setCustomerId(rs.getInt("customer_id"));
+                shippingOrders.setDeliveryAddress(rs.getString("delivery_adress"));
+                shippingOrders.setOrderDate(rs.getDate("order_date"));
+                shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
+                shippingOrders.setStatus(rs.getInt("status"));
+                shippingOrders.setStatus(rs.getInt("approved_status"));
+            }
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shippingOrdersList;
     }
 }
