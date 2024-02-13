@@ -19,7 +19,11 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public void getYearlyExpenseRecords() {
-
+        System.out.print("조회하고 싶은 연도를 입력하세요.");
+        String year = GetTexts.getInstance().readLine();
+        System.out.print("조회하고 싶은 창고번호를 입력하세요.");
+        int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
+        expenseDao.expenseSelectByYear(year, warehouseId);
     }
 
     @Override
