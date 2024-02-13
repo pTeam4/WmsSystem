@@ -5,6 +5,9 @@ import dao.ExpenseDao;
 import dao.SalesDao;
 import vo.Expense;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class FinanceServiceImpl implements FinanceService {
     ExpenseDao expenseDao = new ExpenseDao();
     SalesDao salesDao = new SalesDao();
@@ -38,9 +41,22 @@ public class FinanceServiceImpl implements FinanceService {
         String type = GetTexts.getInstance().readLine();
         System.out.print("지출 비용을 입력하세요.");
         int cost = Integer.parseInt(GetTexts.getInstance().readLine());
+        System.out.print("수정할 지출 일자를 yyyy-MM-dd 형식으로 입력하세요: ");
+        String dateString = GetTexts.getInstance().readLine();
+        java.sql.Date expenseDate = null;
+        if (!dateString.isEmpty()) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                java.util.Date parsedDate = dateFormat.parse(dateString);
+                expenseDate = new java.sql.Date(parsedDate.getTime());
+            } catch (ParseException e) {
+                System.out.println("잘못 입력하셨습니다.");
+            }
+        }
         expense.setWarehouseId(warehouseId);
         expense.setType(type);
         expense.setCost(cost);
+        expense.setExpenseDate(expenseDate);
         expenseDao.expenseInsert(expense);
     }
 
@@ -85,6 +101,26 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public void getTotalSettlementRecords() {
+        System.out.print("총 정산내역을 조회할 창고번호를 입력하세요.");
+        int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
+        System.out.print("총 정산내역을 조회할 년도를 입력하세요.");
+        String year = GetTexts.getInstance().readLine();
+        int totalAmount = salesDao.SalesSumByYear(warehouseNo,year);
+        int totalCost = expenseDao.expenseSumByYear(warehouseNo, year);
+        String lastYear = String.valueOf(Integer.parseInt(year) - 1);
+        int lastYearTotalAmount = salesDao.SalesSumByYear(warehouseNo, lastYear);
+        int lastYearTotalCost = expenseDao.expenseSumByYear(warehouseNo,lastYear);
+        int profit = totalAmount-totalCost;
+        int lastYearProfit = lastYearTotalAmount - lastYearTotalCost;
+        double profitChangeRate = 0.0;
+        if (lastYearProfit != 0) {
+            profitChangeRate = ((double) (profit - lastYearProfit) / lastYearProfit) * 100;
+        }
 
+
+        System.out.println("당해년도 매출 : " + totalAmount);
+        System.out.println("당해년도 지출 : " + totalCost);
+        System.out.println("당해년도 순이익 : " + profit);
+        System.out.println("당해년도 순이익 증감률(이전년도와 비교): " + profitChangeRate + "%");
     }
 }
