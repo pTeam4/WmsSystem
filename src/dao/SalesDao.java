@@ -37,6 +37,50 @@ public class SalesDao {
     }
 
     private int salesSum(int warehouseId) {
+        conn = JdbcConnection.getInstance().getConnection();
+        String sql = "select sum(amount) from sales where warehouse_id = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.setInt(1, warehouseId);
+            ResultSet rs = pstmt.executeQuery();
+            int totalamount = 0;
+            if(rs.next())
+            {
+                totalamount = rs.getInt("sum(amount)");
+            }
+            return totalamount;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
         return 0;
     }
+
+    public int SalesSumByYear(int warehouseId, String year)
+    {
+        conn = JdbcConnection.getInstance().getConnection();
+        String sql = "select sum(amount) from sales where warehouse_id = ? and year(sales_date) = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.setInt(1, warehouseId);
+            pstmt.setString(2, year);
+            ResultSet rs = pstmt.executeQuery();
+            int totalamount = 0;
+            if(rs.next())
+            {
+                totalamount = rs.getInt("sum(amount)");
+            }
+            return totalamount;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
 }
