@@ -1,13 +1,12 @@
 package dao;
 
-import config.GetTexts;
 import config.JdbcConnection;
 import vo.Expense;
 
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 //지출 Dao
 public class ExpenseDao {
@@ -33,34 +32,37 @@ public class ExpenseDao {
             e.printStackTrace();
         }
     }
-    public void expenseSelect(int warehouseId)
-    {
+    public List<Expense> expenseSelect(int warehouseId) {
         conn = JdbcConnection.getInstance().getConnection();
-        String sql = "select * from Expense where ?";
+        String sql = "SELECT * FROM Expense WHERE warehouse_id = ?";
+        List<Expense> expenseList = new ArrayList<>();
 
-        try(
-                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        )
-        {
+        try (
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
             pstmt.setInt(1, warehouseId);
             ResultSet rs = pstmt.executeQuery();
-            System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", "id", "창고번호", "종류", "비용", "지출일자");
-            while(rs.next())
-            {
+            while (rs.next()) {
                 int id = rs.getInt("id");
                 String type = rs.getString("type");
                 int cost = rs.getInt("cost");
                 Date expenseDate = rs.getDate("expense_date");
-                System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", id, warehouseId, type, cost, expenseDate);
+
+                Expense expense = new Expense();
+                expense.setId(id);
+                expense.setType(type);
+                expense.setCost(cost);
+                expense.setExpenseDate(expenseDate);
+                expense.setWarehouseId(warehouseId);
+                expenseList.add(expense);
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        int totalCost = expenseSum(warehouseId);
-        System.out.println(warehouseId + "번 창고의 총 지출 합계 : " + totalCost);
+
+        return expenseList;
     }
+
 
     public Expense expenseSelectOne(int id)
     {
@@ -74,16 +76,18 @@ public class ExpenseDao {
         {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", "id", "창고번호", "종류", "비용", "지출일자");
             if(rs.next())
             {
-                int expenseId = rs.getInt("id");
-                int warehouseId= rs.getInt("warehouse_id");
                 String type = rs.getString("type");
                 int cost = rs.getInt("cost");
                 Date expenseDate = rs.getDate("expense_date");
-                expense.setId(expenseId);
-                System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", id, warehouseId, type, cost, expenseDate);
+                int warehouseId = rs.getInt("warehouse_id");
+
+                expense.setId(id);
+                expense.setType(type);
+                expense.setCost(cost);
+                expense.setExpenseDate(expenseDate);
+                expense.setWarehouseId(warehouseId);
             }
         }
         catch (SQLException e)
@@ -119,7 +123,7 @@ public class ExpenseDao {
         }
     }
 
-    public void expenseDelete(int id)
+    public int expenseDelete(int id)
     {
         conn = JdbcConnection.getInstance().getConnection();
         String sql = "delete from Expense where id = ?";
@@ -130,20 +134,31 @@ public class ExpenseDao {
         {
             pstmt.setInt(1, id);
             int n = pstmt.executeUpdate();
-            if(n == 1)
-            {
-                System.out.println(id + "번 지출 내역를 삭제하였습니다.");
-            }
-            else {
-                System.out.println("삭제 실패했습니다. 해당 번호의 지출 내역이 있는지 확인해주세요.");
-            }
+            return n;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return 0;
     }
-    public void expenseUpdate(Expense expense) {
+    public int expenseUpdate(Expense expense) {
         conn = JdbcConnection.getInstance().getConnection();
-        String sql = "UPDATE expense set ";
+        String sql = "UPDATE expense set type = ?, expense_date = ?, cost = ? where id = ?";
+        try(
+                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        )
+        {
+            pstmt.setString(1, expense.getType());
+            pstmt.setDate(2, (java.sql.Date) expense.getExpenseDate());
+            pstmt.setInt(3, expense.getCost());
+            pstmt.setInt(4, expense.getId());
+            int row = pstmt.executeUpdate();
+            return row;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 
