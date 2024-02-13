@@ -141,84 +141,9 @@ public class ExpenseDao {
             e.printStackTrace();
         }
     }
-    public void expenseUpdate(int id) {
+    public void expenseUpdate(Expense expense) {
         conn = JdbcConnection.getInstance().getConnection();
         String sql = "UPDATE expense set ";
-        boolean hasUpdates = false;
-
-        // 창고 아이디 수정 여부 확인
-        System.out.print("수정할 창고 아이디를 입력하시겠습니까? (Y/N): ");
-        String input = GetTexts.getInstance().readLine();
-        if (input.equalsIgnoreCase("Y")) {
-            System.out.print("수정할 창고 아이디를 입력하세요: ");
-            String warehouseIdInput = GetTexts.getInstance().readLine();
-            if (!warehouseIdInput.isEmpty()) {
-                sql += "warehouse_id = '" + warehouseIdInput + "', ";
-                hasUpdates = true;
-            }
-        }
-
-        // 지출 유형 수정 여부 확인
-        System.out.print("수정할 지출 유형을 입력하시겠습니까? (Y/N): ");
-        input = GetTexts.getInstance().readLine();
-        if (input.equalsIgnoreCase("Y")) {
-            System.out.print("수정할 지출 유형을 입력하세요: ");
-            String typeInput = GetTexts.getInstance().readLine();
-            if (!typeInput.isEmpty()) {
-                sql += "type = '" + typeInput + "', ";
-                hasUpdates = true;
-            }
-        }
-
-        // 지출 비용 수정 여부 확인
-        System.out.print("수정할 지출 비용을 입력하시겠습니까? (Y/N): ");
-        input = GetTexts.getInstance().readLine();
-        if (input.equalsIgnoreCase("Y")) {
-            System.out.print("수정할 지출 비용을 입력하세요: ");
-            String costInput = GetTexts.getInstance().readLine();
-            if (!costInput.isEmpty()) {
-                sql += "cost = '" + costInput + "', ";
-                hasUpdates = true;
-            }
-        }
-
-        // 지출 일자 수정 여부 확인
-        System.out.print("수정할 지출 일자를 입력하시겠습니까? (Y/N): ");
-        input = GetTexts.getInstance().readLine();
-        if (input.equalsIgnoreCase("Y")) {
-            System.out.print("수정할 지출 일자를 yyyy-MM-dd 형식으로 입력하세요: ");
-            String dateString = GetTexts.getInstance().readLine();
-            java.sql.Date expenseDate = null;
-            if (!dateString.isEmpty()) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                try {
-                    java.util.Date parsedDate = dateFormat.parse(dateString);
-                    expenseDate = new java.sql.Date(parsedDate.getTime());
-                    sql += "expense_date = '" + expenseDate + "', ";
-                    hasUpdates = true;
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        // 변경사항이 있는 경우에만 업데이트 실행
-        if (hasUpdates) {
-            // 마지막 쉼표 제거
-            sql = sql.substring(0, sql.length() - 2);
-            // WHERE 절 추가
-            sql += " WHERE id = ?";
-            try {
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                pstmt.setInt(1, id);
-                pstmt.executeUpdate();
-                pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("수정할 내용이 없습니다.");
-        }
     }
 
 
