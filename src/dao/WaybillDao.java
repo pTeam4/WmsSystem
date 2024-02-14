@@ -15,7 +15,7 @@ public class WaybillDao {
     Connection conn;
     PreparedStatement pstmt;
 
-    public WaybillDao () {
+    public WaybillDao() {
         this.conn = JdbcConnection.getInstance().getConnection();
     }
 
@@ -75,7 +75,7 @@ public class WaybillDao {
                 .append("values (?,?,?)")
                 .toString();
         try {
-            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, shippingOrdersId);
             pstmt.setString(2, vehicleNum);
             pstmt.setDate(3, departureDate);
@@ -97,15 +97,8 @@ public class WaybillDao {
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, waybill.getShippingOrdersId());
             pstmt.setString(2, waybill.getVehicleNum());
-            try {
-                String dateInput = GetTexts.getInstance().readLine();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date utilDate = simpleDateFormat.parse(dateInput);
-                java.sql.Date departureDate = new java.sql.Date(waybill.getDepartureDate().getTime());
-                pstmt.setDate(3, departureDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            java.sql.Date departureDate = new java.sql.Date(waybill.getDepartureDate().getTime());
+            pstmt.setDate(3, departureDate);
             pstmt.setInt(4, waybill.getId());
             pstmt.executeUpdate();
             /*pstmt.close();*/
