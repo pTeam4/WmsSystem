@@ -2,9 +2,11 @@ package dao;
 
 import config.GetTexts;
 import config.JdbcConnection;
+import dto.UserPermission;
 import util.UserManager;
 import vo.User;
 
+import javax.print.DocFlavor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,24 +47,39 @@ public class UserDao {
 
     }
 
-    public List<User> userSelect() {
-        String sql = "SELECT * FROM user";
-        List<User> users = new ArrayList<>();
+    //    public List<User> userSelect() {
+    public List<UserPermission> userSelect() {
+//        String sql = "SELECT * FROM user";
+        String sql = "select u.id, name, birth, password, email, telephone, level, state " +
+                "from user u join permission p join status s " +
+                "on u.permission_id = p.id and u.status_id = s.id";
+//        List<User> users = new ArrayList<>();
+        List<UserPermission> users = new ArrayList<>();
 
         try (
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 ResultSet resultSet = preparedStatement.executeQuery();
         ) {
             while (resultSet.next()) {
-                User user = new User();
+//                User user = new User();
+//                user.setId(resultSet.getString("id"));
+//                user.setName(resultSet.getString("name"));
+//                user.setBirth(resultSet.getDate("birth"));
+//                user.setPw(resultSet.getString("password"));
+//                user.setEmail(resultSet.getString("email"));
+//                user.setTel(resultSet.getString("telephone"));
+//                user.setPermission(resultSet.getInt("permission_id"));
+//                user.setStatus(resultSet.getInt("status_id"));
+//                users.add(user);
+                UserPermission user = new UserPermission();
                 user.setId(resultSet.getString("id"));
                 user.setName(resultSet.getString("name"));
                 user.setBirth(resultSet.getDate("birth"));
                 user.setPw(resultSet.getString("password"));
                 user.setEmail(resultSet.getString("email"));
                 user.setTel(resultSet.getString("telephone"));
-                user.setPermission(resultSet.getInt("permission_id"));
-                user.setStatus(resultSet.getInt("status_id"));
+                user.setLevel(resultSet.getString("level"));
+                user.setState(resultSet.getString("state"));
                 users.add(user);
             }
 
@@ -110,7 +127,17 @@ public class UserDao {
     public void userSelectByStatus() {
     }
 
-    public void userConfirm() {
+    public void userConfirm(String id) {
+        try {
+            String sql = "update user set permission_id = 2, status_id = 1 where id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,id);
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void userUpdate(User user, String id) {
@@ -129,5 +156,44 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public String userSelectByNameAndEmail(String name, String email) {
+        String id = null;
+        try {
+            String sql = "select id from user where name = ? and email = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, email);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                id = rs.getString("id");
+            }
+            pstmt.close();
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public String userSelectByIdAndName(String id, String name) {
+        String pw = null;
+        try {
+            String sql = "select password from user where id = ? and email = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            pstmt.setString(2, name);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                pw = rs.getString("password");
+            }
+            pstmt.close();
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pw;
     }
 }
