@@ -81,7 +81,7 @@ public class UserDao {
                 user.setPw(rs.getString("pw"));
                 user.setEmail(rs.getString("email"));
                 user.setTel(rs.getString("tel"));
-                user.setPermission(rs.getString("permission"));
+                user.setPermission(Integer.parseInt(rs.getString("permission")));
                 user.setStatus(rs.getString("status"));
                 System.out.println(user.getId() + " 로그인 성공");
 
