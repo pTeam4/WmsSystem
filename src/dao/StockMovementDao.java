@@ -78,4 +78,38 @@ public class StockMovementDao {
 
         return updatedRows;
     }
+
+    public List<StockMovement> stockSelectByStatus(String statusCode) {
+        String sql = "SELECT * FROM stock_movement WHERE status_code = ?";
+        List<StockMovement> stockMovements = new ArrayList<>();
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+
+            preparedStatement.setString(1, statusCode);
+
+            try (
+                    ResultSet resultSet = preparedStatement.executeQuery();
+            ) {
+
+                while (resultSet.next()) {
+                    StockMovement stockMovement = new StockMovement();
+
+                    stockMovement.setId(resultSet.getInt("id"));
+                    stockMovement.setProductId(resultSet.getInt("product_id"));
+                    stockMovement.setUserId(resultSet.getString("user_id"));
+                    stockMovement.setStatusCode(resultSet.getString("status_code"));
+                    stockMovement.setRequestDatetime(resultSet.getTimestamp("request_datetime"));
+
+                    stockMovements.add(stockMovement);
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return stockMovements;
+    }
 }
