@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
@@ -20,65 +19,67 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addMember() {
         User user = new User();
-
         System.out.print("이름: ");
         user.setName(getTexts.readLine());
-
-        System.out.print("생년월일(ex: 19981225): ");
-        String dateString = getTexts.readLine();
-
-        // SimpleDateFormat을 사용하여 문자열을 java.util.Date로 파싱
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date utilDate;
-
-        try {
-            utilDate = sdf.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return;
-        }
-        user.setBirth(utilDate);
-
-        System.out.print("id: ");
-        user.setId(getTexts.readLine());
-
-        System.out.print("pw: ");
-        user.setPw(getTexts.readLine());
-
-        System.out.print("email: ");
-        user.setEmail(getTexts.readLine());
-
-        System.out.print("tel: ");
-        user.setTel(getTexts.readLine());
-
+        System.out.print("생년월일(ex: 20240101): ");
+        user.setBirth(stringToDate(getTexts.readLine()));
+        user.setId(checkId());
+        user.setPw(checkPw());
+        user.setEmail(checkEmail());
+        user.setTel(checkTel());
         userDao.userInsert(user);
         System.out.println(user.getName() + "님 회원가입이 완료되었습니다.");
     }
 
+//    public String checkBirth() {
+//        System.out.print("생년월일(ex: 20240101): ");
+//        String input = getTexts.readLine();
+//        if (!Pattern.matches("\\d{8}", input)) {
+//            System.out.println("입력한 생년월일은 유효하지 않습니다. 다시 입력해주세요.");
+//            input = null;
+//            checkBirth();
+//        }
+//        return input;
+//    }
+
     public String checkId() {
-        //사용자 ID에 대한 정규식
-        String regex = "^[a-zA-Z0-9]{4,12}$";
-        //정규식 패턴을 컴파일
-        Pattern pattern = Pattern.compile(regex);
         System.out.print("id(영어+숫자, 4~12자): ");
         String input = getTexts.readLine();
-        // 패턴과 입력 문자열을 비교하여 일치 여부 확인
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.matches()) {
+        if (!Pattern.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,12}$", input)) {
             System.out.println("입력한 ID는 유효하지 않습니다. 다시 입력해주세요.");
             checkId();
-            return null;
         }
         return input;
     }
 
-    public void checkPw() {
+    public String checkPw() {
+        System.out.print("pw(영어+숫자, 4~12자): ");
+        String input = getTexts.readLine();
+        if (!Pattern.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,12}$", input)) {
+            System.out.println("입력한 pw는 유효하지 않습니다. 다시 입력해주세요.");
+            checkPw();
+        }
+        return input;
     }
 
-    public void checkEmail() {
+    public String checkEmail() {
+        System.out.print("email(ex: ssg@gmail.com): ");
+        String input = getTexts.readLine();
+        if (!Pattern.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", input)) {
+            System.out.println("입력한 Email은 유효하지 않습니다. 다시 입력해주세요.");
+            checkEmail();
+        }
+        return input;
     }
 
-    public void checkTel() {
+    public String checkTel() {
+        System.out.print("tel(ex: 01012345678): ");
+        String input = getTexts.readLine();
+        if (!Pattern.matches("^01[0-9]{9}$", input)) {
+            System.out.println("입력한 전화번호는 유효하지 않습니다. 다시 입력해주세요.");
+            checkTel();
+        }
+        return input;
     }
 
     @Override
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("아이디 찾기");
         System.out.print("회원 이름: ");
         String name = getTexts.readLine();
-        System.out.print("회원 이메일: ");
+        System.out.print("회원 이메일(ex: ssg@gmail.com): ");
         String email = getTexts.readLine();
         String id = userDao.userSelectByNameAndEmail(name, email);
         System.out.println("찾으시는 id: " + id);
@@ -105,29 +106,34 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public void modifyMember() {
-        User user = new User();
-        System.out.println("회원정보 수정");
-        System.out.print("name : ");
-        user.setName(getTexts.readLine());
-        System.out.print("birth : ");
-        String dateString = getTexts.readLine();
+    public Date stringToDate(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date utilDate;
+        Date utilDate = null;
         try {
             utilDate = sdf.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
-            return;
         }
-        user.setBirth(utilDate);
-        System.out.print("pw : ");
+        return utilDate;
+    }
+
+    @Override
+    public void modifyMember() {
+        User user = new User();
+        System.out.println("회원정보 수정");
+        System.out.print("name: ");
+        user.setName(getTexts.readLine());
+        System.out.print("birth(ex: 20240101): ");
+        user.setBirth(stringToDate(getTexts.readLine()));
+        System.out.print("pw: ");
         user.setPw(getTexts.readLine());
-        System.out.print("email : ");
+        System.out.print("email(ex: ssg@gmail.com): ");
         user.setEmail(getTexts.readLine());
-        System.out.print("tel : ");
+        System.out.print("tel(ex: 01012345678): ");
         user.setTel(getTexts.readLine());
+//        user.setPw(checkPw());
+//        user.setEmail(checkEmail());
+//        user.setTel(checkTel());
         userDao.userUpdate(user, UserManager.getInstance().getCurrentUser().getId());
         System.out.println("회원정보 수정 완료");
     }
@@ -160,10 +166,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void getMemberDetails() {
         User user = UserManager.getInstance().getCurrentUser();
-        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n", "id", "name", "birth", "pw", "email", "tel");
+        String format = "%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n";
+        System.out.printf(format, "id", "name", "birth", "pw", "email", "tel");
         System.out.println("-".repeat(150));
-        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n"
-                , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel());
+        System.out.printf(format, user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel());
         System.out.println("-".repeat(150));
 
     }
@@ -175,14 +181,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getMembers() {
-//        List<User> users = userDao.userSelect();
         List<UserPermission> users = userDao.userSelect();
+        String format = "%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n";
         System.out.println("-".repeat(180));
-        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n", "id", "name", "birth", "pw", "email", "tel", "permission", "status");
+        System.out.printf(format, "id", "name", "birth", "pw", "email", "tel", "permission", "status");
         System.out.println("-".repeat(180));
         users.forEach(user -> {
-            System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n"
-                    , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getLevel(), user.getState());
+            System.out.printf(format, user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getLevel(), user.getState());
         });
         System.out.println("-".repeat(180));
     }

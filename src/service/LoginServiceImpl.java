@@ -11,24 +11,28 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public void login() {
-        System.out.print("id: ");
-        String id = getTexts.readLine();
+        try {
+            System.out.print("id: ");
+            String id = getTexts.readLine();
 
-        System.out.print("pw: ");
-        String pw = getTexts.readLine();
+            System.out.print("pw: ");
+            String pw = getTexts.readLine();
 
-        User user = userDao.userSelectOne(id, pw);
+            User user = userDao.userSelectOne(id, pw);
 
-        UserManager.getInstance().setCurrentUser(user);
-        User currentUser =  UserManager.getInstance().getCurrentUser();
+            UserManager.getInstance().setCurrentUser(user);
+            User currentUser = UserManager.getInstance().getCurrentUser();
 
-        System.out.println(currentUser.getName() + " 로그인 성공");
+            System.out.println(currentUser.getName() + " 님 환영합니다.");
+        } catch (NullPointerException e) {
+            System.out.println("id 혹은 pw가 잘못 입력되었습니다.");
+            login();
+        }
     }
 
     @Override
     public void logout() {
-        UserManager userManager = UserManager.getInstance();
-        User currentUser = userManager.getCurrentUser();
+        User currentUser = UserManager.getInstance().getCurrentUser();
         currentUser = null;
         System.out.println("로그아웃 되었습니다.");
     }

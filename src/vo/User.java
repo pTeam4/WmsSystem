@@ -16,12 +16,8 @@ public class User {
     private int permission;
     private int status;
 
-    public User() {
-        // 생성자 내용 작성
-    }
-
-    public User(String id, String pw) {
-        this.id = id;
-        this.pw = pw;
-    }
+//    public User(String id, String pw) {
+//        this.id = id;
+//        this.pw = pw;
+//    }
 }
