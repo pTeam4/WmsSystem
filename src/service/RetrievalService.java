@@ -13,7 +13,7 @@ public interface RetrievalService {
     public void getRetrievalOrder();
 
     public void getRetrievalList();
-
+    public void requestShippingOrdersDetail(int shippingOrderId);
     public void searchRetrievalGoods();
 
     public void addVehicleDispatching(String vehicleNum);

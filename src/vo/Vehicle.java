@@ -9,6 +9,6 @@ public class Vehicle {
     private int deliveryDriverId;
     private String type;
     private int contact1;
-    private int contact2;
+    private String contact2;
     private int status;
 }

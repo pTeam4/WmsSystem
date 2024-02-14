@@ -11,13 +11,13 @@ public class ShippingOrdersDao {
     PreparedStatement pstmt;
     Connection conn;
 
-    public ShippingOrdersDao() {
+    /*public ShippingOrdersDao() {
         this.conn = JdbcConnection.getInstance().getConnection();
-    }
+    }*/
 
     public List<ShippingOrders> getShippingOrdersList() {
+        conn = JdbcConnection.getInstance().getConnection();
         List<ShippingOrders> shippingOrdersList = new ArrayList<>();
-        ShippingOrders shippingOrders = new ShippingOrders();
         StringBuilder stringBuilder = new StringBuilder();
         String sql = stringBuilder.append("select * from Shipping_Orders ")
                 .append("where approved_status = 1")
@@ -26,16 +26,18 @@ public class ShippingOrdersDao {
             pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
+                ShippingOrders shippingOrders = new ShippingOrders();
                 shippingOrders.setId(rs.getInt("id"));
+                shippingOrders.setCustomerId(rs.getInt("customer_id"));
                 shippingOrders.setDeliveryAddress(rs.getString("delivery_address"));
                 shippingOrders.setOrderDate(rs.getDate("order_date"));
                 shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
                 shippingOrders.setStatus(rs.getInt("status"));
-                shippingOrders.setApproved_status(rs.getInt("approved_status"));
+                shippingOrders.setApprovedStatus(rs.getInt("approved_status"));
 
                 shippingOrdersList.add(shippingOrders);
             }
-            pstmt.close();
+            /*            pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,10 +45,12 @@ public class ShippingOrdersDao {
     }
 
     public int requestRetrieval(ShippingOrders shippingOrders) {
+        conn = JdbcConnection.getInstance().getConnection();
         int shippingOrdersId = 0;
         StringBuilder stringBuilder = new StringBuilder();
         String sql = stringBuilder.append("Insert into Shipping_Orders(customer_id, delivery_address, order_date, delivery_date) ")
-                + "values (?,?,?,?)";
+                .append("values (?,?,?,?)")
+                .toString();
         try {
             pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, shippingOrders.getCustomerId());
@@ -61,7 +65,6 @@ public class ShippingOrdersDao {
             if (generatedKeys.next()) {
                 shippingOrdersId = generatedKeys.getInt(1); // shipping_orders_id 값
             }
-            pstmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,16 +72,16 @@ public class ShippingOrdersDao {
     }
 
     public void approveRetrievalRequest(int shippingOrdersId) {
+        conn = JdbcConnection.getInstance().getConnection();
         try {
             StringBuilder stringBuilder = new StringBuilder();
             String sql = stringBuilder.append("UPDATE Shipping_Orders SET ")
-                    .append("approved_status = 1")
-                    .append("where shipping_orders_id = ?")
+                    .append("approved_status = 1 ")
+                    .append("where id = ?")
                     .toString();
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, shippingOrdersId);
             pstmt.executeUpdate();
-            pstmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -88,8 +91,8 @@ public class ShippingOrdersDao {
      * 출고 승인을 기다리고 있는 목록 리스트
      */
     public List<ShippingOrders> getAwaitedShippingOrdersList() {
+        conn = JdbcConnection.getInstance().getConnection();
         List<ShippingOrders> shippingOrdersList = new ArrayList<>();
-        ShippingOrders shippingOrders = new ShippingOrders();
         StringBuilder stringBuilder = new StringBuilder();
         String sql = stringBuilder.append("select * from Shipping_Orders ")
                 .append("where approved_status = 0")
@@ -98,18 +101,49 @@ public class ShippingOrdersDao {
             pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
+                ShippingOrders shippingOrders = new ShippingOrders();
                 shippingOrders.setId(rs.getInt("id"));
                 shippingOrders.setCustomerId(rs.getInt("customer_id"));
-                shippingOrders.setDeliveryAddress(rs.getString("delivery_adress"));
+                shippingOrders.setDeliveryAddress(rs.getString("delivery_address"));
+                shippingOrders.setOrderDate(rs.getDate("order_date"));
+                shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
+                shippingOrders.setStatus(rs.getInt("status"));
+                shippingOrders.setStatus(rs.getInt("approved_status"));
+
+                shippingOrdersList.add(shippingOrders);
+            }
+/*            pstmt.close();*/
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shippingOrdersList;
+    }
+
+    public ShippingOrders getShippingOrder(int shippingOrdersId) {
+        ShippingOrders shippingOrders = new ShippingOrders();
+        conn = JdbcConnection.getInstance().getConnection();
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String sql = stringBuilder.append("select * from Shipping_Orders ")
+                .append("where id = ?")
+                .toString();
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, shippingOrdersId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                shippingOrders.setId(rs.getInt("id"));
+                shippingOrders.setCustomerId(rs.getInt("customer_id"));
+                shippingOrders.setDeliveryAddress(rs.getString("delivery_address"));
                 shippingOrders.setOrderDate(rs.getDate("order_date"));
                 shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
                 shippingOrders.setStatus(rs.getInt("status"));
                 shippingOrders.setStatus(rs.getInt("approved_status"));
             }
-            pstmt.close();
+            /*            pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return shippingOrdersList;
+        return shippingOrders;
     }
 }

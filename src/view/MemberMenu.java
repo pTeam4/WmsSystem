@@ -1,6 +1,5 @@
 package view;
 
-import service.EstimateService;
 import service.LoginService;
 import service.LoginServiceImpl;
 
@@ -56,7 +55,7 @@ public class MemberMenu {
                 memberMainMenu();
             }
             case 10 -> {
-                InqueryServiceMenu.inqueryServiceMenu();
+                InquiryServiceMenu.inquiryServiceMenu();
                 memberMainMenu();
             }
             case 11 -> {
@@ -65,6 +64,7 @@ public class MemberMenu {
             }
             case 12 -> {
                 System.out.println("야옹 창고 시스템을 종료합니다.");
+                System.exit(0);
             }
             default -> {
                 System.out.println("잘못 입력하셨습니다.");

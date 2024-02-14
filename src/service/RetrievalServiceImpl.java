@@ -55,26 +55,26 @@ public class RetrievalServiceImpl implements RetrievalService {
         int shippingOrdersId = Integer.parseInt(GetTexts.getInstance().readLine());
         Waybill waybill = waybillDao.getWaybillByShippingOrdersId(shippingOrdersId);
         System.out.println("운송장을 출력합니다.");
-        System.out.println("--------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------------");
         System.out.printf(
-                "%-6d%-20d%-10s%-25s%-16s%n",
+                "%-6s%-20s%-10s%-25s%-16s%n",
                 "id",
                 "shipping_orders_id",
                 "vehicle_num",
                 "departure_date",
                 "arrival_date"
         );
-        System.out.println("--------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------------");
         System.out.printf(
-                "%-6d%-20d%-10s%-25s%-16s%n",
+                "%-6s%-20s%-10s%-25s%-16s%n",
                 waybill.getId(),
                 waybill.getShippingOrdersId(),
                 waybill.getVehicleNum(),
                 waybill.getDepartureDate(),
                 waybill.getArrivalDate()
         );
-        System.out.println("--------------------------------------");
-        GetTexts.getInstance().close();
+        System.out.println("--------------------------------------------------------------------------------------");
+        //GetTexts.getInstance().close();
     }
 
     /**
@@ -83,12 +83,11 @@ public class RetrievalServiceImpl implements RetrievalService {
     @Override
     public void requestRetrieval() {
         ShippingOrders shippingOrders = new ShippingOrders();
-        ShippingOrdersDetail shippingOrdersDetail = new ShippingOrdersDetail();
 
         System.out.println("-----출고 지시서 정보 입력-----");
-        /*System.out.println("고객 번호 입력 : "); // 어떻게 할 지 물어보기
+        System.out.println("고객 번호 입력 : "); // 어떻게 할 지 물어보기
         int customerId = Integer.parseInt(GetTexts.getInstance().readLine());
-        shippingOrders.setCustomerId(customerId);*/
+        shippingOrders.setCustomerId(customerId);
         System.out.println("배송 주소 입력 : ");
         String deliveryAddress = GetTexts.getInstance().readLine();
         shippingOrders.setDeliveryAddress(deliveryAddress);
@@ -107,6 +106,13 @@ public class RetrievalServiceImpl implements RetrievalService {
             e.printStackTrace();
         }
         int shippingOrdersId = shippingOrdersDao.requestRetrieval(shippingOrders);
+        requestShippingOrdersDetail(shippingOrdersId);
+
+    }
+
+    @Override
+    public void requestShippingOrdersDetail(int shippingOrdersId) {
+        ShippingOrdersDetail shippingOrdersDetail = new ShippingOrdersDetail();
 
         System.out.println("-----상세 출고 지시서 정보 입력-----");
         // 위에서 생성한 출고 지시서 아이디 입력
@@ -119,7 +125,6 @@ public class RetrievalServiceImpl implements RetrievalService {
         shippingOrdersDetail.setQuantity(quantity);
 
         shippingOrdersDetailDao.requestRetrieval(shippingOrdersDetail);
-        GetTexts.getInstance().close();
     }
 
     /**
@@ -128,9 +133,9 @@ public class RetrievalServiceImpl implements RetrievalService {
     @Override
     public void approveRetrievalRequest() {
         List<ShippingOrders> awaitedShippingOrdersList = shippingOrdersDao.getAwaitedShippingOrdersList();   // 승인 대기 중인 출고지시서 리스트 출력
-        System.out.println("--------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
         System.out.printf(
-                "%-6d%-12d%-10s%-25s%-16s%-16s%-16s%n",
+                "%-6s%-15s%-20s%-15s%-15s%-15s%-15s%n",
                 "id",
                 "customer_id",
                 "delivery_address",
@@ -139,26 +144,26 @@ public class RetrievalServiceImpl implements RetrievalService {
                 "status",
                 "approved_status"
         );
-        System.out.println("--------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
         for (ShippingOrders shippingOrders : awaitedShippingOrdersList) {
             System.out.printf(
-                    "%-6d%-12d%-10s%-25s%-16s%-16s%-16s%n",
+                    "%-6s%-15s%-20s%-15s%-15s%-15s%-15s%n",
                     shippingOrders.getId(),
                     shippingOrders.getCustomerId(),
                     shippingOrders.getDeliveryAddress(),
                     shippingOrders.getOrderDate(),
                     shippingOrders.getDeliveryDate(),
                     shippingOrders.getStatus(),
-                    shippingOrders.getApproved_status()
+                    shippingOrders.getApprovedStatus()
             );
         }
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
 
-        System.out.println("--------------------------------------");
         System.out.println("승인할 출고지시서의 번호를 입력하세요.");
         int shippingOrdersId = Integer.parseInt(GetTexts.getInstance().readLine());
         shippingOrdersDao.approveRetrievalRequest(shippingOrdersId);
         System.out.println("해당 출고지시서가 승인되었습니다.");
-        GetTexts.getInstance().close();
+        //GetTexts.getInstance().close();
     }
 
     /**
@@ -167,21 +172,12 @@ public class RetrievalServiceImpl implements RetrievalService {
     @Override
     public void getRetrievalOrder() {
         System.out.print("조회할 출고지시서 번호를 입력하세요 : ");
-        String number = GetTexts.getInstance().readLine();
+        int shippingOrdersId = Integer.parseInt(GetTexts.getInstance().readLine());
         System.out.println("출고지시서를 조회합니다.");
-        GetTexts.getInstance().close();
-    }
-
-    /**
-     * 출고리스트 조회
-     */
-    @Override
-    public void getRetrievalList() {
-        System.out.println("출고지시서 목록을 조회합니다.");
-        List<ShippingOrders> shippingOrdersList = shippingOrdersDao.getShippingOrdersList();
-        System.out.println("--------------------------------------");
+        ShippingOrders shippingOrders = shippingOrdersDao.getShippingOrder(shippingOrdersId);
+        System.out.println("------------------------------------------------------------------------------------------------------------------");
         System.out.printf(
-                "%-6d%-12d%-10s%-25s%-16s%-16s%-16s%n",
+                "%-6s%-15s%-15s%-15s%-15s%-15s%-15s%n",
                 "id",
                 "customer_id",
                 "delivery_address",
@@ -190,20 +186,53 @@ public class RetrievalServiceImpl implements RetrievalService {
                 "status",
                 "approved_status"
         );
-        System.out.println("--------------------------------------");
-        for (ShippingOrders shippingOrders : shippingOrdersList) {
+        System.out.println("------------------------------------------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-6s%-15s%-15s%-15s%-15s%-15s%-15s%n",
+                shippingOrders.getId(),
+                shippingOrders.getCustomerId(),
+                shippingOrders.getDeliveryAddress(),
+                shippingOrders.getOrderDate(),
+                shippingOrders.getDeliveryDate(),
+                shippingOrders.getStatus(),
+                shippingOrders.getApprovedStatus()
+        );
+        System.out.println("------------------------------------------------------------------------------------------------------------------");
+        //GetTexts.getInstance().close();
+    }
+
+    /**
+     * 출고리스트 조회
+     */
+    @Override
+    public void getRetrievalList() {
+        System.out.println("출고지시서 목록을 조회합니다.");
+        List<ShippingOrders> awaitedShippingOrdersList = shippingOrdersDao.getShippingOrdersList();   // 승인 완료된 출고지시서 리스트 출력
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-6s%-15s%-20s%-15s%-15s%-15s%-15s%n",
+                "id",
+                "customer_id",
+                "delivery_address",
+                "order_date",
+                "delivery_date",
+                "status",
+                "approved_status"
+        );
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        for (ShippingOrders shippingOrders : awaitedShippingOrdersList) {
             System.out.printf(
-                    "%-6d%-12d%-10s%-25s%-16s%-16s%-16s%n",
+                    "%-6s%-15s%-20s%-15s%-15s%-15s%-15s%n",
                     shippingOrders.getId(),
                     shippingOrders.getCustomerId(),
                     shippingOrders.getDeliveryAddress(),
                     shippingOrders.getOrderDate(),
                     shippingOrders.getDeliveryDate(),
                     shippingOrders.getStatus(),
-                    shippingOrders.getApproved_status()
+                    shippingOrders.getApprovedStatus()
             );
         }
-        System.out.println("--------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
     }
 
     /**
@@ -214,26 +243,26 @@ public class RetrievalServiceImpl implements RetrievalService {
         System.out.println("검색할 상품의 상품 번호를 입력하세요.");
         int productId = Integer.parseInt(GetTexts.getInstance().readLine());
         List<ShippingOrdersDetail> shippingOrdersDetailList = shippingOrdersDetailDao.getShippingOrdersDetailByProductId(productId);
-        System.out.println("--------------------------------------");
+        System.out.println("-------------------------------------------------------------");
         System.out.printf(
-                "%-6d%-16d%-16d%-16d%n",
+                "%-6s%-25s%-16s%-16s%n",
                 "id",
                 "shipping_orders_id",
                 "product_id",
                 "quantity"
         );
-        System.out.println("--------------------------------------");
+        System.out.println("-------------------------------------------------------------");
         for (ShippingOrdersDetail shippingOrdersDetail : shippingOrdersDetailList) {
             System.out.printf(
-                    "%-6d%-16d%-16d%-16d%n",
+                    "%-6s%-25s%-16s%-16s%n",
                     shippingOrdersDetail.getId(),
                     shippingOrdersDetail.getShippingOrdersId(),
                     shippingOrdersDetail.getProductId(),
                     shippingOrdersDetail.getQuantity()
             );
         }
-        System.out.println("--------------------------------------");
-        GetTexts.getInstance().close();
+        System.out.println("-------------------------------------------------------------");
+        //GetTexts.getInstance().close();
     }
 
     /**
@@ -269,7 +298,7 @@ public class RetrievalServiceImpl implements RetrievalService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        GetTexts.getInstance().close();
+        //GetTexts.getInstance().close();
     }
 
 
@@ -279,29 +308,27 @@ public class RetrievalServiceImpl implements RetrievalService {
     @Override
     public void getVehicleDispatching() {
         List<Vehicle> vehicleList = vehicleDao.getVehicleList();
-        System.out.println("-----------------------------------");
+        System.out.println("----------------------------------------------------------------------");
         System.out.printf(
-                "%-6s%-12s%-10s%-25s%-16s%-16s%n",
+                "%-6s%-15s%-15s%-20s%-15s%n",
                 "num",
-                "delivery_driver_id",
                 "type",
                 "contact1",
                 "contact2",
                 "status"
         );
-        System.out.println("-----------------------------------");
+        System.out.println("----------------------------------------------------------------------");
         for (Vehicle vehicle : vehicleList) {
             System.out.printf(
-                    "%-6s%-12s%-10s%-25s%-16s%-16s%n",
+                    "%-6s%-15s%-15s%-20s%-15s%n",
                     vehicle.getNum(),
-                    vehicle.getDeliveryDriverId(),
                     vehicle.getType(),
                     vehicle.getContact1(),
                     vehicle.getContact2(),
                     vehicle.getStatus()
             );
         }
-        System.out.println("-----------------------------------");
+        System.out.println("----------------------------------------------------------------------");
     }
 
     /**
@@ -314,7 +341,7 @@ public class RetrievalServiceImpl implements RetrievalService {
         List<Waybill> waybillList = waybillDao.getWaybillList();
         System.out.println("--------------------------------------");
         System.out.printf(
-                "%-6d%-20d%-10s%-25s%-16s%n",
+                "%-6s%-20s%-10s%-25s%-16s%n",
                 "id",
                 "shipping_orders_id",
                 "vehicle_num",
@@ -324,7 +351,7 @@ public class RetrievalServiceImpl implements RetrievalService {
         System.out.println("--------------------------------------");
         for (Waybill waybill : waybillList) {
             System.out.printf(
-                    "%-6d%-20d%-10s%-25s%-16s%n",
+                    "%-6s%-20s%-10s%-25s%-16s%n",
                     waybill.getId(),
                     waybill.getShippingOrdersId(),
                     waybill.getVehicleNum(),
@@ -340,7 +367,7 @@ public class RetrievalServiceImpl implements RetrievalService {
 
         vehicleDao.cancelVehicleDispatchingByWaybillId(shippingOrderId);
         System.out.println("배차가 취소되었습니다.");
-        GetTexts.getInstance().close();
+        //GetTexts.getInstance().close();
     }
 
     /**
@@ -383,7 +410,7 @@ public class RetrievalServiceImpl implements RetrievalService {
         vehicleDao.modifyVehicleDispatchingByWaybillId(shippingOrdersId, vehicleNum);
         System.out.println("배차가 수정되었습니다.");
 
-        GetTexts.getInstance().close();
+        //GetTexts.getInstance().close();
     }
 
     /**
@@ -392,14 +419,84 @@ public class RetrievalServiceImpl implements RetrievalService {
     @Override
     public void modifyWaybill() {
         Waybill waybill = new Waybill();
-        waybillDao.getWaybillList();    // 운송장 리스트 출력
-
+        List<Waybill> waybillList = waybillDao.getWaybillList(); // 운송장 리스트 출력
+        System.out.println("--------------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-6s%-25s%-20s%-20s%-16s%n",
+                "id",
+                "shipping_orders_id",
+                "vehicle_num",
+                "departure_date",
+                "arrival_date"
+        );
+        System.out.println("--------------------------------------------------------------------------------------");
+        for (Waybill w : waybillList) {
+            System.out.printf(
+                    "%-6s%-25s%-20s%-20s%-16s%n",
+                    w.getId(),
+                    w.getShippingOrdersId(),
+                    w.getVehicleNum(),
+                    w.getDepartureDate(),
+                    w.getArrivalDate()
+            );
+        }
+        System.out.println("--------------------------------------------------------------------------------------");
         System.out.println("수정할 운송장 번호를 입력하세요.");
         int waybillId = Integer.parseInt(GetTexts.getInstance().readLine());
         waybill.setId(waybillId);
+
+        List<ShippingOrders> awaitedShippingOrdersList = shippingOrdersDao.getShippingOrdersList();   // 승인 완료된 출고지시서 리스트 출력
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-6s%-15s%-20s%-15s%-15s%-15s%-15s%n",
+                "id",
+                "customer_id",
+                "delivery_address",
+                "order_date",
+                "delivery_date",
+                "status",
+                "approved_status"
+        );
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        for (ShippingOrders shippingOrders : awaitedShippingOrdersList) {
+            System.out.printf(
+                    "%-6s%-15s%-20s%-15s%-15s%-15s%-15s%n",
+                    shippingOrders.getId(),
+                    shippingOrders.getCustomerId(),
+                    shippingOrders.getDeliveryAddress(),
+                    shippingOrders.getOrderDate(),
+                    shippingOrders.getDeliveryDate(),
+                    shippingOrders.getStatus(),
+                    shippingOrders.getApprovedStatus()
+            );
+        }
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
         System.out.println("출고 지시서 번호를 입력하세요.");
         int shippingOrdersId = Integer.parseInt(GetTexts.getInstance().readLine());
         waybill.setShippingOrdersId(shippingOrdersId);
+
+        List<Vehicle> vehicleList = vehicleDao.getVehicleList();
+        System.out.println("----------------------------------------------------------------------");
+        System.out.printf(
+                "%-6s%-15s%-15s%-20s%-15s%n",
+                "num",
+                "type",
+                "contact1",
+                "contact2",
+                "status"
+        );
+        System.out.println("----------------------------------------------------------------------");
+        for (Vehicle vehicle : vehicleList) {
+            System.out.printf(
+                    "%-6s%-15s%-15s%-20s%-15s%n",
+                    vehicle.getNum(),
+                    vehicle.getType(),
+                    vehicle.getContact1(),
+                    vehicle.getContact2(),
+                    vehicle.getStatus()
+            );
+        }
+        System.out.println("----------------------------------------------------------------------");
         System.out.println("차량 번호를 입력하세요.");
         String vehicleNum = GetTexts.getInstance().readLine();
         waybill.setVehicleNum(vehicleNum);
@@ -412,8 +509,8 @@ public class RetrievalServiceImpl implements RetrievalService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        waybillDao.modifyWaybill(waybillId);
+        waybillDao.modifyWaybill(waybill);
         System.out.println("운송장이 수정되었습니다.");
-        GetTexts.getInstance().close();
+        //GetTexts.getInstance().close();
     }
 }

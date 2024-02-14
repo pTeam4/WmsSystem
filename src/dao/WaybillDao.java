@@ -20,7 +20,6 @@ public class WaybillDao {
     }
 
     public List<Waybill> getWaybillList() {
-        Waybill waybill = new Waybill();
         List<Waybill> waybillList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
         String sql = stringBuilder.append("select * from Waybill")
@@ -30,6 +29,7 @@ public class WaybillDao {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
+                Waybill waybill = new Waybill();
                 waybill.setId(rs.getInt("id"));
                 waybill.setShippingOrdersId(rs.getInt("shipping_orders_id"));
                 waybill.setVehicleNum(rs.getString("vehicle_num"));
@@ -38,7 +38,7 @@ public class WaybillDao {
 
                 waybillList.add(waybill);
             }
-            pstmt.close();
+            /*pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,7 @@ public class WaybillDao {
                 waybill.setDepartureDate(rs.getDate("departure_date"));
                 waybill.setArrivalDate(rs.getDate("arrival_date"));
             }
-            pstmt.close();
+            /*pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,32 +85,30 @@ public class WaybillDao {
         }
     }
 
-    public void modifyWaybill(int waybillId) {
+    public void modifyWaybill(Waybill waybill) {
         try {
             StringBuilder stringBuilder = new StringBuilder();
             String sql = stringBuilder.append("UPDATE Waybill SET ")
-                    .append("shipping_orders_id = ?")
-                    .append("vehicle_num = ?")
-                    .append("departure_date = ?")
-                    .append("where waybill_id = ?")
+                    .append("shipping_orders_id = ? , ")
+                    .append("vehicle_num = ? , ")
+                    .append("departure_date = ? ")
+                    .append("where id = ?")
                     .toString();
             pstmt = conn.prepareStatement(sql);
-            int shippingOrdersId = Integer.parseInt(GetTexts.getInstance().readLine());
-            pstmt.setInt(1, shippingOrdersId);
-            String vehicleNum = GetTexts.getInstance().readLine();
-            pstmt.setString(2, vehicleNum);
+            pstmt.setInt(1, waybill.getShippingOrdersId());
+            pstmt.setString(2, waybill.getVehicleNum());
             try {
                 String dateInput = GetTexts.getInstance().readLine();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date utilDate = simpleDateFormat.parse(dateInput);
-                java.sql.Date departureDate = new java.sql.Date(utilDate.getTime());
+                java.sql.Date departureDate = new java.sql.Date(waybill.getDepartureDate().getTime());
                 pstmt.setDate(3, departureDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            pstmt.setInt(4, waybillId);
+            pstmt.setInt(4, waybill.getId());
             pstmt.executeUpdate();
-            pstmt.close();
+            /*pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
