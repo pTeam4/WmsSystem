@@ -30,7 +30,6 @@ public class NonMemberMenu {
             }
             case 2-> {
                 loginService.login(); // 로그인 검사 로직 필요
-
                 MemberMenu.memberMainMenu();
             }
             case 3-> {

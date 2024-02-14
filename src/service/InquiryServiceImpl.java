@@ -3,6 +3,7 @@ package service;
 import config.GetTexts;
 import dao.InquiryDao;
 import dao.NoticeDao;
+import util.UserManager;
 import vo.Inquiry;
 import vo.Notice;
 
@@ -66,7 +67,7 @@ public class InquiryServiceImpl implements InquiryService {
         sb.delete(sb.length() - 2, sb.length()); //맨마지막 개행 삭제
         String content = sb.toString();
 
-        String userId = "dumplingmani";
+        String userId = UserManager.getInstance().getCurrentUser().getId();
         notice.setType(postType);
         notice.setUserId(userId);
         notice.setContent(content);
@@ -112,7 +113,7 @@ public class InquiryServiceImpl implements InquiryService {
         sb.delete(sb.length() - 2, sb.length()); //맨마지막 개행 삭제
         String content = sb.toString();
 
-        String userId = "dumplingmani";
+        String userId = UserManager.getInstance().getCurrentUser().getId();
         notice.setType(postType);
         notice.setUserId(userId);
         notice.setContent(content);
@@ -207,8 +208,8 @@ public class InquiryServiceImpl implements InquiryService {
         sb.delete(sb.length() - 2, sb.length()); //맨마지막 개행 삭제
         String postContent = sb.toString();
 
-        String userId = "dumplingmani";
-        String userName = "구민석";
+        String userId = UserManager.getInstance().getCurrentUser().getId();
+        String userName = UserManager.getInstance().getCurrentUser().getName();
         inquiry.setPostType(postType);
         inquiry.setPostTitle(postTitle);
         inquiry.setPostContent(postContent);
@@ -271,8 +272,8 @@ public class InquiryServiceImpl implements InquiryService {
         inquiry.setPostType(postType);
         inquiry.setPostTitle(postTitle);
         inquiry.setPostContent(postContent);
-        inquiry.setUserId("dumplingmani");
-        inquiry.setUserName("구민석");
+        inquiry.setUserId(UserManager.getInstance().getCurrentUser().getId());
+        inquiry.setUserName(UserManager.getInstance().getCurrentUser().getName());
         int row = inquiryDao.inquiryUpdate(inquiry);
         if(row != 0)
         {
