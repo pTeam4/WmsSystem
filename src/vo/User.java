@@ -13,7 +13,7 @@ public class User {
     private String pw;
     private String email;
     private String tel;
-    private String permission;
+    private int permission;
     private String status;
 
     // 정적 변수로 유일한 인스턴스를 저장합니다.
