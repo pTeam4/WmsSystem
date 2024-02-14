@@ -3,7 +3,6 @@ package service;
 import config.GetTexts;
 import dao.ProductDao;
 import dao.StockMovementDao;
-import dao.UserDao;
 import util.MovementStatus;
 import util.UserManager;
 import vo.Product;
@@ -61,7 +60,6 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void approveStorageRequest() {
-        UserDao userDao = new UserDao();
         User user = UserManager.getInstance().getCurrentUser();
 
         if (user.getPermission() == 1) {
