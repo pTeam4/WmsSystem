@@ -1,7 +1,3 @@
-import dao.UserDao;
-import service.LoginServiceImpl;
-import service.UserService;
-import service.UserServiceImpl;
 import view.MemberMenu;
 import view.NonMemberMenu;
 
@@ -10,14 +6,9 @@ public class Main {
     public static void main(String[] args) {
 
         NonMemberMenu wmsMenu = new NonMemberMenu();
-//        wmsMenu.nonMemberMenu();
-
-//        UserServiceImpl userService = new UserServiceImpl();
-//        userService.addMember();
 
         MemberMenu memberMenu = new MemberMenu();
         memberMenu.memberMainMenu();
-
 
     }
 }

@@ -3,18 +3,17 @@ package service;
 import config.GetTexts;
 import dao.ProductDao;
 import dao.StockMovementDao;
+import dao.UserDao;
 import util.MovementStatus;
 import vo.Product;
 import vo.StockMovement;
+import vo.User;
+
+import java.util.List;
 
 public class StorageServiceImpl implements StorageService {
     @Override
     public void requestStorage() {
-  /*
-         상품 정보들을 입력 받는다.
-         입력한 상품 정보들을 이용하여 product 테이블에 삽입한다..
-         product 테이블에 데이터가 정상적으로 삽입되면 입출고 요청 테이블에 정보를 삽입한다.(메소드를 분리하여 실행)
-         */
         Product product = new Product();
         ProductDao productDao = new ProductDao();
 
@@ -61,7 +60,16 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void approveStorageRequest() {
+        UserDao userDao = new UserDao();
+        User user = userDao.userSelect();
 
+        if (user.getPermission() == 1) {
+            StockMovementDao stockMovementDao = new StockMovementDao();
+
+            List<StockMovement> stockMovements = stockMovementDao.stockSelectByStatus(MovementStatus.REQUESTED.getCode());
+
+            for (StockMovement stockMovement : stockMovements) System.out.println(stockMovement.toString());
+        }
     }
 
     @Override

@@ -1,7 +1,7 @@
 package service;
 
 import config.GetTexts;
-import config.UserManager;
+import util.UserManager;
 import dao.UserDao;
 import vo.User;
 

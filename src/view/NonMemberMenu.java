@@ -1,9 +1,7 @@
 package view;
 
-import config.UserManager;
 import service.*;
 import config.GetTexts;
-import vo.User;
 
 public class NonMemberMenu {
     private static LoginService loginService = new LoginServiceImpl();
