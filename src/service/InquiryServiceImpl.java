@@ -2,30 +2,135 @@ package service;
 
 import config.GetTexts;
 import dao.InquiryDao;
+import dao.NoticeDao;
 import vo.Inquiry;
+import vo.Notice;
 
 import java.util.ArrayList;
 
 public class InquiryServiceImpl implements InquiryService {
     InquiryDao inquiryDao = new InquiryDao();
+    NoticeDao noticeDao = new NoticeDao();
     @Override
     public void getNotice() {
-
+        System.out.println("[공지 사항]");
+        System.out.println("----------------------------------------------------------------------------------------");
+        System.out.printf("%-6s%-10s%-12s%-15s%-25s%-16s\n", "게시물번호", "공지종류", "제목", "ID", "내용", "작성일");
+        System.out.println("----------------------------------------------------------------------------------------");
+        ArrayList<Notice> noticeList = noticeDao.noticeSelect();
+        for (Notice notice : noticeList)
+        {
+            String content = notice.getContent().replace("\r\n", " ");
+            if(content.length() > 10)
+            {
+                content = content.substring(0, 10) + "...";
+            }
+            System.out.printf("%-6s%-10s%-12s%-15s%-25s%-16s\n", notice.getNo(), notice.getType(), notice.getTitle(), notice.getUserId(), content, notice.getNoticeDate());
+        }
+        System.out.println("----------------------------------------------------------------------------------------\n");
     }
 
     @Override
     public void addNotice() {
+        Notice notice = new Notice();
+        System.out.println("[새 공지사항 입력]");
+        System.out.println("공지 유형 선택 1. 긴급 2. 정기 공지 3. 이용 안내");
+        String postTypeNum = GetTexts.getInstance().readLine();
+        String postType = "";
+        switch (postTypeNum) {
+            case "1" -> {
+                postType = "긴급";
+            }
+            case "2" -> {
+                postType = "정기 공지";
+            }
+            case "3" -> {
+                postType = "이용 안내";
+            }
+            default -> {
+                System.out.println("잘못 입력하셨습니다.");
+                return;
+            }
+        }
+        System.out.println("제목: ");
+        String title = GetTexts.getInstance().readLine();
 
+        System.out.println("글 내용을 입력하세요. 다 작성하셨으면 exit를 입력해주세요.");
+        StringBuilder sb = new StringBuilder();
+        String line;
+
+        while (!(line = GetTexts.getInstance().readLine()).equals("exit")) {
+            sb.append(line).append("\r\n"); // 각 줄의 끝에 \r\n 추가
+        }
+
+        sb.delete(sb.length() - 2, sb.length()); //맨마지막 개행 삭제
+        String content = sb.toString();
+
+        String userId = "dumplingmani";
+        notice.setType(postType);
+        notice.setUserId(userId);
+        notice.setContent(content);
+        notice.setTitle(title);
+        noticeDao.noticeInsert(notice);
     }
 
     @Override
     public void modifyNotice() {
+        System.out.println("수정할 공지사항 번호를 입력하세요.");
+        int no = Integer.parseInt(GetTexts.getInstance().readLine());
+        Notice notice = noticeDao.noticeSelectOne(no);
+        System.out.println("[수정할 공지사항 입력]");
+        System.out.println("공지 유형 선택 1. 긴급 2. 정기 공지 3. 이용 안내");
+        String postTypeNum = GetTexts.getInstance().readLine();
+        String postType = "";
+        switch (postTypeNum) {
+            case "1" -> {
+                postType = "긴급";
+            }
+            case "2" -> {
+                postType = "정기 공지";
+            }
+            case "3" -> {
+                postType = "이용 안내";
+            }
+            default -> {
+                System.out.println("잘못 입력하셨습니다.");
+                return;
+            }
+        }
+        System.out.println("제목: ");
+        String title = GetTexts.getInstance().readLine();
 
+        System.out.println("글 내용을 입력하세요. 다 작성하셨으면 exit를 입력해주세요.");
+        StringBuilder sb = new StringBuilder();
+        String line;
+
+        while (!(line = GetTexts.getInstance().readLine()).equals("exit")) {
+            sb.append(line).append("\r\n"); // 각 줄의 끝에 \r\n 추가
+        }
+
+        sb.delete(sb.length() - 2, sb.length()); //맨마지막 개행 삭제
+        String content = sb.toString();
+
+        String userId = "dumplingmani";
+        notice.setType(postType);
+        notice.setUserId(userId);
+        notice.setContent(content);
+        notice.setTitle(title);
+        noticeDao.noticeUpdate(notice);
     }
 
     @Override
     public void removeNotice() {
-
+        System.out.print("삭제할 공지사항 번호를 입력하세요. ");
+        int no = Integer.parseInt(GetTexts.getInstance().readLine());
+        int row = noticeDao.noticeDelete(no);
+        if(row != 0){
+            System.out.println("해당 게시물이 삭제되었습니다.");
+        }
+        else{
+            System.out.println("해당 게시물이 없습니다.");
+        }
     }
 
     @Override

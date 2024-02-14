@@ -4,9 +4,11 @@ import config.GetTexts;
 import dao.ExpenseDao;
 import dao.SalesDao;
 import vo.Expense;
+import vo.Sales;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -134,7 +136,16 @@ public class FinanceServiceImpl implements FinanceService {
     public void getSalesRecords() {
         System.out.print("매출 내역을 조회하고 싶은 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
-        salesDao.salesSelect(warehouseNo);
+        ArrayList<Sales> salesArrayList = salesDao.salesSelect(warehouseNo);
+        System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", "id", "창고번호", "종류", "매출금액", "매출일자");
+        for (Sales sales : salesArrayList)
+        {
+            int id = sales.getId();
+            String type = sales.getType();
+            int amount = sales.getAmount();
+            Date salesDate = sales.getSalesDate();
+            System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", id, warehouseNo, type, amount, salesDate);
+        }
     }
 
     @Override
