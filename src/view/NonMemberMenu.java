@@ -1,7 +1,9 @@
 package view;
 
+import config.UserManager;
 import service.*;
 import config.GetTexts;
+import vo.User;
 
 public class NonMemberMenu {
     private static LoginService loginService = new LoginServiceImpl();
@@ -30,10 +32,11 @@ public class NonMemberMenu {
             }
             case 2-> {
                 loginService.login(); // 로그인 검사 로직 필요
+
                 MemberMenu.memberMainMenu();
             }
             case 3-> {
-                InqueryServiceMenu.inqueryServiceMenu();
+                InquiryServiceMenu.inquiryServiceMenu();
                 nonMemberMenu();
             }
             case 4-> {

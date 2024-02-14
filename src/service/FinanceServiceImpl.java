@@ -4,9 +4,13 @@ import config.GetTexts;
 import dao.ExpenseDao;
 import dao.SalesDao;
 import vo.Expense;
+import vo.Sales;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class FinanceServiceImpl implements FinanceService {
     ExpenseDao expenseDao = new ExpenseDao();
@@ -15,7 +19,16 @@ public class FinanceServiceImpl implements FinanceService {
     public void getExpenseRecords() {
         System.out.print("지출 내역을 조회하고 싶은 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
-        expenseDao.expenseSelect(warehouseNo);
+        List<Expense> expenses = expenseDao.expenseSelect(warehouseNo);
+        System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", "id", "창고번호", "종류", "비용", "지출일자");
+        for (Expense expense : expenses) {
+            int id = expense.getId();
+            String type = expense.getType();
+            int cost = expense.getCost();
+            Date expenseDate = expense.getExpenseDate();
+            System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", id, warehouseNo, type, cost, expenseDate);
+        }
+
     }
 
     @Override
@@ -70,13 +83,45 @@ public class FinanceServiceImpl implements FinanceService {
             System.out.println("해당 내역이 존재하지 않습니다.");
             return;
         }
-        expenseDao.expenseUpdate(id);
+
+        System.out.print("수정할 지출 유형을 선택하세요 ");
+        String type = GetTexts.getInstance().readLine();
+        if (!type.isEmpty()) {
+            expense.setType(type);
+        }
+
+        System.out.print("수정할 지출 비용을 입력하세요 ");
+        String costInput = GetTexts.getInstance().readLine();
+        if (!costInput.isEmpty()) {
+            int cost = Integer.parseInt(costInput);
+            expense.setCost(cost);
+        }
+
+        System.out.print("수정할 지출 일자를 입력하세요 yyyy-MM-dd (이전 일자: " + expense.getExpenseDate() + "): ");
+        String dateString = GetTexts.getInstance().readLine();
+        if (!dateString.isEmpty()) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date parsedDate = dateFormat.parse(dateString);
+                expense.setExpenseDate(new java.sql.Date(parsedDate.getTime()));
+            } catch (ParseException e) {
+                System.out.println("잘못된 형식입니다.");
+            }
+        }
+
+        int rowsAffected = expenseDao.expenseUpdate(expense);
+        if (rowsAffected > 0) {
+            System.out.println("지출 내역이 성공적으로 수정되었습니다.");
+        } else {
+            System.out.println("지출 내역 수정에 실패했습니다.");
+        }
     }
+
 
 
     @Override
     public void removeExpenseRecord() {
-        System.out.print("삭제하고싶은 지출내역번호를 입력하세요. 취소하고싶다면 0입력");
+        System.out.print("삭제하고싶은 지출내역번호를 입력하세요. 취소하고싶다면 0입력 ");
         int id = Integer.parseInt(GetTexts.getInstance().readLine());
         if(id == 0)
         {
@@ -91,7 +136,16 @@ public class FinanceServiceImpl implements FinanceService {
     public void getSalesRecords() {
         System.out.print("매출 내역을 조회하고 싶은 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
-        salesDao.salesSelect(warehouseNo);
+        ArrayList<Sales> salesArrayList = salesDao.salesSelect(warehouseNo);
+        System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", "id", "창고번호", "종류", "매출금액", "매출일자");
+        for (Sales sales : salesArrayList)
+        {
+            int id = sales.getId();
+            String type = sales.getType();
+            int amount = sales.getAmount();
+            Date salesDate = sales.getSalesDate();
+            System.out.printf("%-4s%-8s%-20s%-12s%-20s\n", id, warehouseNo, type, amount, salesDate);
+        }
     }
 
     @Override
