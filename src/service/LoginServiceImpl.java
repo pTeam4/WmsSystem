@@ -32,8 +32,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public void logout() {
-        UserManager userManager = UserManager.getInstance();
-        User currentUser = userManager.getCurrentUser();
+        User currentUser = UserManager.getInstance().getCurrentUser();
         currentUser = null;
         System.out.println("로그아웃 되었습니다.");
     }
