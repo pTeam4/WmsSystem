@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         System.out.print("tel: ");
         user.setTel(getTexts.readLine());
         userDao.userInsert(user);
-        System.out.println(user.getName()+"님 회원가입이 완료되었습니다.");
+        System.out.println(user.getName() + "님 회원가입이 완료되었습니다.");
     }
 
     public String checkId() {
@@ -85,7 +85,28 @@ public class UserServiceImpl implements UserService {
     public void modifyMember() {
         UserManager userManager = UserManager.getInstance();
         User currentUser = userManager.getCurrentUser();
-        System.out.println(currentUser);
+        System.out.println("회원 정보 수정");
+        System.out.print("name: ");
+        currentUser.setName(getTexts.readLine());
+        System.out.print("pw: ");
+        currentUser.setPw(getTexts.readLine());
+        System.out.print("birth(ex 19981225): ");
+        String dateString = getTexts.readLine();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date utilDate;
+        try {
+            utilDate = sdf.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return;
+        }
+        currentUser.setBirth(utilDate);
+        System.out.print("email(ex test@naver.com): ");
+        currentUser.setEmail(getTexts.readLine());
+        System.out.print("tel(ex 01012345678): ");
+        currentUser.setTel(getTexts.readLine());
+        userDao.userUpdate();
+        System.out.println("회원정보가 변경되었습니다.");
     }
 
     @Override
@@ -110,6 +131,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getMemberDetails() {
+        UserManager userManager = UserManager.getInstance();
+        User currentUser = userManager.getCurrentUser();
+        System.out.println("id: " + currentUser.getId());
+        System.out.println("name: " + currentUser.getName());
+        System.out.println("birth: " + currentUser.getBirth());
+        System.out.println("pw: " + currentUser.getPw());
+        System.out.println("email: " + currentUser.getEmail());
+        System.out.println("tel: " + currentUser.getTel());
 
     }
 
