@@ -94,9 +94,9 @@ public class UserServiceImpl implements UserService {
     public void modifyMember() {
         User user = new User();
         System.out.println("회원정보 수정");
-        System.out.println("name : ");
+        System.out.print("name : ");
         user.setName(getTexts.readLine());
-        System.out.println("birth : ");
+        System.out.print("birth : ");
         String dateString = getTexts.readLine();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date utilDate;
@@ -107,11 +107,11 @@ public class UserServiceImpl implements UserService {
             return;
         }
         user.setBirth(utilDate);
-        System.out.println("pw : ");
+        System.out.print("pw : ");
         user.setPw(getTexts.readLine());
-        System.out.println("email : ");
+        System.out.print("email : ");
         user.setEmail(getTexts.readLine());
-        System.out.println("tel : ");
+        System.out.print("tel : ");
         user.setTel(getTexts.readLine());
         userDao.userUpdate(user, UserManager.getInstance().getCurrentUser().getId());
         System.out.println("회원정보 수정 완료");
@@ -139,7 +139,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getMemberDetails() {
-
+        User user = UserManager.getInstance().getCurrentUser();
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n", "id", "name", "birth", "pw", "email", "tel");
+        System.out.println("-".repeat(150));
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n"
+                , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel());
 
     }
 
@@ -151,11 +155,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void getMembers() {
         List<User> users = userDao.userSelect();
-        System.out.printf("id name birth pw email tel permission status\n");
-        System.out.println("-".repeat(200));
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-10s | %-5s\n", "id", "name", "birth", "pw", "email", "tel", "permission", "status");
+        System.out.println("-".repeat(180));
         users.forEach(user -> {
-            System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s | %-5s\n"
-            ,user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getPermission(), user.getStatus());
+            System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n"
+                    , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getPermission(), user.getStatus());
         });
     }
 
