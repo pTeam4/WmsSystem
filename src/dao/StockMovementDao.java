@@ -131,6 +131,29 @@ public class StockMovementDao {
 
         return rows;
     }
+    public List<StockMovement> getAllStockMovements(int productId) {
+        String SELECT_STOCK_MOVEMENT_QUERY = "SELECT id, productId, userId, requestDatetime, approvedDatetime FROM stockmovement WHERE productid = ? ";
+
+        List<StockMovement> stockMovements = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STOCK_MOVEMENT_QUERY))
+        {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.setInt(1, productId);
+
+            while (resultSet.next()) {
+                StockMovement stockMovement = new StockMovement();
+                stockMovement.setId(resultSet.getInt("id"));
+                stockMovement.setProductId(productId);
+                stockMovement.setUserId(resultSet.getString("userId"));
+                stockMovement.setRequestDatetime(resultSet.getDate("requestDatetime"));
+                stockMovement.setApprovedDatetime(resultSet.getDate("approvedDatetime"));
+                stockMovements.add(stockMovement);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stockMovements;
+    }
 
     private void stockMovementUpdateAllApprovedDatetime(String status) {
         String sql = "UPDATE stock_movement SET approved_datetime = CURRENT_TIMESTAMP " +
