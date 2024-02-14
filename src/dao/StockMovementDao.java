@@ -129,4 +129,20 @@ public class StockMovementDao {
 
         return rows;
     }
+
+    private void stockMovementUpdateAllApprovedDatetime(String status) {
+        String sql = "UPDATE stock_movement SET approved_datetime = CURRENT_TIMESTAMP " +
+                "WHERE status_code = ? AND approved_datetime IS NULL";
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+
+            preparedStatement.setString(1, status);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
