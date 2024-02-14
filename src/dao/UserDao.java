@@ -22,8 +22,7 @@ public class UserDao {
     }
 
     public void userInsert(User user) {
-//        User user = new User();
-        String sql = "Insert into User(id, name, birth, pw, email, tel)" +
+        String sql = "Insert into User(id, name, birth, password, email, telephone)" +
                 "values(?, ?, ?, ?, ?, ?)";
         try {
             pstmt = conn.prepareStatement(sql);
@@ -34,11 +33,12 @@ public class UserDao {
             pstmt.setString(4, user.getPw());
             pstmt.setString(5, user.getEmail());
             pstmt.setString(6, user.getTel());
+
             pstmt.executeUpdate();
             System.out.println("db insert ok");
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -68,7 +68,6 @@ public class UserDao {
         }
 
         return user;
-
     }
 
     public void userSelectOne(String id, String pw) {
