@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao {
     PreparedStatement pstmt = null;
@@ -22,8 +24,7 @@ public class UserDao {
     }
 
     public void userInsert(User user) {
-//        User user = new User();
-        String sql = "Insert into User(id, name, birth, pw, email, tel)" +
+        String sql = "Insert into User(id, name, birth, password, email, telephone)" +
                 "values(?, ?, ?, ?, ?, ?)";
         try {
             pstmt = conn.prepareStatement(sql);
@@ -34,25 +35,27 @@ public class UserDao {
             pstmt.setString(4, user.getPw());
             pstmt.setString(5, user.getEmail());
             pstmt.setString(6, user.getTel());
+
             pstmt.executeUpdate();
             System.out.println("db insert ok");
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
 
-    public User userSelect() {
+    public List<User> userSelect() {
         String sql = "SELECT * FROM user";
-        User user = new User();
+        List<User> users = new ArrayList<>();
 
         try (
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 ResultSet resultSet = preparedStatement.executeQuery();
         ) {
 
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+                User user = new User();
                 user.setId(resultSet.getString("id"));
                 user.setName(resultSet.getString("name"));
                 user.setBirth(resultSet.getDate("birth"));
@@ -61,52 +64,45 @@ public class UserDao {
                 user.setTel(resultSet.getString("tel"));
                 user.setPermission(resultSet.getInt("permission_id"));
                 user.setStatus(resultSet.getInt("status_id"));
+                users.add(user);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return user;
-
+        return users;
     }
 
-    public void userSelectOne(String id, String pw) {
-        try {
-            String sql = "select * from user where id = ? and pw = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
-            pstmt.setString(2, pw);
-            UserManager userManager = UserManager.getInstance();
-            User user = new User();
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                user.setId(rs.getString("id"));
-                user.setName(rs.getString("name"));
-                java.sql.Date sqlDate = new java.sql.Date(rs.getDate("birth").getTime());
-                user.setBirth(sqlDate);
-                user.setPw(rs.getString("pw"));
-                user.setEmail(rs.getString("email"));
-                user.setTel(rs.getString("tel"));
+    public User userSelectOne(String id, String pw) {
+        String sql = "select * from user where id = ? and password = ?";
+        User user = null;
 
-                user.setPermission(rs.getInt("permission_id"));
-                user.setStatus(rs.getInt("status_id"));
+        try (
+                PreparedStatement preparedStatement = conn.prepareStatement(sql);
+        ) {
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, pw);
 
-                userManager.setCurrentUser(user);
-                User currentUser = userManager.getCurrentUser();
-                System.out.println(currentUser.getName() + " 로그인 성공");
-
-
-                rs.close();
-                pstmt.close();
-            } else {
-                System.out.println("없는 회원입니다.");
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = new User();
+                    user.setId(resultSet.getString("id"));
+                    user.setName(resultSet.getString("name"));
+                    java.sql.Date sqlDate = new java.sql.Date(resultSet.getDate("birth").getTime());
+                    user.setBirth(sqlDate);
+                    user.setPw(resultSet.getString("password"));
+                    user.setEmail(resultSet.getString("email"));
+                    user.setTel(resultSet.getString("telephone"));
+                    user.setPermission(resultSet.getInt("permission_id"));
+                    user.setStatus(resultSet.getInt("status_id"));
+                }
             }
-
-
         } catch (SQLException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
+
+        return user;
     }
 
     public void userDelete() {
