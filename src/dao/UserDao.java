@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao {
     PreparedStatement pstmt = null;
@@ -43,16 +45,16 @@ public class UserDao {
 
     }
 
-    public User userSelect() {
+    public List<User> userSelect() {
         String sql = "SELECT * FROM user";
-        User user = new User();
+        List<User> users = new ArrayList<>();
 
         try (
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 ResultSet resultSet = preparedStatement.executeQuery();
         ) {
-
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+                User user = new User();
                 user.setId(resultSet.getString("id"));
                 user.setName(resultSet.getString("name"));
                 user.setBirth(resultSet.getDate("birth"));
@@ -61,14 +63,13 @@ public class UserDao {
                 user.setTel(resultSet.getString("tel"));
                 user.setPermission(resultSet.getInt("permission_id"));
                 user.setStatus(resultSet.getInt("status_id"));
+                users.add(user);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return user;
-
+        return users;
     }
 
     public void userSelectOne(String id, String pw) {
@@ -118,6 +119,21 @@ public class UserDao {
     public void userConfirm() {
     }
 
-    public void userUpdate() {
+    public void userUpdate(User user, String id) {
+        try {
+            String sql = "update user set name = ?, birth = ?, pw = ?, email = ?, tel = ? where id = ? ";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, user.getName());
+            java.sql.Date sqlDate = new java.sql.Date(user.getBirth().getTime());
+            pstmt.setDate(2, sqlDate);
+            pstmt.setString(3, user.getPw());
+            pstmt.setString(4, user.getEmail());
+            pstmt.setString(5, user.getTel());
+            pstmt.setString(6, id);
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
