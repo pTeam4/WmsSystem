@@ -1,6 +1,7 @@
 package service;
 
 import config.GetTexts;
+import config.UserManager;
 import dao.UserDao;
 import vo.User;
 
@@ -16,7 +17,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addMember() {
-        User user = User.getInstance();
+        User user = new User();
         System.out.print("이름: ");
         user.setName(getTexts.readLine());
         System.out.print("생년월일(ex: 19981225): ");
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
         System.out.print("tel: ");
         user.setTel(getTexts.readLine());
         userDao.userInsert(user);
+        System.out.println(user.getName()+"님 회원가입이 완료되었습니다.");
     }
 
     public String checkId() {
@@ -81,7 +83,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void modifyMember() {
-
+        UserManager userManager = UserManager.getInstance();
+        User currentUser = userManager.getCurrentUser();
+        System.out.println(currentUser);
     }
 
     @Override
