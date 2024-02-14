@@ -88,7 +88,6 @@ public class StockMovementDao {
 
             try (
                     ResultSet resultSet = preparedStatement.executeQuery();
-
             ) {
 
                 while (resultSet.next()) {
