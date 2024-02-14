@@ -43,33 +43,32 @@ public class UserDao {
 
     }
 
-    public void userSelect() {
-        try {
-            User user = new User();
-            String sql = "select id, name, birth, pw, email, tel, p.level, s.state " +
-                    "from user u join permission p join status s " +
-                    "on u.permission_id = p.id and u.status_id = s.id";
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                user.setId(rs.getString("id"));
-                user.setName(rs.getString("name"));
-                java.sql.Date sqlDate = new java.sql.Date(rs.getDate("birth").getTime());
-                user.setBirth(sqlDate);
-                user.setPw(rs.getString("pw"));
-                user.setEmail(rs.getString("email"));
-                user.setTel(rs.getString("tel"));
-                user.setPermission(rs.getInt("permission_id"));
-                user.setStatus(rs.getInt("status_id"));
-                System.out.println(user.getId() + " 로그인 성공");
+    public User userSelect() {
+        String sql = "SELECT * FROM user";
+        User user = User.getInstance();
 
-                rs.close();
-                pstmt.close();
-            } else {
-                System.out.println("없는 회원입니다.");
+        try (
+                PreparedStatement preparedStatement = conn.prepareStatement(sql);
+                ResultSet resultSet = preparedStatement.executeQuery();
+        ) {
+
+            if (resultSet.next()) {
+                user.setId(resultSet.getString("id"));
+                user.setName(resultSet.getString("name"));
+                user.setBirth(resultSet.getDate("birth"));
+                user.setPw(resultSet.getString("pw"));
+                user.setEmail(resultSet.getString("email"));
+                user.setTel(resultSet.getString("tel"));
+                user.setPermission(resultSet.getInt("permission_id"));
+                user.setStatus(resultSet.getString("status_id"));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return user;
+
     }
 
     public void userSelectOne(String id, String pw) {
@@ -89,12 +88,14 @@ public class UserDao {
                 user.setPw(rs.getString("pw"));
                 user.setEmail(rs.getString("email"));
                 user.setTel(rs.getString("tel"));
+
                 user.setPermission(rs.getInt("permission_id"));
                 user.setStatus(rs.getInt("status_id"));
 
                 userManager.setCurrentUser(user);
                 User currentUser = userManager.getCurrentUser();
                 System.out.println(currentUser.getName() + " 로그인 성공");
+
 
                 rs.close();
                 pstmt.close();

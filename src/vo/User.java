@@ -14,7 +14,10 @@ public class User {
     private String email;
     private String tel;
     private int permission;
+
     private int status;
+
+
 
     // 정적 변수로 유일한 인스턴스를 저장합니다.
 

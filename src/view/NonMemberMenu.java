@@ -36,7 +36,7 @@ public class NonMemberMenu {
                 MemberMenu.memberMainMenu();
             }
             case 3-> {
-                InqueryServiceMenu.inqueryServiceMenu();
+                InquiryServiceMenu.inquiryServiceMenu();
                 nonMemberMenu();
             }
             case 4-> {

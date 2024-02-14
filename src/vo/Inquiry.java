@@ -11,10 +11,9 @@ public class Inquiry{
     private int postNum;
     private String postType;
     private String postTitle;
-    private int userNo;
-    private int customerId;
+    private String userId;
+    private String userName;
     private String postContent;
-    private Blob postAttach;
     private Date postDate;
     private String response;
 }
