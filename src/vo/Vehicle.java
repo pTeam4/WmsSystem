@@ -8,7 +8,6 @@ public class Vehicle {
     private String num;
     private int deliveryDriverId;
     private String type;
-    private int contact1;
-    private String contact2;
+    private String telephone;
     private int status;
 }
