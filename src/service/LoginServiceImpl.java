@@ -20,15 +20,14 @@ public class LoginServiceImpl implements LoginService {
         User user = userDao.userSelectOne(id, pw);
 
         UserManager.getInstance().setCurrentUser(user);
-        User currentUser =  UserManager.getInstance().getCurrentUser();
+        User currentUser = UserManager.getInstance().getCurrentUser();
 
         System.out.println(currentUser.getName() + " 로그인 성공");
     }
 
     @Override
     public void logout() {
-        UserManager userManager = UserManager.getInstance();
-        User currentUser = userManager.getCurrentUser();
+        User currentUser = UserManager.getInstance().getCurrentUser();
         currentUser = null;
         System.out.println("로그아웃 되었습니다.");
     }

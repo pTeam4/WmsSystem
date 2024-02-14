@@ -24,20 +24,8 @@ public class UserServiceImpl implements UserService {
         System.out.print("이름: ");
         user.setName(getTexts.readLine());
 
-        System.out.print("생년월일(ex: 19981225): ");
-        String dateString = getTexts.readLine();
-
-        // SimpleDateFormat을 사용하여 문자열을 java.util.Date로 파싱
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date utilDate;
-
-        try {
-            utilDate = sdf.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return;
-        }
-        user.setBirth(utilDate);
+        System.out.print("생년월일(ex: 20240101): ");
+        user.setBirth(stringToDate(getTexts.readLine()));
 
         System.out.print("id: ");
         user.setId(getTexts.readLine());
@@ -45,10 +33,10 @@ public class UserServiceImpl implements UserService {
         System.out.print("pw: ");
         user.setPw(getTexts.readLine());
 
-        System.out.print("email: ");
+        System.out.print("email(ex: ssg@gmail.com): ");
         user.setEmail(getTexts.readLine());
 
-        System.out.print("tel: ");
+        System.out.print("tel(ex: 01012345678): ");
         user.setTel(getTexts.readLine());
 
         userDao.userInsert(user);
@@ -86,7 +74,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("아이디 찾기");
         System.out.print("회원 이름: ");
         String name = getTexts.readLine();
-        System.out.print("회원 이메일: ");
+        System.out.print("회원 이메일(ex: ssg@gmail.com): ");
         String email = getTexts.readLine();
         String id = userDao.userSelectByNameAndEmail(name, email);
         System.out.println("찾으시는 id: " + id);
@@ -105,28 +93,30 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public void modifyMember() {
-        User user = new User();
-        System.out.println("회원정보 수정");
-        System.out.print("name : ");
-        user.setName(getTexts.readLine());
-        System.out.print("birth : ");
-        String dateString = getTexts.readLine();
+    public Date stringToDate(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date utilDate;
+        Date utilDate = null;
         try {
             utilDate = sdf.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
-            return;
         }
-        user.setBirth(utilDate);
-        System.out.print("pw : ");
+        return utilDate;
+    }
+
+    @Override
+    public void modifyMember() {
+        User user = new User();
+        System.out.println("회원정보 수정");
+        System.out.print("name: ");
+        user.setName(getTexts.readLine());
+        System.out.print("birth(ex: 20240101): ");
+        user.setBirth(stringToDate(getTexts.readLine()));
+        System.out.print("pw: ");
         user.setPw(getTexts.readLine());
-        System.out.print("email : ");
+        System.out.print("email(ex: ssg@gmail.com): ");
         user.setEmail(getTexts.readLine());
-        System.out.print("tel : ");
+        System.out.print("tel(ex: 01012345678): ");
         user.setTel(getTexts.readLine());
         userDao.userUpdate(user, UserManager.getInstance().getCurrentUser().getId());
         System.out.println("회원정보 수정 완료");
@@ -160,10 +150,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void getMemberDetails() {
         User user = UserManager.getInstance().getCurrentUser();
-        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n", "id", "name", "birth", "pw", "email", "tel");
+        String format = "%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n";
+        System.out.printf(format, "id", "name", "birth", "pw", "email", "tel");
         System.out.println("-".repeat(150));
-        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n"
-                , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel());
+        System.out.printf(format, user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel());
         System.out.println("-".repeat(150));
 
     }
@@ -175,14 +165,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getMembers() {
-//        List<User> users = userDao.userSelect();
         List<UserPermission> users = userDao.userSelect();
+        String format = "%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n";
         System.out.println("-".repeat(180));
-        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n", "id", "name", "birth", "pw", "email", "tel", "permission", "status");
+        System.out.printf(format, "id", "name", "birth", "pw", "email", "tel", "permission", "status");
         System.out.println("-".repeat(180));
         users.forEach(user -> {
-            System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n"
-                    , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getLevel(), user.getState());
+            System.out.printf(format, user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getLevel(), user.getState());
         });
         System.out.println("-".repeat(180));
     }
