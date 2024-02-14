@@ -45,8 +45,7 @@ public class UserDao {
 
     public User userSelect() {
         String sql = "SELECT * FROM user";
-        UserManager userManager = UserManager.getInstance();
-        User user = userManager.getCurrentUser();
+        User user = new User();
 
         try (
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
