@@ -66,9 +66,26 @@ public class StorageServiceImpl implements StorageService {
         if (user.getPermission() == 1) {
             StockMovementDao stockMovementDao = new StockMovementDao();
 
-            List<StockMovement> stockMovements = stockMovementDao.stockSelectByStatus(MovementStatus.REQUESTED.getCode());
+            List<StockMovement> stockMovements = stockMovementDao.stockMovementSelectByStatus(MovementStatus.REQUESTED.getCode());
 
             for (StockMovement stockMovement : stockMovements) System.out.println(stockMovement.toString());
+
+            System.out.printf("""
+                    메뉴를 선택하세요.
+                    1. 일괄 승인 | 2. 개별 승인
+                    """);
+
+            int menuno = Integer.parseInt(GetTexts.getInstance().readLine());
+
+            switch (menuno) {
+                case 1 -> {
+                    int rows = stockMovementDao.stockMovementUpdateAllStatus(
+                            MovementStatus.REQUESTED.getCode(), MovementStatus.APPROVED.getCode()
+                    );
+
+                    System.out.printf("%d건의 입고 요청이 승인되었습니다.", rows);
+                }
+            }
         }
     }
 
@@ -82,13 +99,13 @@ public class StorageServiceImpl implements StorageService {
         StockMovementDao stockMovementDao = new StockMovementDao();
 
         // 모든 입고 요청을 출력
-        stockMovementDao.stockMovementsSelect();
+        stockMovementDao.printAllStockMovements();
 
         // 사용자로부터 취소할 입고 요청의 ID를 입력받음
         System.out.print("취소할 입고 요청의 ID를 입력하세요: ");
         int requestId = Integer.parseInt(GetTexts.getInstance().readLine());
 
-        // 상태를 '취소됨=ID'으로 변경
+        // 상태를 '취소됨'으로 변경
         int updatedRows = stockMovementDao.updateStockMovementStatus(requestId, MovementStatus.CANCELLED.getCode());
 
         // 변경된 행이 있을 경우 메시지 출력
@@ -102,37 +119,6 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void modifyStorageRequest() {
-        ProductDao productDao = new ProductDao();
-        StockMovementDao stockMovementDao = new StockMovementDao();
-
-        // 모든 입고 요청 출력
-        stockMovementDao.stockMovementsSelect();
-
-        System.out.print("수정할 상품의 ID를 입력하세요: ");
-        int productId = Integer.parseInt(GetTexts.getInstance().readLine());
-
-        // 사용자로부터 수정할 상품의 정보 입력 받기
-        Product product = new Product();
-        System.out.print("새로운 상품 이름을 입력하세요: ");
-        product.setName(GetTexts.getInstance().readLine());
-        System.out.print("새로운 상품 브랜드를 입력하세요: ");
-        product.setBrand(GetTexts.getInstance().readLine());
-        System.out.print("새로운 상품 분류를 입력하세요: ");
-        product.setType(GetTexts.getInstance().readLine());
-        System.out.print("새로운 상품 정가를 입력하세요: ");
-        product.setPrice(Integer.parseInt(GetTexts.getInstance().readLine()));
-        System.out.print("새로운 상품 판매가를 입력하세요: ");
-        product.setSalePrice(Integer.parseInt(GetTexts.getInstance().readLine()));
-        System.out.print("새로운 상품 수량을 입력하세요: ");
-        product.setQuantity(Integer.parseInt(GetTexts.getInstance().readLine()));
-
-        int updatedProductRows = productDao.productUpdate(productId, product);
-
-        if (updatedProductRows > 0) {
-            System.out.println("상품 정보가 수정되었습니다.");
-        } else {
-            System.out.println("상품 정보 수정에 실패했습니다.");
-        }
 
     }
 
