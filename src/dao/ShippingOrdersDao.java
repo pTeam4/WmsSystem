@@ -11,10 +11,6 @@ public class ShippingOrdersDao {
     PreparedStatement pstmt;
     Connection conn;
 
-    /*public ShippingOrdersDao() {
-        this.conn = JdbcConnection.getInstance().getConnection();
-    }*/
-
     public List<ShippingOrders> getShippingOrdersList() {
         conn = JdbcConnection.getInstance().getConnection();
         List<ShippingOrders> shippingOrdersList = new ArrayList<>();
@@ -28,7 +24,7 @@ public class ShippingOrdersDao {
             while (rs.next()) {
                 ShippingOrders shippingOrders = new ShippingOrders();
                 shippingOrders.setId(rs.getInt("id"));
-                shippingOrders.setCustomerId(rs.getInt("customer_id"));
+                shippingOrders.setUserId(rs.getString("user_id"));
                 shippingOrders.setDeliveryAddress(rs.getString("delivery_address"));
                 shippingOrders.setOrderDate(rs.getDate("order_date"));
                 shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
@@ -48,12 +44,12 @@ public class ShippingOrdersDao {
         conn = JdbcConnection.getInstance().getConnection();
         int shippingOrdersId = 0;
         StringBuilder stringBuilder = new StringBuilder();
-        String sql = stringBuilder.append("Insert into Shipping_Orders(customer_id, delivery_address, order_date, delivery_date) ")
+        String sql = stringBuilder.append("Insert into Shipping_Orders(user_id, delivery_address, order_date, delivery_date) ")
                 .append("values (?,?,?,?)")
                 .toString();
         try {
             pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, shippingOrders.getCustomerId());
+            pstmt.setString(1, shippingOrders.getUserId());
             pstmt.setString(2, shippingOrders.getDeliveryAddress());
             java.sql.Date orderDate = new java.sql.Date(shippingOrders.getOrderDate().getTime());
             pstmt.setDate(3, orderDate);
@@ -103,7 +99,7 @@ public class ShippingOrdersDao {
             while (rs.next()) {
                 ShippingOrders shippingOrders = new ShippingOrders();
                 shippingOrders.setId(rs.getInt("id"));
-                shippingOrders.setCustomerId(rs.getInt("customer_id"));
+                shippingOrders.setUserId(rs.getString("user_id"));
                 shippingOrders.setDeliveryAddress(rs.getString("delivery_address"));
                 shippingOrders.setOrderDate(rs.getDate("order_date"));
                 shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
@@ -112,7 +108,6 @@ public class ShippingOrdersDao {
 
                 shippingOrdersList.add(shippingOrders);
             }
-/*            pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -133,7 +128,7 @@ public class ShippingOrdersDao {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 shippingOrders.setId(rs.getInt("id"));
-                shippingOrders.setCustomerId(rs.getInt("customer_id"));
+                shippingOrders.setUserId(rs.getString("user_id"));
                 shippingOrders.setDeliveryAddress(rs.getString("delivery_address"));
                 shippingOrders.setOrderDate(rs.getDate("order_date"));
                 shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
