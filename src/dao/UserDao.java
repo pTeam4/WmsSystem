@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao {
     PreparedStatement pstmt = null;
@@ -43,10 +45,14 @@ public class UserDao {
 
     }
 
-    public User userSelect() {
+    public List<User> userSelect() {
         String sql = "SELECT * FROM user";
+
+        List<User> users = new ArrayList<>();
+
         UserManager userManager = UserManager.getInstance();
         User user = userManager.getCurrentUser();
+
 
         try (
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -54,6 +60,7 @@ public class UserDao {
         ) {
 
             if (resultSet.next()) {
+                User user = new User();
                 user.setId(resultSet.getString("id"));
                 user.setName(resultSet.getString("name"));
                 user.setBirth(resultSet.getDate("birth"));
@@ -62,13 +69,15 @@ public class UserDao {
                 user.setTel(resultSet.getString("tel"));
                 user.setPermission(resultSet.getInt("permission_id"));
                 user.setStatus(resultSet.getInt("status_id"));
+
+                users.add(user);
+
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return user;
+        return users;
 
     }
 
@@ -94,9 +103,6 @@ public class UserDao {
                 user.setStatus(rs.getInt("status_id"));
 
                 userManager.setCurrentUser(user);
-                User currentUser = userManager.getCurrentUser();
-                System.out.println(currentUser.getName() + " 로그인 성공");
-
 
                 rs.close();
                 pstmt.close();
@@ -120,5 +126,22 @@ public class UserDao {
     }
 
     public void userUpdate() {
+        try {
+            UserManager userManager = UserManager.getInstance();
+            User currentUser = userManager.getCurrentUser();
+            String sql = "update user set name = ?, pw = ?, birth = ?, email= ?, tel= ? where id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, currentUser.getName());
+            pstmt.setString(2, currentUser.getPw());
+            java.sql.Date sqlDate = new java.sql.Date(currentUser.getBirth().getTime());
+            pstmt.setDate(3, sqlDate);
+            pstmt.setString(4, currentUser.getEmail());
+            pstmt.setString(5, currentUser.getTel());
+            pstmt.setString(6, currentUser.getId());
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
