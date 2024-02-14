@@ -71,6 +71,24 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void cancelStorageRequest() {
+        StockMovementDao stockMovementDao = new StockMovementDao();
+
+        // 모든 입고 요청을 출력
+        stockMovementDao.printAllStockMovements();
+
+        // 사용자로부터 취소할 입고 요청의 ID를 입력받음
+        System.out.print("취소할 입고 요청의 ID를 입력하세요: ");
+        int requestId = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        // 상태를 '취소됨'으로 변경
+        int updatedRows = stockMovementDao.updateStockMovementStatus(requestId, MovementStatus.CANCELLED.getCode());
+
+        // 변경된 행이 있을 경우 메시지 출력
+        if (updatedRows > 0) {
+            System.out.println("입고 요청이 취소되었습니다.");
+        } else {
+            System.out.println("입고 요청 취소에 실패했습니다.");
+        }
 
     }
 
