@@ -51,7 +51,6 @@ public class UserDao {
         List<User> users = new ArrayList<>();
 
         UserManager userManager = UserManager.getInstance();
-        User user = userManager.getCurrentUser();
 
 
         try (
@@ -83,7 +82,7 @@ public class UserDao {
 
     public void userSelectOne(String id, String pw) {
         try {
-            String sql = "select * from user where id = ? and pw = ?";
+            String sql = "select * from user where id = ? and password = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             pstmt.setString(2, pw);
