@@ -14,28 +14,33 @@ public class User {
     private String email;
     private String tel;
     private int permission;
-    private String status;
+
+    private int status;
+
+
 
     // 정적 변수로 유일한 인스턴스를 저장합니다.
-    private static User instance;
 
-    // 생성자를 private로 선언하여 외부에서 직접 인스턴스를 생성하는 것을 막습니다.
-    private User() {
+    public User() {
         // 생성자 내용 작성
     }
 
-    // 인스턴스를 반환하는 정적 메서드를 제공합니다.
-    public static User getInstance() {
-        // 인스턴스가 아직 생성되지 않은 경우에만 생성합니다.
-        if (instance == null) {
-            instance = new User();
-        }
-        return instance;
+    public User(String id, String pw) {
+        this.id = id;
+        this.pw = pw;
     }
 
-    public void logout() {
-        this.id = null;
-        this.pw = null;
-    }
+//    public User(String id, String name, Date birth, String pw, String email, String tel, String permission, String status) {
+//        this.id = id;
+//        this.name = name;
+//        this.birth = birth;
+//        this.pw = pw;
+//        this.email = email;
+//        this.tel = tel;
+//        this.permission = permission;
+//        this.status = status;
+//    }
+
+
 
 }
