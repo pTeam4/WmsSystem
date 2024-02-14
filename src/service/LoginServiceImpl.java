@@ -17,9 +17,10 @@ public class LoginServiceImpl implements LoginService {
         System.out.print("pw: ");
         String pw = getTexts.readLine();
 
-        userDao.userSelectOne(id, pw);
-        UserManager userManager = UserManager.getInstance();
-        User currentUser = userManager.getCurrentUser();
+        User user = userDao.userSelectOne(id, pw);
+
+        UserManager.getInstance().setCurrentUser(user);
+        User currentUser =  UserManager.getInstance().getCurrentUser();
 
         System.out.println(currentUser.getName() + " 로그인 성공");
     }

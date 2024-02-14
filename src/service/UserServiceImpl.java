@@ -19,13 +19,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addMember() {
         User user = new User();
+
         System.out.print("이름: ");
         user.setName(getTexts.readLine());
+
         System.out.print("생년월일(ex: 19981225): ");
         String dateString = getTexts.readLine();
+
         // SimpleDateFormat을 사용하여 문자열을 java.util.Date로 파싱
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date utilDate;
+
         try {
             utilDate = sdf.parse(dateString);
         } catch (ParseException e) {
@@ -33,15 +37,19 @@ public class UserServiceImpl implements UserService {
             return;
         }
         user.setBirth(utilDate);
-//            user.setId(checkId());
+
         System.out.print("id: ");
         user.setId(getTexts.readLine());
+
         System.out.print("pw: ");
         user.setPw(getTexts.readLine());
+
         System.out.print("email: ");
         user.setEmail(getTexts.readLine());
+
         System.out.print("tel: ");
         user.setTel(getTexts.readLine());
+
         userDao.userInsert(user);
         System.out.println(user.getName() + "님 회원가입이 완료되었습니다.");
     }
