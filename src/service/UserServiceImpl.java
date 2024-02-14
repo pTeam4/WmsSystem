@@ -2,6 +2,7 @@ package service;
 
 import config.GetTexts;
 import dao.UserDao;
+import dto.UserPermission;
 import util.UserManager;
 import vo.User;
 
@@ -82,11 +83,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void findId() {
+        System.out.println("아이디 찾기");
+        System.out.print("회원 이름: ");
+        String name = getTexts.readLine();
+        System.out.print("회원 이메일: ");
+        String email = getTexts.readLine();
+        String id = userDao.userSelectByNameAndEmail(name, email);
+        System.out.println("찾으시는 id: " + id);
 
     }
 
     @Override
     public void findPassword() {
+        System.out.println("비밀번호 찾기");
+        System.out.print("회원 아이디: ");
+        String id = getTexts.readLine();
+        System.out.print("회원 이름: ");
+        String name = getTexts.readLine();
+        String pw = userDao.userSelectByIdAndName(id, name);
+        System.out.println("찾으시는 pw: " + pw);
 
     }
 
@@ -94,9 +109,9 @@ public class UserServiceImpl implements UserService {
     public void modifyMember() {
         User user = new User();
         System.out.println("회원정보 수정");
-        System.out.println("name : ");
+        System.out.print("name : ");
         user.setName(getTexts.readLine());
-        System.out.println("birth : ");
+        System.out.print("birth : ");
         String dateString = getTexts.readLine();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date utilDate;
@@ -107,11 +122,11 @@ public class UserServiceImpl implements UserService {
             return;
         }
         user.setBirth(utilDate);
-        System.out.println("pw : ");
+        System.out.print("pw : ");
         user.setPw(getTexts.readLine());
-        System.out.println("email : ");
+        System.out.print("email : ");
         user.setEmail(getTexts.readLine());
-        System.out.println("tel : ");
+        System.out.print("tel : ");
         user.setTel(getTexts.readLine());
         userDao.userUpdate(user, UserManager.getInstance().getCurrentUser().getId());
         System.out.println("회원정보 수정 완료");
@@ -124,7 +139,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void approveAdministrator() {
-
+        System.out.println("관리자 승인");
+        getMembers();
+        System.out.print("가입을 승인할 회원 id: ");
+        String id = getTexts.readLine();
+        userDao.userConfirm(id);
+        System.out.println("변경 완료 되었습니다.");
     }
 
     @Override
@@ -139,7 +159,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getMemberDetails() {
-
+        User user = UserManager.getInstance().getCurrentUser();
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n", "id", "name", "birth", "pw", "email", "tel");
+        System.out.println("-".repeat(150));
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n"
+                , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel());
+        System.out.println("-".repeat(150));
 
     }
 
@@ -150,13 +175,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getMembers() {
-        List<User> users = userDao.userSelect();
-        System.out.printf("id name birth pw email tel permission status\n");
-        System.out.println("-".repeat(200));
+//        List<User> users = userDao.userSelect();
+        List<UserPermission> users = userDao.userSelect();
+        System.out.println("-".repeat(180));
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n", "id", "name", "birth", "pw", "email", "tel", "permission", "status");
+        System.out.println("-".repeat(180));
         users.forEach(user -> {
-            System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s | %-5s\n"
-            ,user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getPermission(), user.getStatus());
+            System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n"
+                    , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getLevel(), user.getState());
         });
+        System.out.println("-".repeat(180));
     }
 
     @Override
