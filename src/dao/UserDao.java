@@ -58,9 +58,9 @@ public class UserDao {
                 user.setId(resultSet.getString("id"));
                 user.setName(resultSet.getString("name"));
                 user.setBirth(resultSet.getDate("birth"));
-                user.setPw(resultSet.getString("pw"));
+                user.setPw(resultSet.getString("password"));
                 user.setEmail(resultSet.getString("email"));
-                user.setTel(resultSet.getString("tel"));
+                user.setTel(resultSet.getString("telephone"));
                 user.setPermission(resultSet.getInt("permission_id"));
                 user.setStatus(resultSet.getInt("status_id"));
                 users.add(user);
@@ -115,7 +115,7 @@ public class UserDao {
 
     public void userUpdate(User user, String id) {
         try {
-            String sql = "update user set name = ?, birth = ?, pw = ?, email = ?, tel = ? where id = ? ";
+            String sql = "update user set name = ?, birth = ?, password = ?, email = ?, telephone = ? where id = ? ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, user.getName());
             java.sql.Date sqlDate = new java.sql.Date(user.getBirth().getTime());
