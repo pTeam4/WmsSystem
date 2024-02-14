@@ -25,7 +25,6 @@ public class VehicleDao {
         List<Vehicle> vehicleList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
         String sql = stringBuilder.append("select * from Vehicle ")
-                .append("where status = 0")
                 .toString();
         try {
             pstmt = conn.prepareStatement(sql);
@@ -35,13 +34,12 @@ public class VehicleDao {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setNum(rs.getString("num"));
                 vehicle.setType(rs.getString("type"));
-                vehicle.setContact1(rs.getInt("contact1"));
-                vehicle.setContact2(rs.getString("contact2"));
-                vehicle.setStatus(rs.getInt("status"));
+                vehicle.setDeliveryDriverId(rs.getInt("delivery_driver_id"));
+                vehicle.setTelephone(rs.getString("telephone"));
 
                 vehicleList.add(vehicle);
             }
-/*            pstmt.close();*/
+            /*            pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }

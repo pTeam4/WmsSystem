@@ -1,13 +1,15 @@
 package service;
 
 import config.GetTexts;
-import util.UserManager;
 import dao.UserDao;
+import dto.UserPermission;
+import util.UserManager;
 import vo.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,13 +20,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addMember() {
         User user = new User();
+
         System.out.print("이름: ");
         user.setName(getTexts.readLine());
+
         System.out.print("생년월일(ex: 19981225): ");
         String dateString = getTexts.readLine();
+
         // SimpleDateFormat을 사용하여 문자열을 java.util.Date로 파싱
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date utilDate;
+
         try {
             utilDate = sdf.parse(dateString);
         } catch (ParseException e) {
@@ -32,17 +38,21 @@ public class UserServiceImpl implements UserService {
             return;
         }
         user.setBirth(utilDate);
-//            user.setId(checkId());
+
         System.out.print("id: ");
         user.setId(getTexts.readLine());
+
         System.out.print("pw: ");
         user.setPw(getTexts.readLine());
+
         System.out.print("email: ");
         user.setEmail(getTexts.readLine());
+
         System.out.print("tel: ");
         user.setTel(getTexts.readLine());
+
         userDao.userInsert(user);
-        System.out.println(user.getName()+"님 회원가입이 완료되었습니다.");
+        System.out.println(user.getName() + "님 회원가입이 완료되었습니다.");
     }
 
     public String checkId() {
@@ -73,19 +83,53 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void findId() {
+        System.out.println("아이디 찾기");
+        System.out.print("회원 이름: ");
+        String name = getTexts.readLine();
+        System.out.print("회원 이메일: ");
+        String email = getTexts.readLine();
+        String id = userDao.userSelectByNameAndEmail(name, email);
+        System.out.println("찾으시는 id: " + id);
 
     }
 
     @Override
     public void findPassword() {
+        System.out.println("비밀번호 찾기");
+        System.out.print("회원 아이디: ");
+        String id = getTexts.readLine();
+        System.out.print("회원 이름: ");
+        String name = getTexts.readLine();
+        String pw = userDao.userSelectByIdAndName(id, name);
+        System.out.println("찾으시는 pw: " + pw);
 
     }
 
     @Override
     public void modifyMember() {
-        UserManager userManager = UserManager.getInstance();
-        User currentUser = userManager.getCurrentUser();
-        System.out.println(currentUser);
+        User user = new User();
+        System.out.println("회원정보 수정");
+        System.out.print("name : ");
+        user.setName(getTexts.readLine());
+        System.out.print("birth : ");
+        String dateString = getTexts.readLine();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date utilDate;
+        try {
+            utilDate = sdf.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return;
+        }
+        user.setBirth(utilDate);
+        System.out.print("pw : ");
+        user.setPw(getTexts.readLine());
+        System.out.print("email : ");
+        user.setEmail(getTexts.readLine());
+        System.out.print("tel : ");
+        user.setTel(getTexts.readLine());
+        userDao.userUpdate(user, UserManager.getInstance().getCurrentUser().getId());
+        System.out.println("회원정보 수정 완료");
     }
 
     @Override
@@ -95,7 +139,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void approveAdministrator() {
-
+        System.out.println("관리자 승인");
+        getMembers();
+        System.out.print("가입을 승인할 회원 id: ");
+        String id = getTexts.readLine();
+        userDao.userConfirm(id);
+        System.out.println("변경 완료 되었습니다.");
     }
 
     @Override
@@ -110,6 +159,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getMemberDetails() {
+        User user = UserManager.getInstance().getCurrentUser();
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n", "id", "name", "birth", "pw", "email", "tel");
+        System.out.println("-".repeat(150));
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s\n"
+                , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel());
+        System.out.println("-".repeat(150));
 
     }
 
@@ -120,7 +175,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getMembers() {
-
+//        List<User> users = userDao.userSelect();
+        List<UserPermission> users = userDao.userSelect();
+        System.out.println("-".repeat(180));
+        System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n", "id", "name", "birth", "pw", "email", "tel", "permission", "status");
+        System.out.println("-".repeat(180));
+        users.forEach(user -> {
+            System.out.printf("%-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-5s\n"
+                    , user.getId(), user.getName(), user.getBirth(), user.getPw(), user.getEmail(), user.getTel(), user.getLevel(), user.getState());
+        });
+        System.out.println("-".repeat(180));
     }
 
     @Override

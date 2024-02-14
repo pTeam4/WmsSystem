@@ -3,7 +3,11 @@ package service;
 import config.GetTexts;
 import dao.*;
 import util.MovementStatus;
-import vo.*;
+
+import util.UserManager;
+import vo.Product;
+import vo.StockMovement;
+import vo.User;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
@@ -78,7 +82,7 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void approveStorageRequest() {
         UserDao userDao = new UserDao();
-        User user = userDao.userSelect();
+        User user = UserManager.getInstance().getCurrentUser();
 
         if (user.getPermission() == 1) {
             StockMovementDao stockMovementDao = new StockMovementDao();
