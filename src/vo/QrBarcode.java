@@ -2,6 +2,7 @@ package vo;
 
 import lombok.Data;
 
+import java.sql.Blob;
 import java.util.Date;
 
 //QR바코드
@@ -9,6 +10,6 @@ import java.util.Date;
 public class QrBarcode {
     private int id;
     private int product_id;
-    private int barcodeData;
+    private Blob barcodeData;
     private Date creationDate;
 }

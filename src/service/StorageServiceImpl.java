@@ -1,18 +1,38 @@
 package service;
 
 import config.GetTexts;
-import dao.ProductDao;
-import dao.StockMovementDao;
-import dao.UserDao;
+import dao.*;
 import util.MovementStatus;
+
 import util.UserManager;
 import vo.Product;
 import vo.StockMovement;
 import vo.User;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 public class StorageServiceImpl implements StorageService {
+    //qrcode용 필드 객체들 2개 있어요
+    private String generateQrCodeContent(Stock stock, StockMovement stockMovement) {
+        return "Warehouse ID: " + stock.getWarehouseId() + "\nProduct ID: " + stockMovement.getProductId() + "\nUser ID: " + stockMovement.getUserId() + "\nRequest Datetime: " + stockMovement.getRequestDatetime() + "\nApproved Datetime: " + stockMovement.getApprovedDatetime();
+    }
+    private Blob convertBase64ToBlob(String base64Image) {
+        try {
+            // Convert Base64 encoded string to byte array
+            byte[] byteArray = Base64.getDecoder().decode(base64Image);
+
+            // Converting byte array to Blob
+            return new SerialBlob(byteArray);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     @Override
     public void requestStorage() {
         Product product = new Product();
@@ -92,6 +112,42 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void createQrBarcode() {
+        StockMovementDao stockMovementDao = new StockMovementDao();
+        StockDao stockDao = new StockDao();
+
+        System.out.println("QR 코드를 생성 할 Product ID를 입력하세요.:");
+        int productId = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        List<Stock> stocks = stockDao.getAllStocks(productId);
+        List<StockMovement> stockMovements = stockMovementDao.getAllStockMovements(productId);
+        if (!stocks.isEmpty() && !stockMovements.isEmpty()) {
+            for (Stock stock : stocks) {
+                for (StockMovement stockMovement : stockMovements) {
+                    String qrCodeContent = generateQrCodeContent(stock, stockMovement);
+
+                    String base64Image = QrBarcodeDao.generateQrCode(qrCodeContent);
+
+                    if (base64Image != null) {
+                        // Convert Base64 string to Blob
+                        Blob barcodeData = convertBase64ToBlob(base64Image);
+
+                        // Saving QrBarcode object to the database
+                        QrBarcode qrBarcode = new QrBarcode();
+                        qrBarcode.setProduct_id(productId);
+                        qrBarcode.setBarcodeData(barcodeData);
+                        qrBarcode.setCreationDate(new Date());
+
+                        // Call your database service to save qrBarcode object to the database
+                        QrBarcodeDao.saveQrBarcode(qrBarcode);
+                        System.out.println("QR 코드 생성이 완료되었습니다.");
+                    } else {
+                        System.out.println("Failed to generate QR code image.");
+                    }
+                }
+            }
+        } else {
+            System.out.println("No data found for the provided Product ID.");
+        }
 
     }
 
@@ -120,6 +176,38 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void modifyStorageRequest() {
+        ProductDao productDao = new ProductDao();
+        StockMovementDao stockMovementDao = new StockMovementDao();
+
+        // 모든 입고 요청 출력
+        stockMovementDao.printAllStockMovements();
+
+        System.out.print("수정할 상품의 ID를 입력하세요: ");
+        int productId = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        // 입력받은 productId로 상품의 상태가 IR이 아닌 경우 수정 불가능하다고 막는 메서드 필요.
+        // 사용자로부터 수정할 상품의 정보 입력 받기
+        Product product = new Product();
+        System.out.print("새로운 상품 이름을 입력하세요: ");
+        product.setName(GetTexts.getInstance().readLine());
+        System.out.print("새로운 상품 브랜드를 입력하세요: ");
+        product.setBrand(GetTexts.getInstance().readLine());
+        System.out.print("새로운 상품 분류를 입력하세요: ");
+        product.setType(GetTexts.getInstance().readLine());
+        System.out.print("새로운 상품 정가를 입력하세요: ");
+        product.setPrice(Integer.parseInt(GetTexts.getInstance().readLine()));
+        System.out.print("새로운 상품 판매가를 입력하세요: ");
+        product.setSalePrice(Integer.parseInt(GetTexts.getInstance().readLine()));
+        System.out.print("새로운 상품 수량을 입력하세요: ");
+        product.setQuantity(Integer.parseInt(GetTexts.getInstance().readLine()));
+
+        int updatedProductRows = productDao.productUpdate(productId, product);
+
+        if (updatedProductRows > 0) {
+            System.out.println("상품 정보가 수정되었습니다.");
+        } else {
+            System.out.println("상품 정보 수정에 실패했습니다.");
+        }
 
     }
 
