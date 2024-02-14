@@ -66,9 +66,26 @@ public class StorageServiceImpl implements StorageService {
         if (user.getPermission() == 1) {
             StockMovementDao stockMovementDao = new StockMovementDao();
 
-            List<StockMovement> stockMovements = stockMovementDao.stockSelectByStatus(MovementStatus.REQUESTED.getCode());
+            List<StockMovement> stockMovements = stockMovementDao.stockMovementSelectByStatus(MovementStatus.REQUESTED.getCode());
 
             for (StockMovement stockMovement : stockMovements) System.out.println(stockMovement.toString());
+
+            System.out.printf("""
+                    메뉴를 선택하세요.
+                    1. 일괄 승인 | 2. 개별 승인
+                    """);
+
+            int menuno = Integer.parseInt(GetTexts.getInstance().readLine());
+
+            switch (menuno) {
+                case 1 -> {
+                    int rows = stockMovementDao.stockMovementUpdateAllStatus(
+                            MovementStatus.REQUESTED.getCode(), MovementStatus.APPROVED.getCode()
+                    );
+
+                    System.out.printf("%d건의 입고 요청이 승인되었습니다.", rows);
+                }
+            }
         }
     }
 
