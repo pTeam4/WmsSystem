@@ -1,6 +1,7 @@
 package service;
 
 import config.GetTexts;
+import config.UserManager;
 import dao.UserDao;
 import vo.User;
 
@@ -19,7 +20,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public void logout() {
-        User.getInstance().logout();
+        UserManager userManager = UserManager.getInstance();
+        User currentUser = userManager.getCurrentUser();
+        currentUser = null;
         System.out.println("로그아웃 되었습니다.");
     }
 }
