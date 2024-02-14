@@ -49,14 +49,16 @@ public class UserDao {
                 ResultSet resultSet = preparedStatement.executeQuery();
         ) {
 
-            user.setId(resultSet.getString("id"));
-            user.setName(resultSet.getString("name"));
-            user.setBirth(resultSet.getDate("birth"));
-            user.setPw(resultSet.getString("pw"));
-            user.setEmail(resultSet.getString("email"));
-            user.setTel(resultSet.getString("tel"));
-            user.setPermission(resultSet.getInt("permission_id"));
-            user.setStatus(resultSet.getString("status_id"));
+            if (resultSet.next()) {
+                user.setId(resultSet.getString("id"));
+                user.setName(resultSet.getString("name"));
+                user.setBirth(resultSet.getDate("birth"));
+                user.setPw(resultSet.getString("pw"));
+                user.setEmail(resultSet.getString("email"));
+                user.setTel(resultSet.getString("tel"));
+                user.setPermission(resultSet.getInt("permission_id"));
+                user.setStatus(resultSet.getString("status_id"));
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
