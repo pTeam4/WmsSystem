@@ -81,10 +81,10 @@ public class StorageServiceImpl implements StorageService {
             switch (menuno) {
                 case 1 -> {
                     int rows = stockMovementDao.stockMovementUpdateAllStatus(
-                            MovementStatus.REQUESTED.getCode(), MovementStatus.APPROVED.getCode()
+                            MovementStatus.APPROVED.getCode(), MovementStatus.REQUESTED.getCode()
                     );
 
-                    System.out.printf("%d건의 입고 요청이 승인되었습니다.", rows);
+                    System.out.printf("%d건의 입고 요청이 승인되었습니다.%n", rows);
                 }
             }
         }
