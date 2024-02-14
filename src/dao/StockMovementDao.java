@@ -76,7 +76,7 @@ public class StockMovementDao {
         return updatedRows;
     }
 
-    public List<StockMovement> stockSelectByStatus(String statusCode) {
+    public List<StockMovement> stockMovementSelectByStatus(String statusCode) {
         String sql = "SELECT * FROM stock_movement WHERE status_code = ?";
         List<StockMovement> stockMovements = new ArrayList<>();
 
