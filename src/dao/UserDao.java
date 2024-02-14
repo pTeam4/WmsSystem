@@ -2,7 +2,7 @@ package dao;
 
 import config.GetTexts;
 import config.JdbcConnection;
-import config.UserManager;
+import util.UserManager;
 import vo.User;
 
 import java.sql.Connection;
@@ -47,7 +47,12 @@ public class UserDao {
 
     public List<User> userSelect() {
         String sql = "SELECT * FROM user";
+
         List<User> users = new ArrayList<>();
+
+        UserManager userManager = UserManager.getInstance();
+        User user = userManager.getCurrentUser();
+
 
         try (
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -64,7 +69,9 @@ public class UserDao {
                 user.setTel(resultSet.getString("tel"));
                 user.setPermission(resultSet.getInt("permission_id"));
                 user.setStatus(resultSet.getInt("status_id"));
+
                 users.add(user);
+
             }
 
         } catch (SQLException e) {

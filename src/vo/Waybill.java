@@ -8,7 +8,7 @@ import java.util.Date;
 @Data
 public class Waybill {
     private int id;
-    private int shippingOrders;
+    private int shippingOrdersId;
     private String vehicleNum;
     private Date departureDate;
     private Date arrivalDate;

@@ -35,7 +35,7 @@ public class JdbcConnection {
         }
     }
 
-    public static JdbcConnection getInstance() {
+    public static synchronized JdbcConnection getInstance() {
         if (instance == null) {
             instance = new JdbcConnection();
         }
