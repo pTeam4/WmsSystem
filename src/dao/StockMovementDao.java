@@ -123,6 +123,8 @@ public class StockMovementDao {
 
             rows = preparedStatement.executeUpdate();
 
+            stockMovementUpdateAllApprovedDatetime(newStatus);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
