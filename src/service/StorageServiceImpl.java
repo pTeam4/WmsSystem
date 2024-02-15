@@ -180,7 +180,8 @@ public class StorageServiceImpl implements StorageService {
         } else {
             System.out.println("No data found for the provided Product ID.");
         }
-
+        String filePath = "./qrcode"+productId+".png";
+        saveQrCodeImage(productId, filePath);
     }
 
     @Override
