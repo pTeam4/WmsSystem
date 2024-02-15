@@ -35,6 +35,54 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void getWarehouse() {
+        getWarehouseSubMenu();
+    }
+
+    private void getWarehouseSubMenu() {
+        System.out.println("1. 전체 조회 | 2. 지역별 조회");
+        int menuno = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        switch (menuno) {
+            case 1 -> {
+                getAllWarehouse();
+            }
+            case 2 -> getWarehouseByLocation();
+        }
+    }
+
+    private void getWarehouseByLocation() {
+        WarehouseDao warehouseDao = new WarehouseDao();
+
+        System.out.print("지역을 입력하세요: ");
+        String location = GetTexts.getInstance().readLine();
+
+        List<Warehouse> warehouseList = warehouseDao.warehouseSelectByLocation(location);
+
+        if (!warehouseList.isEmpty()){
+            System.out.println(
+                    "\n-----------------------------------------------------------------------"
+            );
+            System.out.printf(
+                    "%-6s%-20s%-20s%n", "ID", "Name", "Type"
+            );
+            System.out.println(
+                    "-----------------------------------------------------------------------"
+            );
+            for (Warehouse warehouse : warehouseList) {
+                System.out.printf(
+                        "%-6s%-20s%-20s%n",
+                        warehouse.getId(),
+                        warehouse.getName(),
+                        warehouse.getType()
+                );
+            }
+            System.out.println(
+                    "-----------------------------------------------------------------------"
+            );
+        } else System.out.println("조회된 창고가 없습니다.");
+    }
+
+    public void getAllWarehouse() {
         WarehouseDao warehouseDao = new WarehouseDao();
         List<Warehouse> warehouses = warehouseDao.warehouseSelect();
 
@@ -68,7 +116,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void getStock() {
-        getWarehouse();
+        getAllWarehouse();
 
         System.out.print("재고를 조회할 창고 ID를 입력하세요: ");
         int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());

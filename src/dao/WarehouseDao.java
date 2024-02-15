@@ -2,6 +2,7 @@ package dao;
 
 import config.JdbcConnection;
 import vo.Warehouse;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,7 +49,7 @@ public class WarehouseDao {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 ResultSet resultSet = preparedStatement.executeQuery()
         ) {
-            
+
             while (resultSet.next()) {
                 Warehouse warehouse = new Warehouse();
                 warehouse.setId(resultSet.getInt("id"));
@@ -64,5 +65,37 @@ public class WarehouseDao {
         }
 
         return warehouses;
+    }
+
+    public List<Warehouse> warehouseSelectByLocation(String location) {
+        String sql = "SELECT * FROM warehouse WHERE location = ?";
+        List<Warehouse> warehouseList = new ArrayList<>();
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+
+            preparedStatement.setString(1, location);
+
+            try (
+                    ResultSet resultSet = preparedStatement.executeQuery();
+            ) {
+
+                while (resultSet.next()) {
+                    Warehouse warehouse = new Warehouse();
+                    warehouse.setId(resultSet.getInt("id"));
+                    warehouse.setName(resultSet.getString("name"));
+                    warehouse.setType(resultSet.getString("type"));
+
+                    warehouseList.add(warehouse);
+                }
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return warehouseList;
     }
 }
