@@ -19,6 +19,7 @@ public class StorageServiceImpl implements StorageService {
     private String generateQrCodeContent(Stock stock, StockMovement stockMovement) {
         return "Warehouse ID: " + stock.getWarehouseId() + "\nProduct ID: " + stockMovement.getProductId() + "\nUser ID: " + stockMovement.getUserId() + "\nRequest Datetime: " + stockMovement.getRequestDatetime() + "\nApproved Datetime: " + stockMovement.getApprovedDatetime();
     }
+
     private Blob convertBase64ToBlob(String base64Image) {
         try {
             // Convert Base64 encoded string to byte array
@@ -31,6 +32,7 @@ public class StorageServiceImpl implements StorageService {
             return null;
         }
     }
+
     @Override
     public void requestStorage() {
         Product product = new Product();
@@ -83,28 +85,61 @@ public class StorageServiceImpl implements StorageService {
 
         if (user.getPermission() == 1) {
             StockMovementDao stockMovementDao = new StockMovementDao();
-
             List<StockMovement> stockMovements = stockMovementDao.stockMovementSelectByStatus(MovementStatus.REQUESTED.getCode());
 
-            for (StockMovement stockMovement : stockMovements) System.out.println(stockMovement.toString());
+            printStockMovement(stockMovements);
 
-            System.out.printf("""
+            approveStorageRequestSubMenu(stockMovementDao);
+        }
+    }
+
+    private void approveStorageRequestSubMenu(StockMovementDao stockMovementDao) {
+        System.out.printf("""
                     메뉴를 선택하세요.
                     1. 일괄 승인 | 2. 개별 승인
                     """);
 
-            int menuno = Integer.parseInt(GetTexts.getInstance().readLine());
+        int menuno = Integer.parseInt(GetTexts.getInstance().readLine());
 
-            switch (menuno) {
-                case 1 -> {
-                    int rows = stockMovementDao.stockMovementUpdateAllStatus(
-                            MovementStatus.APPROVED.getCode(), MovementStatus.REQUESTED.getCode()
-                    );
+        switch (menuno) {
+            case 1 -> {
+                int rows = stockMovementDao.stockMovementUpdateAllStatus(
+                        MovementStatus.APPROVED.getCode(), MovementStatus.REQUESTED.getCode()
+                );
 
-                    System.out.printf("%d건의 입고 요청이 승인되었습니다.%n", rows);
-                }
+                System.out.printf("%d건의 입고 요청이 승인되었습니다.%n", rows);
             }
         }
+    }
+
+    private void printStockMovement(List<StockMovement> stockMovements) {
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------"
+        );
+        System.out.printf(
+                "%-6s%-6s%-20s%-6s%-25s%-25s%n",
+                "id",
+                "Product ID",
+                "User ID",
+                "Status",
+                "Request Date Time",
+                "Approved Date Time"
+        );
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------"
+        );
+        for (StockMovement stockMovement : stockMovements) {
+            System.out.printf(
+                    "%-6s%-6s%-20s%-6s%-25s%-25s%n",
+                    stockMovement.getId(),
+                    stockMovement.getProductId(),
+                    stockMovement.getUserId(),
+                    stockMovement.getStatusCode(),
+                    stockMovement.getRequestDatetime(),
+                    stockMovement.getApprovedDatetime()
+            );
+        }
+
     }
 
     @Override
