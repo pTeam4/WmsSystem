@@ -1,5 +1,4 @@
 package dao;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -11,12 +10,11 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import config.JdbcConnection;
 import vo.QrBarcode;
 
+import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.io.*;
+import java.sql.*;
 import java.util.*;
 
 //QR바코드
@@ -57,11 +55,11 @@ public class QrBarcodeDao {
         }
     }
 
+
     public static void saveQrBarcode(QrBarcode qrBarcode) { //Qrbarcode 테이블에 저장하는 메서드
         String INSERT_QR_BARCODE_QUERY = "INSERT INTO Qr_Barcode (product_id, barcode_Data, creation_Date) VALUES (?, ?, ?)";
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QR_BARCODE_QUERY)
-        ) {
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QR_BARCODE_QUERY)) {
 
             preparedStatement.setInt(1, qrBarcode.getProduct_id());
             preparedStatement.setBlob(2, qrBarcode.getBarcodeData());
@@ -69,10 +67,44 @@ public class QrBarcodeDao {
 
             preparedStatement.executeUpdate();
 
-            System.out.println("QrBarcode saved successfully!");
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void saveQrCodeImage(int productId, String filePath) {
+        String query = "SELECT barcode_Data FROM Qr_Barcode WHERE product_id = ?";
+        try (
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+            ){
+
+            preparedStatement.setInt(1, productId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                // Retrieve Blob data from ResultSet
+                Blob barcodeBlob = resultSet.getBlob("barcode_Data");
+
+                // Convert Blob data to byte array
+                byte[] barcodeBytes = barcodeBlob.getBytes(1, (int) barcodeBlob.length());
+
+                // Save byte array to file
+                File outputFile = new File(filePath);
+                FileOutputStream fos = new FileOutputStream(outputFile);
+                fos.write(barcodeBytes);
+                fos.close();
+
+                System.out.println("[ " + filePath+" ] 경로에 QR code 이미지가 저장되었습니다.");
+            } else {
+                System.out.println("No QR code image found for the provided product ID.");
+            }
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to retrieve and save QR code image.");
         }
     }
 }
