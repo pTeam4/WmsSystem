@@ -14,6 +14,8 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+import static dao.QrBarcodeDao.saveQrCodeImage;
+
 public class StorageServiceImpl implements StorageService {
     //qrcode용 필드 객체들 2개 있어요
     private String generateQrCodeContent(Stock stock, StockMovement stockMovement) {
