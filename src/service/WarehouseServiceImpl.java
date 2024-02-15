@@ -46,8 +46,40 @@ public class WarehouseServiceImpl implements WarehouseService {
             case 1 -> {
                 getAllWarehouse();
             }
-//            case 2 -> getWarehouseByLocation();
+            case 2 -> getWarehouseByLocation();
         }
+    }
+
+    private void getWarehouseByLocation() {
+        WarehouseDao warehouseDao = new WarehouseDao();
+
+        System.out.print("지역을 입력하세요: ");
+        String location = GetTexts.getInstance().readLine();
+
+        List<Warehouse> warehouseList = warehouseDao.warehouseSelectByLocation(location);
+
+        if (!warehouseList.isEmpty()){
+            System.out.println(
+                    "\n-----------------------------------------------------------------------"
+            );
+            System.out.printf(
+                    "%-6s%-20s%-20s%n", "ID", "Name", "Type"
+            );
+            System.out.println(
+                    "-----------------------------------------------------------------------"
+            );
+            for (Warehouse warehouse : warehouseList) {
+                System.out.printf(
+                        "%-6s%-20s%-20s%n",
+                        warehouse.getId(),
+                        warehouse.getName(),
+                        warehouse.getType()
+                );
+            }
+            System.out.println(
+                    "-----------------------------------------------------------------------"
+            );
+        } else System.out.println("조회된 창고가 없습니다.");
     }
 
     public void getAllWarehouse() {
