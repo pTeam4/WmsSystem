@@ -97,6 +97,36 @@ public class WarehouseDao {
         return warehouseList;
     }
 
+    public Warehouse warehouseSelectOne(int warehouseId) {
+        String sql = "SELECT * FROM warehouse WHERE id = ?";
+        Warehouse warehouse = new Warehouse();
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+
+            preparedStatement.setInt(1, warehouseId);
+
+            try (
+                    ResultSet resultSet = preparedStatement.executeQuery();
+            ) {
+
+                if (resultSet.next()) {
+                    warehouse.setId(resultSet.getInt("id"));
+                    warehouse.setName(resultSet.getString("name"));
+                    warehouse.setLocation(resultSet.getString("location"));
+                    warehouse.setType(resultSet.getString("type"));
+                }
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return warehouse;
+    }
+
     public List<WarehouseInfo> warehouseSelectWithStock(int warehouseId) {
         String sql = "SELECT w.id, w.name, w.location, w.type, p.name, s.quantity" +
                 " FROM warehouse w" +
