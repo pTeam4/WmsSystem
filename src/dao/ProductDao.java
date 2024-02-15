@@ -47,7 +47,7 @@ public class ProductDao {
         return result;
     }
     public int productUpdate(int productId, Product product) {
-        String sql = "UPDATE Product SET name=?, brand=?, type=?, price=?, sale_price=?, quantity=? WHERE id = ?";
+        String sql = "UPDATE Product SET name=?, brand=?, type=?, price=?, sale_price=?, quantity=? WHERE id = ? ";
 
         int updatedRows = 0;
 
