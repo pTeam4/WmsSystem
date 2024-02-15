@@ -110,7 +110,7 @@ public class StockMovementDao {
         return stockMovements;
     }
 
-    public int stockMovementUpdateAllStatus(String status1, String status2) {
+    public int stockMovementUpdateAllStatus(String newStatus, String oldStatus) {
         String sql = "UPDATE stock_movement SET status_code = ? WHERE status_code = ?";
         int rows = 0;
 
@@ -118,8 +118,8 @@ public class StockMovementDao {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            preparedStatement.setString(1, status1);
-            preparedStatement.setString(2, status2);
+            preparedStatement.setString(1, newStatus);
+            preparedStatement.setString(2, oldStatus);
 
             rows = preparedStatement.executeUpdate();
 
