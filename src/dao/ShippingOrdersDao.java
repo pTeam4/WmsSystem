@@ -132,7 +132,7 @@ public class ShippingOrdersDao {
                 shippingOrders.setOrderDate(rs.getDate("order_date"));
                 shippingOrders.setDeliveryDate(rs.getDate("delivery_date"));
                 shippingOrders.setStatus(rs.getInt("status"));
-                shippingOrders.setStatus(rs.getInt("approved_status"));
+                shippingOrders.setApprovedStatus(rs.getInt("approved_status"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
