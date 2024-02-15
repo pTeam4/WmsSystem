@@ -48,8 +48,7 @@ public class WarehouseDao {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 ResultSet resultSet = preparedStatement.executeQuery()
         ) {
-
-
+            
             while (resultSet.next()) {
                 Warehouse warehouse = new Warehouse();
                 warehouse.setId(resultSet.getInt("id"));

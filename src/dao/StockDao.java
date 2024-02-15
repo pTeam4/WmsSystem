@@ -14,16 +14,19 @@ import java.util.List;
 public class StockDao {
     private Connection connection;
 
-
     public StockDao() {
         this.connection = JdbcConnection.getInstance().getConnection();
     }
 
-    public List<Stock> getAllStocks(int productId) {
+    public List<Stock> stockSelect(int productId) {
         String SELECT_STOCK_QUERY = "SELECT id, warehouseId, productId, quantity FROM stock WHERE productId = ? ";
         List<Stock> stocks = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_STOCK_QUERY)){
-             ResultSet resultSet = statement.executeQuery();
+
+        try (
+                PreparedStatement statement = connection.prepareStatement(SELECT_STOCK_QUERY);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+
             statement.setInt(1, productId);
 
             while (resultSet.next()) {
@@ -34,9 +37,11 @@ public class StockDao {
                 stock.setQuantity(resultSet.getInt("quantity"));
                 stocks.add(stock);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return stocks;
     }
 }
