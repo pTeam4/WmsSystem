@@ -3,9 +3,9 @@ package service;
 import config.GetTexts;
 import dao.*;
 import util.MovementStatus;
-
 import util.UserManager;
 import vo.Product;
+import vo.Stock;
 import vo.StockMovement;
 import vo.User;
 
@@ -81,7 +81,6 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void approveStorageRequest() {
-        UserDao userDao = new UserDao();
         User user = UserManager.getInstance().getCurrentUser();
 
         if (user.getPermission() == 1) {
@@ -101,10 +100,10 @@ public class StorageServiceImpl implements StorageService {
             switch (menuno) {
                 case 1 -> {
                     int rows = stockMovementDao.stockMovementUpdateAllStatus(
-                            MovementStatus.REQUESTED.getCode(), MovementStatus.APPROVED.getCode()
+                            MovementStatus.APPROVED.getCode(), MovementStatus.REQUESTED.getCode()
                     );
 
-                    System.out.printf("%d건의 입고 요청이 승인되었습니다.", rows);
+                    System.out.printf("%d건의 입고 요청이 승인되었습니다.%n", rows);
                 }
             }
         }
@@ -112,42 +111,42 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void createQrBarcode() {
-        StockMovementDao stockMovementDao = new StockMovementDao();
-        StockDao stockDao = new StockDao();
-
-        System.out.println("QR 코드를 생성 할 Product ID를 입력하세요.:");
-        int productId = Integer.parseInt(GetTexts.getInstance().readLine());
-
-        List<Stock> stocks = stockDao.getAllStocks(productId);
-        List<StockMovement> stockMovements = stockMovementDao.getAllStockMovements(productId);
-        if (!stocks.isEmpty() && !stockMovements.isEmpty()) {
-            for (Stock stock : stocks) {
-                for (StockMovement stockMovement : stockMovements) {
-                    String qrCodeContent = generateQrCodeContent(stock, stockMovement);
-
-                    String base64Image = QrBarcodeDao.generateQrCode(qrCodeContent);
-
-                    if (base64Image != null) {
-                        // Convert Base64 string to Blob
-                        Blob barcodeData = convertBase64ToBlob(base64Image);
-
-                        // Saving QrBarcode object to the database
-                        QrBarcode qrBarcode = new QrBarcode();
-                        qrBarcode.setProduct_id(productId);
-                        qrBarcode.setBarcodeData(barcodeData);
-                        qrBarcode.setCreationDate(new Date());
-
-                        // Call your database service to save qrBarcode object to the database
-                        QrBarcodeDao.saveQrBarcode(qrBarcode);
-                        System.out.println("QR 코드 생성이 완료되었습니다.");
-                    } else {
-                        System.out.println("Failed to generate QR code image.");
-                    }
-                }
-            }
-        } else {
-            System.out.println("No data found for the provided Product ID.");
-        }
+//        StockMovementDao stockMovementDao = new StockMovementDao();
+//        StockDao stockDao = new StockDao();
+//
+//        System.out.println("QR 코드를 생성 할 Product ID를 입력하세요.:");
+//        int productId = Integer.parseInt(GetTexts.getInstance().readLine());
+//
+//        List<Stock> stocks = stockDao.getAllStocks(productId);
+//        List<StockMovement> stockMovements = stockMovementDao.getAllStockMovements(productId);
+//        if (!stocks.isEmpty() && !stockMovements.isEmpty()) {
+//            for (Stock stock : stocks) {
+//                for (StockMovement stockMovement : stockMovements) {
+//                    String qrCodeContent = generateQrCodeContent(stock, stockMovement);
+//
+//                    String base64Image = QrBarcodeDao.generateQrCode(qrCodeContent);
+//
+//                    if (base64Image != null) {
+//                        // Convert Base64 string to Blob
+//                        Blob barcodeData = convertBase64ToBlob(base64Image);
+//
+//                        // Saving QrBarcode object to the database
+//                        QrBarcode qrBarcode = new QrBarcode();
+//                        qrBarcode.setProduct_id(productId);
+//                        qrBarcode.setBarcodeData(barcodeData);
+//                        qrBarcode.setCreationDate(new Date());
+//
+//                        // Call your database service to save qrBarcode object to the database
+//                        QrBarcodeDao.saveQrBarcode(qrBarcode);
+//                        System.out.println("QR 코드 생성이 완료되었습니다.");
+//                    } else {
+//                        System.out.println("Failed to generate QR code image.");
+//                    }
+//                }
+//            }
+//        } else {
+//            System.out.println("No data found for the provided Product ID.");
+//        }
 
     }
 

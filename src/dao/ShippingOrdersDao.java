@@ -11,10 +11,6 @@ public class ShippingOrdersDao {
     PreparedStatement pstmt;
     Connection conn;
 
-    /*public ShippingOrdersDao() {
-        this.conn = JdbcConnection.getInstance().getConnection();
-    }*/
-
     public List<ShippingOrders> getShippingOrdersList() {
         conn = JdbcConnection.getInstance().getConnection();
         List<ShippingOrders> shippingOrdersList = new ArrayList<>();
@@ -37,7 +33,6 @@ public class ShippingOrdersDao {
 
                 shippingOrdersList.add(shippingOrders);
             }
-            /*            pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -112,7 +107,6 @@ public class ShippingOrdersDao {
 
                 shippingOrdersList.add(shippingOrders);
             }
-            /*            pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -140,7 +134,6 @@ public class ShippingOrdersDao {
                 shippingOrders.setStatus(rs.getInt("status"));
                 shippingOrders.setStatus(rs.getInt("approved_status"));
             }
-            /*            pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }

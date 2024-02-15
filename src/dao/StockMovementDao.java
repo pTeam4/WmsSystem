@@ -110,7 +110,7 @@ public class StockMovementDao {
         return stockMovements;
     }
 
-    public int stockMovementUpdateAllStatus(String status1, String status2) {
+    public int stockMovementUpdateAllStatus(String newStatus, String oldStatus) {
         String sql = "UPDATE stock_movement SET status_code = ? WHERE status_code = ?";
         int rows = 0;
 
@@ -118,10 +118,12 @@ public class StockMovementDao {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            preparedStatement.setString(1, status1);
-            preparedStatement.setString(2, status2);
+            preparedStatement.setString(1, newStatus);
+            preparedStatement.setString(2, oldStatus);
 
             rows = preparedStatement.executeUpdate();
+
+            stockMovementUpdateAllApprovedDatetime(newStatus);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,6 +131,23 @@ public class StockMovementDao {
 
         return rows;
     }
+
+    private void stockMovementUpdateAllApprovedDatetime(String status) {
+        String sql = "UPDATE stock_movement SET approved_datetime = CURRENT_TIMESTAMP " +
+                "WHERE status_code = ? AND approved_datetime IS NULL";
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+
+            preparedStatement.setString(1, status);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<StockMovement> getAllStockMovements(int productId) {
         String SELECT_STOCK_MOVEMENT_QUERY = "SELECT id, productId, userId, requestDatetime, approvedDatetime FROM stockmovement WHERE productid = ? ";
 
