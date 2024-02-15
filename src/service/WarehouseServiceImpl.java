@@ -38,18 +38,27 @@ public class WarehouseServiceImpl implements WarehouseService {
         WarehouseDao warehouseDao = new WarehouseDao();
         List<Warehouse> warehouses = warehouseDao.warehouseSelect();
 
-        System.out.println("\n = = = = = 창고 리스트 = = = = = \n");
-
+        System.out.println(
+                "\n-------------------------------------------------------------------------------------------"
+        );
+        System.out.printf(
+                "%-6s%-20s%-20s%-20s%n", "ID", "Name", "Location", "Type"
+        );
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
         for (Warehouse warehouse : warehouses) {
-            System.out.printf("""
-                    창고 아이디: %d
-                    창고 이름: %s
-                    창고 위치: %s
-                    창고 종류: %s%n
-                    """, warehouse.getId(), warehouse.getName(), warehouse.getLocation(), warehouse.getType());
+            System.out.printf(
+                    "%-6s%-20s%-20s%-20s%n",
+                    warehouse.getId(),
+                    warehouse.getName(),
+                    warehouse.getLocation(),
+                    warehouse.getType()
+            );
         }
-
-        System.out.println("= = = = = = = = = = = = = = = \n");
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
     }
 
     @Override
