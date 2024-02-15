@@ -10,6 +10,12 @@ import java.util.ArrayList;
 //공지사항
 public class NoticeDao {
     Connection conn;
+
+    /**
+     * 공지사항 테이블에 튜플을 추가한다.
+     * @param notice 추가할 튜플의 정보가 담긴 notice를 매개변수로 가진다.
+     * @return 성공했을경우 1 실패했을경우 0을 반환한다.
+     */
     public int noticeInsert(Notice notice) {
         conn = JdbcConnection.getInstance().getConnection();
         String sql = "Insert into Notice(user_ID, type, title, content, notice_date)"
@@ -30,6 +36,10 @@ public class NoticeDao {
         return 0;
     }
 
+    /**
+     * 공지사항 테이블을 전체 조회한다.
+     * @return 전체 조회한 정보를 ArrayList로 반환한다.
+     */
     public ArrayList<Notice> noticeSelect() {
         ArrayList<Notice> noticeList = new ArrayList<>();
         conn = JdbcConnection.getInstance().getConnection();
@@ -58,6 +68,11 @@ public class NoticeDao {
         return noticeList;
     }
 
+    /**
+     * 공지사항 테이블의 튜플 하나를 상세 조회한다.
+     * @param no 상세 조회할 공지사항의 공지사항 번호를 매개변수로 가진다.
+     * @return 상세조회한 공지사항의 정보가 담긴 Notice를 반환한다.
+     */
     public Notice noticeSelectOne(int no) {
         conn = JdbcConnection.getInstance().getConnection();
 
@@ -84,6 +99,11 @@ public class NoticeDao {
         }
     }
 
+    /**
+     * 공지사항 테이블의 튜플 하나를 삭제한다.
+     * @param no 삭제할 공지사항 번호를 매개변수로 갖는다.
+     * @return 성공했을경우 1 실패했을경우 0을 반환한다.
+     */
     public int noticeDelete(int no) {
         conn = JdbcConnection.getInstance().getConnection();
 
@@ -102,6 +122,11 @@ public class NoticeDao {
         return 0;
     }
 
+    /**
+     *
+     * @param notice
+     * @return
+     */
     public int noticeUpdate(Notice notice) {
         conn = JdbcConnection.getInstance().getConnection();
 

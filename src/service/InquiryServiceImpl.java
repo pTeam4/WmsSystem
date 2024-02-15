@@ -12,6 +12,10 @@ import java.util.ArrayList;
 public class InquiryServiceImpl implements InquiryService {
     InquiryDao inquiryDao = new InquiryDao();
     NoticeDao noticeDao = new NoticeDao();
+
+    /**
+     * 공지사항 게시물 조회
+     */
     @Override
     public void getNotice() {
         System.out.println("[공지 사항]");
@@ -31,8 +35,16 @@ public class InquiryServiceImpl implements InquiryService {
         System.out.println("----------------------------------------------------------------------------------------\n");
     }
 
+    /**
+     * 공지사항 게시물 등록
+     */
     @Override
     public void addNotice() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() != 1)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         Notice notice = new Notice();
         System.out.println("[새 공지사항 입력]");
         System.out.println("공지 유형 선택 1. 긴급 2. 정기 공지 3. 이용 안내");
@@ -76,8 +88,16 @@ public class InquiryServiceImpl implements InquiryService {
         if (row != 0) System.out.println("공지가 등록되었습니다.");
     }
 
+    /**
+     * 공지사항 게시물 수정
+     */
     @Override
     public void modifyNotice() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() != 1)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.println("수정할 공지사항 번호를 입력하세요.");
         int no = Integer.parseInt(GetTexts.getInstance().readLine());
         Notice notice = noticeDao.noticeSelectOne(no);
@@ -123,8 +143,16 @@ public class InquiryServiceImpl implements InquiryService {
         if (row != 0) System.out.println("공지가 수정되었습니다.");
     }
 
+    /**
+     * 공지사항 게시물 삭제
+     */
     @Override
     public void removeNotice() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() != 1)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("삭제할 공지사항 번호를 입력하세요. ");
         int no = Integer.parseInt(GetTexts.getInstance().readLine());
         int row = noticeDao.noticeDelete(no);
@@ -136,6 +164,9 @@ public class InquiryServiceImpl implements InquiryService {
         }
     }
 
+    /**
+     * 문의게시판 게시물 조회
+     */
     @Override
     public void getInquiry() {
         System.out.println("[문의 게시판 게시물 목록]");
@@ -175,6 +206,9 @@ public class InquiryServiceImpl implements InquiryService {
                 "----------------------------------------------------------------------------------------\n");
     }
 
+    /**
+     * 문의게시판 게시물 작성
+     */
     @Override
     public void addInquiry() {
         Inquiry inquiry = new Inquiry();
@@ -221,6 +255,9 @@ public class InquiryServiceImpl implements InquiryService {
         if (row != 0)System.out.println("문의글이 등록되었습니다.");
     }
 
+    /**
+     * 문의게시판 게시물 수정
+     */
     @Override
     public void removeInquiry() {
         System.out.print("삭제할 게시물 번호를 입력하세요. ");
@@ -234,6 +271,9 @@ public class InquiryServiceImpl implements InquiryService {
         }
     }
 
+    /**
+     * 문의게시판 게시물 삭제
+     */
     @Override
     public void modifyInquiry() {
         System.out.println("수정할 게시물 번호를 입력하세요.");
