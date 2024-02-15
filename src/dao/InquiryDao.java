@@ -10,6 +10,11 @@ import java.util.ArrayList;
 public class InquiryDao {
     Connection conn;
 
+    /**
+     * 문의게시판 테이블에 튜플을 추가한다.
+     * @param inquiry
+     * @return 추가에 성공하면 추가한 행의 수를 반환하고 실패했을경우 0을 반환한다.
+     */
     public int inquiryInsert(Inquiry inquiry) {
         conn = JdbcConnection.getInstance().getConnection();
         String sql = "Insert into Inquiry(post_type, post_title, user_id, user_name, post_content, post_date)"
@@ -31,6 +36,10 @@ public class InquiryDao {
         return 0;
     }
 
+    /**
+     * 문의 게시판 테이블을 전체 조회한다.
+     * @return 전체 조회한 튜플들을 ArrayList에 담아 반환한다.
+     */
     public ArrayList<Inquiry> inquirySelect() {
         ArrayList<Inquiry> inquiries = new ArrayList<>();
         conn = JdbcConnection.getInstance().getConnection();
@@ -61,6 +70,11 @@ public class InquiryDao {
         return inquiries;
     }
 
+    /**
+     * 문의 게시판 테이블 튜플 하나를 상세 조회한다.
+     * @param postNum 게시물 번호를 매개변수로 받는다.
+     * @return 조회한 Inquiry 객체를 반환한다.
+     */
     public Inquiry inquirySelectOne(int postNum) {
         conn = JdbcConnection.getInstance().getConnection();
 
@@ -89,6 +103,11 @@ public class InquiryDao {
         }
     }
 
+    /**
+     * 문의 게시판 테이블의 튜플 하나를 삭제한다.
+     * @param postNum 게시물 번호를 매개변수로 받는다.
+     * @return 삭제에 성공하면 삭제에 성공한 행의 수를 리턴 아닌경우 0을 리턴한다.
+     */
     public int inquiryDelete(int postNum) {
         conn = JdbcConnection.getInstance().getConnection();
 
@@ -107,6 +126,11 @@ public class InquiryDao {
         return 0;
     }
 
+    /**
+     * 문의 게시판 테이블의 튜플 하나를 업데이트 한다.
+     * @param inquiry 업데이트 내용이 담긴 Inquiry 객체를 매개변수로 갖는다.
+     * @return 삭제에 성공하면 삭제에 성공한 행의 수를 리턴 아닌경우 0을 리턴한다.
+     */
     public int inquiryUpdate(Inquiry inquiry) {
         conn = JdbcConnection.getInstance().getConnection();
 

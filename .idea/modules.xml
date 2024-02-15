@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WMSProject.iml" filepath="$PROJECT_DIR$/WMSProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WMSfinal2.iml" filepath="$PROJECT_DIR$/WMSfinal2.iml" />
       <module fileurl="file://$PROJECT_DIR$/WmsSystem.iml" filepath="$PROJECT_DIR$/WmsSystem.iml" />
     </modules>
   </component>

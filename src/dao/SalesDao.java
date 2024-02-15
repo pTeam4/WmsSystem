@@ -5,10 +5,15 @@ import vo.Sales;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class SalesDao {
     Connection conn;
+
+    /**
+     * 매출내역 테이블을 전체 조회한다.
+     * @param warehouseId 매출내역을 조회할 창고번호를 매개변수로 갖는다.
+     * @return 조회내역을 ArrayList로 반환한다.
+     */
     public ArrayList<Sales> salesSelect(int warehouseId)
     {
         ArrayList<Sales> salesList = new ArrayList<>();
@@ -43,6 +48,11 @@ public class SalesDao {
         return salesList;
     }
 
+    /**
+     * 해당 년도의 총 매출 내역을 조회한다
+     * @param warehouseId 총 매출내역을 조회할 창고번호를 매개변수로 가진다.
+     * @return 총 매출내역을 반환한다.
+     */
     private int salesSum(int warehouseId) {
         conn = JdbcConnection.getInstance().getConnection();
         String sql = "select sum(amount) from sales where warehouse_id = ?";

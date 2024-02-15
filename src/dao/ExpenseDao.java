@@ -5,12 +5,16 @@ import vo.Expense;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 //지출 Dao
 public class ExpenseDao {
     Connection conn;
+
+    /**
+     * 지출내역 테이블에 튜플을 추가한다.
+     * @param expense 추가할 정보가 담긴 expense를 매개변수로 받는다.
+     */
     public void expenseInsert(Expense expense)
     {
         conn = JdbcConnection.getInstance().getConnection();
@@ -32,6 +36,12 @@ public class ExpenseDao {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 지출내역 테이블을 창고에 따라 조회한다.
+     * @param warehouseId 조회할 창고 id를 입력받는다.
+     * @return List로 반환한다.
+     */
     public List<Expense> expenseSelect(int warehouseId) {
         conn = JdbcConnection.getInstance().getConnection();
         String sql = "SELECT * FROM Expense WHERE warehouse_id = ?";
@@ -46,7 +56,7 @@ public class ExpenseDao {
                 int id = rs.getInt("id");
                 String type = rs.getString("type");
                 int cost = rs.getInt("cost");
-                Date expenseDate = rs.getDate("expense_date");
+                java.sql.Date expenseDate = rs.getDate("expense_date");
 
                 Expense expense = new Expense();
                 expense.setId(id);
@@ -63,7 +73,11 @@ public class ExpenseDao {
         return expenseList;
     }
 
-
+    /**
+     * 지출내역 테이블의 튜플 하나를 상세 조회한다.
+     * @param id 상세조회할 지출 내역번호를 매개변수로 가진다.
+     * @return 조회한 지출 내역을 expense로 반환한다.
+     */
     public Expense expenseSelectOne(int id)
     {
         Expense expense = new Expense();
@@ -80,7 +94,7 @@ public class ExpenseDao {
             {
                 String type = rs.getString("type");
                 int cost = rs.getInt("cost");
-                Date expenseDate = rs.getDate("expense_date");
+                java.sql.Date expenseDate = rs.getDate("expense_date");
                 int warehouseId = rs.getInt("warehouse_id");
 
                 expense.setId(id);
@@ -96,6 +110,12 @@ public class ExpenseDao {
         }
         return expense;
     }
+
+    /**
+     * 지출내역 테이블을 년도에 따라 조회한다.
+     * @param year 조회할 년도를 매개변수로 가진다.
+     * @param warehouseId 조회할 창고번호를 매개변수로 가진다.
+     */
     public void expenseSelectByYear(String year, int warehouseId)
     {
         conn = JdbcConnection.getInstance().getConnection();
@@ -123,6 +143,11 @@ public class ExpenseDao {
         }
     }
 
+    /**
+     * 지출내역 테이블의 튜플 하나를 삭제한다.
+     * @param id 삭제할 지출내역번호를 매개변수로 가진다.
+     * @return 성공하면 1 실패하면 0을 반환한다.
+     */
     public int expenseDelete(int id)
     {
         conn = JdbcConnection.getInstance().getConnection();
@@ -140,6 +165,12 @@ public class ExpenseDao {
         }
         return 0;
     }
+
+    /**
+     * 지출내역 테이블의 튜플 하나를 업데이트한다.
+     * @param expense 업데이트할 내용이 담김 expense객체를 매개변수로 가진다.
+     * @return 업데이트에 성공하면 1 실패하면 0을 반환한다.
+     */
     public int expenseUpdate(Expense expense) {
         conn = JdbcConnection.getInstance().getConnection();
         String sql = "UPDATE expense set type = ?, expense_date = ?, cost = ? where id = ?";
@@ -162,8 +193,11 @@ public class ExpenseDao {
     }
 
 
-
-
+    /**
+     * 총 지출 내역을 조회한다.
+     * @param warehouseId 총 지출 내역을 조회할 창고번호를 매개변수로 가진다.
+     * @return 지출의 총 합계를 반환한다.
+     */
     public int expenseSum(int warehouseId)
     {
         conn = JdbcConnection.getInstance().getConnection();
@@ -187,6 +221,12 @@ public class ExpenseDao {
         return 0;
     }
 
+    /**
+     * 해당 년도의 총 지출 내역을 조회한다.
+     * @param warehouseId 지출내역을 조회할 창고번호를 매개변수로 가진다.
+     * @param year 지출내역을 조회할 연도를 매개변수로 가진다.
+     * @return 해당년도의 총 지출을 반환한다.
+     */
     public int expenseSumByYear(int warehouseId, String year)
     {
         conn = JdbcConnection.getInstance().getConnection();
