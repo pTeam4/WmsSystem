@@ -131,6 +131,7 @@ public class RetrievalServiceImpl implements RetrievalService {
         shippingOrdersDetail.setQuantity(quantity);
 
         shippingOrdersDetailDao.requestRetrieval(shippingOrdersDetail);
+        System.out.println("출고 요청이 완료되었습니다.");
     }
 
     /**
@@ -322,6 +323,7 @@ public class RetrievalServiceImpl implements RetrievalService {
                 Date utilDepartureDate = simpleDateFormat.parse(inputDate);
                 java.sql.Date departureDate = new java.sql.Date(utilDepartureDate.getTime());
                 waybillDao.addWaybill(shippingOrderId, vehicleNum, departureDate);
+                System.out.println("운송장이 등록되었습니다.");
             } catch (ParseException e) {
                 e.printStackTrace();
             }

@@ -71,6 +71,7 @@ public class FinanceServiceImpl implements FinanceService {
         expense.setCost(cost);
         expense.setExpenseDate(expenseDate);
         expenseDao.expenseInsert(expense);
+        System.out.println("지출 내역이 등록되었습니다.");
     }
 
     @Override
@@ -129,6 +130,7 @@ public class FinanceServiceImpl implements FinanceService {
         }
         else {
             expenseDao.expenseDelete(id);
+            System.out.println("지출내역이 삭제되었습니다.");
         }
     }
 
