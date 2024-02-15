@@ -15,9 +15,4 @@ public class User {
     private String tel;
     private int permission;
     private int status;
-
-//    public User(String id, String pw) {
-//        this.id = id;
-//        this.pw = pw;
-//    }
 }
