@@ -66,9 +66,10 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         StockDao stockDao = new StockDao();
         List<StockInfo> stockInfoList = stockDao.stockSelect(warehouseId);
+        int totalQuantity = 0;
 
         System.out.println(
-                "-------------------------------------------------------------------------------------------"
+                "\n-------------------------------------------------------------------------------------------"
         );
         System.out.printf(
                 "%-6s%-25s%-20s%-20s%-25s%n", "ID", "Product Name", "Quantity", "Warehouse Name", "Warehouse Location"
@@ -77,6 +78,8 @@ public class WarehouseServiceImpl implements WarehouseService {
                 "-------------------------------------------------------------------------------------------"
         );
         for (StockInfo stockInfo : stockInfoList) {
+            totalQuantity += stockInfo.getStockQuantity();
+
             System.out.printf(
                     "%-6s%-25s%-20s%-20s%-25s%n",
                     stockInfo.getStockId(),
@@ -88,6 +91,10 @@ public class WarehouseServiceImpl implements WarehouseService {
         }
         System.out.println(
                 "-------------------------------------------------------------------------------------------"
+        );
+        System.out.printf("총 재고량 : %d%n", totalQuantity);
+        System.out.println(
+                "-------------------------------------------------------------------------------------------\n"
         );
     }
 
