@@ -141,7 +141,9 @@ public class StorageServiceImpl implements StorageService {
                     stockMovement.getApprovedDatetime()
             );
         }
-
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------"
+        );
     }
 
     @Override
