@@ -19,33 +19,40 @@ public class StockDao {
         this.connection = JdbcConnection.getInstance().getConnection();
     }
 
-    public List<StockInfo> stockSelect() {
+    public List<StockInfo> stockSelect(int warehouseId) {
         String sql = "SELECT s.id, p.name, s.quantity, w.name, w.location" +
                 " FROM stock s" +
                 " JOIN product p" +
                 "   ON s.product_id = p.id" +
                 " JOIN warehouse w" +
-                "   ON s.warehouse_id = w.id";
+                "   ON s.warehouse_id = w.id" +
+                " WHERE w.id = ?";
 
         List<StockInfo> stockInfoList = new ArrayList<>();
 
         try (
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery()
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            while (resultSet.next()) {
-                StockInfo stockInfo = new StockInfo();
+            preparedStatement.setInt(1, warehouseId);
 
-                stockInfo.setStockId(resultSet.getInt("s.id"));
-                stockInfo.setProductName(resultSet.getString("p.name"));
-                stockInfo.setStockQuantity(resultSet.getInt("s.quantity"));
-                stockInfo.setWarehouseName(resultSet.getString("w.name"));
-                stockInfo.setWarehouseLocation(resultSet.getString("w.location"));
+            try (
+                    ResultSet resultSet = preparedStatement.executeQuery()
+            ) {
 
-                stockInfoList.add(stockInfo);
+                while (resultSet.next()) {
+                    StockInfo stockInfo = new StockInfo();
+
+                    stockInfo.setStockId(resultSet.getInt("s.id"));
+                    stockInfo.setProductName(resultSet.getString("p.name"));
+                    stockInfo.setStockQuantity(resultSet.getInt("s.quantity"));
+                    stockInfo.setWarehouseName(resultSet.getString("w.name"));
+                    stockInfo.setWarehouseLocation(resultSet.getString("w.location"));
+
+                    stockInfoList.add(stockInfo);
+                }
+
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,7 +84,7 @@ public class StockDao {
                 }
 
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
