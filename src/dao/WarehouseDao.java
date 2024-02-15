@@ -1,6 +1,7 @@
 package dao;
 
 import config.JdbcConnection;
+import dto.WarehouseInfo;
 import vo.Warehouse;
 
 import java.sql.Connection;
@@ -97,5 +98,48 @@ public class WarehouseDao {
         }
 
         return warehouseList;
+    }
+
+    public List<WarehouseInfo> warehouseSelectOne(int warehouseId) {
+        String sql = "SELECT w.id, w.name, w.location, w.type, p.name, s.quantity" +
+                " FROM warehouse w" +
+                " JOIN stock s" +
+                " ON w.id = s.warehouse_id" +
+                " JOIN product p" +
+                " ON s.product_id = p.id" +
+                " WHERE w.id = ?";
+
+        List<WarehouseInfo> warehouseInfoList = new ArrayList<>();
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+
+            preparedStatement.setInt(1, warehouseId);
+
+            try (
+                    ResultSet resultSet = preparedStatement.executeQuery();
+            ) {
+
+                while (resultSet.next()) {
+                    WarehouseInfo warehouseInfo = new WarehouseInfo();
+
+                    warehouseInfo.setWarehouseId(resultSet.getInt("w.id"));
+                    warehouseInfo.setWarehouseName(resultSet.getString("w.name"));
+                    warehouseInfo.setWarehouseLocation(resultSet.getString("w.location"));
+                    warehouseInfo.setWarehouseType(resultSet.getString("w.type"));
+                    warehouseInfo.setProductName(resultSet.getString("p.name"));
+                    warehouseInfo.setStockQuantity(resultSet.getInt("s.quantity"));
+
+                    warehouseInfoList.add(warehouseInfo);
+                }
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return warehouseInfoList;
     }
 }
