@@ -28,8 +28,9 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setType(type);
 
         int row = warehouseDao.warehouseInsert(warehouse);
-
         System.out.printf("창고 %d개가 등록되었습니다.%n", row);
+
+        getWarehouse();
     }
 
     @Override
@@ -37,18 +38,27 @@ public class WarehouseServiceImpl implements WarehouseService {
         WarehouseDao warehouseDao = new WarehouseDao();
         List<Warehouse> warehouses = warehouseDao.warehouseSelect();
 
-        System.out.println("\n = = = = = 창고 리스트 = = = = = \n");
-
+        System.out.println(
+                "\n-------------------------------------------------------------------------------------------"
+        );
+        System.out.printf(
+                "%-6s%-20s%-20s%-20s%n", "ID", "Name", "Location", "Type"
+        );
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
         for (Warehouse warehouse : warehouses) {
-            System.out.printf("""
-                    창고 아이디: %d
-                    창고 이름: %s
-                    창고 위치: %s
-                    창고 종류: %s%n
-                    """, warehouse.getId(), warehouse.getName(), warehouse.getLocation(), warehouse.getType());
+            System.out.printf(
+                    "%-6s%-20s%-20s%-20s%n",
+                    warehouse.getId(),
+                    warehouse.getName(),
+                    warehouse.getLocation(),
+                    warehouse.getType()
+            );
         }
-
-        System.out.println("= = = = = = = = = = = = = = = \n");
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
     }
 
     @Override
@@ -58,11 +68,22 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void getStock() {
+        getWarehouse();
+
+        System.out.print("재고를 조회할 창고 ID를 입력하세요: ");
+        int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
+
         StockDao stockDao = new StockDao();
-        List<StockInfo> stockInfoList = stockDao.stockSelect();
+        List<StockInfo> stockInfoList = stockDao.stockSelect(warehouseId);
+
+        printStockList(stockInfoList);
+    }
+
+    private void printStockList(List<StockInfo> stockInfoList) {
+        int totalQuantity = 0;
 
         System.out.println(
-                "-------------------------------------------------------------------------------------------"
+                "\n-------------------------------------------------------------------------------------------"
         );
         System.out.printf(
                 "%-6s%-25s%-20s%-20s%-25s%n", "ID", "Product Name", "Quantity", "Warehouse Name", "Warehouse Location"
@@ -71,6 +92,8 @@ public class WarehouseServiceImpl implements WarehouseService {
                 "-------------------------------------------------------------------------------------------"
         );
         for (StockInfo stockInfo : stockInfoList) {
+            totalQuantity += stockInfo.getStockQuantity();
+
             System.out.printf(
                     "%-6s%-25s%-20s%-20s%-25s%n",
                     stockInfo.getStockId(),
@@ -82,6 +105,10 @@ public class WarehouseServiceImpl implements WarehouseService {
         }
         System.out.println(
                 "-------------------------------------------------------------------------------------------"
+        );
+        System.out.printf("총 재고량 : %d%n", totalQuantity);
+        System.out.println(
+                "-------------------------------------------------------------------------------------------\n"
         );
     }
 
