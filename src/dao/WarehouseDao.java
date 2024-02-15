@@ -17,9 +17,11 @@ public class WarehouseDao {
         this.connection = JdbcConnection.getInstance().getConnection();
     }
 
-    public void warehouseInsert(Warehouse warehouse) {
+    public int warehouseInsert(Warehouse warehouse) {
         String sql = "INSERT INTO warehouse (name, location, type)" +
                 "VALUES (?, ?, ?)";
+
+        int row = 0;
 
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
@@ -29,13 +31,13 @@ public class WarehouseDao {
             preparedStatement.setString(2, warehouse.getLocation());
             preparedStatement.setString(3, warehouse.getType());
 
-            int row = preparedStatement.executeUpdate();
-
-            System.out.printf("창고 %d개가 등록되었습니다.%n", row);
+            row = preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return row;
     }
 
     public List<Warehouse> warehouseSelect() {
