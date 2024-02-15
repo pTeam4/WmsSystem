@@ -10,7 +10,7 @@ public class FinanceServiceMenu {
     {
         FinanceService financeService = new FinanceServiceImpl();
         int menuno = 0;
-        System.out.println("1. 지출내역 조회 2. 연간 지출내역 조회 3. 지출내역 등록 4. 지출내역 수정 5. 지출내역 삭제 6. 매출내역 조회 7. 총 정산 내역 조회 8. 이전메뉴로 돌아가기");
+        System.out.println("1. 지출내역 조회\t\t2. 연간 지출내역 조회\t\t3. 지출내역 등록 \n4. 지출내역 수정\t\t5. 지출내역 삭제\t\t\t6. 매출내역 조회\n7. 총 정산 내역 조회\t8. 이전메뉴로 돌아가기");
         try {
             menuno = Integer.parseInt(GetTexts.getInstance().readLine());
         } catch (NumberFormatException e) {
