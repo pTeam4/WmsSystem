@@ -105,7 +105,7 @@ public class StorageServiceImpl implements StorageService {
                             MovementStatus.APPROVED.getCode(), MovementStatus.REQUESTED.getCode()
                     );
 
-                    System.out.printf("%d건의 입고 요청이 승인되었습니다.", rows);
+                    System.out.printf("%d건의 입고 요청이 승인되었습니다.%n", rows);
                 }
             }
         }
