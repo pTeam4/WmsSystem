@@ -153,7 +153,7 @@ public class UserDao {
     public String userSelectByIdAndName(String id, String name) {
         String pw = null;
         try {
-            String sql = "select password from user where id = ? and email = ?";
+            String sql = "select password from user where id = ? and name = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             pstmt.setString(2, name);
