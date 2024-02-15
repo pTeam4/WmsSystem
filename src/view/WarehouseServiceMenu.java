@@ -11,7 +11,7 @@ public class WarehouseServiceMenu {
     public static void warehouseServiceMenu() {
         WarehouseService warehouseService = new WarehouseServiceImpl();
         int menuno = 0;
-        System.out.println("1. 창고 등록 2. 창고 조회 3. 창고 현황 확인 4. 재고 업무 5. 이전 메뉴로 돌아가기");
+        System.out.println("1. 창고 등록\t2. 창고 조회\t3. 창고 현황 확인\n4. 재고 업무\t5. 이전 메뉴로 돌아가기");
         try {
             menuno = Integer.parseInt(GetTexts.getInstance().readLine());
         } catch (NumberFormatException e) {

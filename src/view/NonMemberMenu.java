@@ -15,7 +15,7 @@ public class NonMemberMenu {
                 "( o.o )  ( o.o )  ( o.o ) \n" +
                 " > ^ <    > ^ <    > ^ <\n");
         System.out.println("야옹 창고 시스템에 오신 것을 환영합니다. 원하시는 메뉴를 선택해주세요");
-        System.out.println("1. 회원가입 2. 로그인 3. 고객센터 4. 요금안내조회 5. 운송장 조회 6. 견적신청 7. 아이디 찾기 8. 비밀번호 찾기 9. 시스템 종료");
+        System.out.println("1. 회원가입\t\t2. 로그인\t\t3. 고객센터 \n4. 요금안내조회\t5. 운송장 조회\t6. 견적신청 \n7. 아이디 찾기\t8. 비밀번호 찾기\t9. 시스템 종료");
 
         int menuno = 0;
         try {
