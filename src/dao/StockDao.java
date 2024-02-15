@@ -2,6 +2,7 @@ package dao;
 
 import config.JdbcConnection;
 import dto.StockInfo;
+import vo.Stock;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,5 +51,36 @@ public class StockDao {
         }
 
         return stockInfoList;
+    }
+
+    public List<Stock> getAllStocks(int productId) {
+        String sql = "SELECT id, warehouse_Id, product_Id, quantity FROM stock WHERE product_Id = ? ";
+        List<Stock> stocks = new ArrayList<>();
+
+        try (
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, productId); // PreparedStatement에 매개변수 설정
+
+            try (
+                    ResultSet resultSet = statement.executeQuery()
+            ) {
+
+                while (resultSet.next()) {
+                    Stock stock = new Stock();
+                    stock.setId(resultSet.getInt("id"));
+                    stock.setProductId(productId);
+                    stock.setWarehouseId(resultSet.getInt("warehouse_Id"));
+                    stock.setQuantity(resultSet.getInt("quantity"));
+                    stocks.add(stock);
+                }
+
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return stocks;
     }
 }
