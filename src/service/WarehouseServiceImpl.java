@@ -1,8 +1,11 @@
 package service;
 
 import config.GetTexts;
+import dao.StockDao;
 import dao.WarehouseDao;
+import dto.StockInfo;
 import vo.Warehouse;
+
 import java.util.List;
 
 public class WarehouseServiceImpl implements WarehouseService {
@@ -55,7 +58,31 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void getStock() {
+        StockDao stockDao = new StockDao();
+        List<StockInfo> stockInfoList = stockDao.stockSelect();
 
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
+        System.out.printf(
+                "%-6s%-25s%-20s%-20s%-25s%n", "ID", "Product Name", "Quantity", "Warehouse Name", "Warehouse Location"
+        );
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
+        for (StockInfo stockInfo : stockInfoList) {
+            System.out.printf(
+                    "%-6s%-25s%-20s%-20s%-25s%n",
+                    stockInfo.getStockId(),
+                    stockInfo.getProductName(),
+                    stockInfo.getStockQuantity(),
+                    stockInfo.getWarehouseName(),
+                    stockInfo.getWarehouseLocation()
+            );
+        }
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
     }
 
     @Override

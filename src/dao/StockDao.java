@@ -1,7 +1,7 @@
 package dao;
 
 import config.JdbcConnection;
-import vo.Stock;
+import dto.StockInfo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,30 +18,37 @@ public class StockDao {
         this.connection = JdbcConnection.getInstance().getConnection();
     }
 
-    public List<Stock> stockSelect(int productId) {
-        String SELECT_STOCK_QUERY = "SELECT id, warehouseId, productId, quantity FROM stock WHERE productId = ? ";
-        List<Stock> stocks = new ArrayList<>();
+    public List<StockInfo> stockSelect() {
+        String sql = "SELECT s.id, p.name, s.quantity, w.name, w.location" +
+                " FROM stock s" +
+                " JOIN product p" +
+                "   ON s.product_id = p.id" +
+                " JOIN warehouse w" +
+                "   ON s.warehouse_id = w.id";
+
+        List<StockInfo> stockInfoList = new ArrayList<>();
 
         try (
-                PreparedStatement statement = connection.prepareStatement(SELECT_STOCK_QUERY);
+                PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery()
         ) {
 
-            statement.setInt(1, productId);
-
             while (resultSet.next()) {
-                Stock stock = new Stock();
-                stock.setId(resultSet.getInt("id"));
-                stock.setProductId(productId);
-                stock.setWarehouseId(resultSet.getInt("warehouseId"));
-                stock.setQuantity(resultSet.getInt("quantity"));
-                stocks.add(stock);
+                StockInfo stockInfo = new StockInfo();
+
+                stockInfo.setStockId(resultSet.getInt("s.id"));
+                stockInfo.setProductName(resultSet.getString("p.name"));
+                stockInfo.setStockQuantity(resultSet.getInt("s.quantity"));
+                stockInfo.setWarehouseName(resultSet.getString("w.name"));
+                stockInfo.setWarehouseLocation(resultSet.getString("w.location"));
+
+                stockInfoList.add(stockInfo);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return stocks;
+        return stockInfoList;
     }
 }
