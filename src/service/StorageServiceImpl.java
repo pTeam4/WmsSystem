@@ -268,8 +268,34 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void storageStatus() {
+        StockMovementDao stockMovementDao = new StockMovementDao();
+        List<StockMovement> storageNow = stockMovementDao.getStockMovementsNow();
+        System.out.println("-------------------------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-6s%-25s%-20s%-20s%-16s%-16s%n",
+                "id",
+                "product_id",
+                "user_id",
+                "status_code",
+                "Request_time",
+                "Approved_time"
+        );
+        System.out.println("-------------------------------------------------------------------------------------------------");
 
+        for (StockMovement s : storageNow){
+            System.out.printf(
+                    "%-6s%-25s%-20s%-20s%-16s%-16s%n",
+                    s.getId(),
+                    s.getProductId(),
+                    s.getUserId(),
+                    s.getStatusCode(),
+                    s.getRequestDatetime(),
+                    s.getApprovedDatetime()
+            );
+        }
+        System.out.println("-------------------------------------------------------------------------------------------------");
     }
+
 
     @Override
     public void storageStatusByPeriod() {
