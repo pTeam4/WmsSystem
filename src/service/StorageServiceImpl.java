@@ -119,7 +119,7 @@ public class StorageServiceImpl implements StorageService {
                 "-----------------------------------------------------------------------------------------------------"
         );
         System.out.printf(
-                "%-6s%-6s%-20s%-6s%-25s%-25s%n",
+                "%-6s%-15s%-20s%-10s%-25s%-25s%n",
                 "id",
                 "Product ID",
                 "User ID",
@@ -131,17 +131,22 @@ public class StorageServiceImpl implements StorageService {
                 "-----------------------------------------------------------------------------------------------------"
         );
         for (StockMovement stockMovement : stockMovements) {
+            String approvedDatetime = stockMovement.getApprovedDatetime() != null ?
+                    String.valueOf(stockMovement.getApprovedDatetime()) : "입고 승인 대기중";
+
             System.out.printf(
-                    "%-6s%-6s%-20s%-6s%-25s%-25s%n",
+                    "%-6s%-15s%-20s%-10s%-25s%-25s%n",
                     stockMovement.getId(),
                     stockMovement.getProductId(),
                     stockMovement.getUserId(),
                     stockMovement.getStatusCode(),
                     stockMovement.getRequestDatetime(),
-                    stockMovement.getApprovedDatetime()
+                    approvedDatetime
             );
         }
-
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------"
+        );
     }
 
     @Override
@@ -182,7 +187,7 @@ public class StorageServiceImpl implements StorageService {
         } else {
             System.out.println("No data found for the provided Product ID.");
         }
-        String filePath = "./qrcode"+productId+".png";
+        String filePath = "./qrcode" + productId + ".png";
         QrBarcodeDao.saveQrCodeImage(productId, filePath);
     }
 
@@ -282,7 +287,7 @@ public class StorageServiceImpl implements StorageService {
         );
         System.out.println("-------------------------------------------------------------------------------------------------");
 
-        for (StockMovement s : storageNow){
+        for (StockMovement s : storageNow) {
             System.out.printf(
                     "%-6s%-25s%-20s%-20s%-16s%-16s%n",
                     s.getId(),
