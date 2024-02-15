@@ -2,7 +2,6 @@ package dao;
 
 import config.JdbcConnection;
 import dto.StockInfo;
-import vo.Stock;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
