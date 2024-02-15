@@ -20,8 +20,18 @@ public class WarehouseServiceImpl implements WarehouseService {
         System.out.print("창고 위치를 입력하세요: ");
         String location = GetTexts.getInstance().readLine();
 
-        System.out.print("창고 종류를 입력하세요: ");
-        String type = GetTexts.getInstance().readLine();
+        System.out.print("창고 종류를 선택하세요: ");
+        System.out.println("1. 일반 | 2. 식품 | 3. 의류");
+
+        int typeNo = Integer.parseInt(GetTexts.getInstance().readLine());
+        String type = "";
+
+        switch (typeNo) {
+            case 1 -> type = "일반 창고";
+            case 2 -> type = "식품 창고";
+            case 3 -> type = "의류 창고";
+            default -> System.out.println("잘못된 입력입니다.");
+        }
 
         warehouse.setName(name);
         warehouse.setLocation(location);
@@ -30,7 +40,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         int row = warehouseDao.warehouseInsert(warehouse);
         System.out.printf("창고 %d개가 등록되었습니다.%n", row);
 
-        getWarehouse();
+        getAllWarehouse();
     }
 
     @Override
