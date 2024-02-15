@@ -170,4 +170,28 @@ public class StockMovementDao {
         }
         return stockMovements;
     }
+    
+    public List<StockMovement> getStockMovementsNow() {
+        String SELECT_STOCK_MOVEMENT_QUERY = "SELECT id, product_Id, user_Id, status_code, request_Datetime, approved_Datetime FROM stock_movement ";
+
+        List<StockMovement> stockMovements = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STOCK_MOVEMENT_QUERY))
+        {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                StockMovement stockMovement = new StockMovement();
+                stockMovement.setId(resultSet.getInt("id"));
+                stockMovement.setProductId(resultSet.getInt("product_id"));
+                stockMovement.setUserId(resultSet.getString("user_Id"));
+                stockMovement.setStatusCode(resultSet.getString("status_code"));
+                stockMovement.setRequestDatetime(resultSet.getDate("request_Datetime"));
+                stockMovement.setApprovedDatetime(resultSet.getDate("approved_Datetime"));
+                stockMovements.add(stockMovement);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stockMovements;
+    }
 }
