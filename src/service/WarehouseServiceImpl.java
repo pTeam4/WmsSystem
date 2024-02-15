@@ -4,6 +4,7 @@ import config.GetTexts;
 import dao.StockDao;
 import dao.WarehouseDao;
 import dto.StockInfo;
+import dto.WarehouseInfo;
 import vo.Warehouse;
 
 import java.util.List;
@@ -63,12 +64,61 @@ public class WarehouseServiceImpl implements WarehouseService {
         int subMenuNo = Integer.parseInt(GetTexts.getInstance().readLine());
 
         switch (subMenuNo) {
-//            case 1 -> warehouseSelectOne();
+            case 1 -> getWarehouseInfo();
             case 2 -> {
                 return;
             }
         }
     }
+
+    private void getWarehouseInfo() {
+        WarehouseDao warehouseDao = new WarehouseDao();
+
+        System.out.print("창고 ID를 입력하세요: ");
+        int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        List<WarehouseInfo> warehouseInfoList = warehouseDao.warehouseSelectOne(warehouseId);
+
+        int totalQuantity = 0;
+
+        System.out.println(
+                "\n-------------------------------"
+        );
+        System.out.printf("""
+                ID : %d
+                Name : %s
+                Location : %s
+                Type : %s
+                """,
+                warehouseInfoList.get(0).getWarehouseId(),
+                warehouseInfoList.get(0).getWarehouseName(),
+                warehouseInfoList.get(0).getWarehouseLocation(),
+                warehouseInfoList.get(0).getWarehouseType());
+        System.out.println(
+                "-------------------------------"
+        );
+        System.out.printf(
+                "%-20s%-20s%n", "Product Name", "Quantity"
+        );
+        System.out.println(
+                "-------------------------------"
+        );
+        for (WarehouseInfo warehouseInfo : warehouseInfoList) {
+            totalQuantity += warehouseInfo.getStockQuantity();
+
+            System.out.printf("%-20s%-20d%n",
+                    warehouseInfo.getProductName(),
+                    warehouseInfo.getStockQuantity());
+        }
+        System.out.println(
+                "-------------------------------"
+        );
+        System.out.printf("총 재고량 : %d%n", totalQuantity);
+        System.out.println(
+                "-------------------------------\n"
+        );
+    }
+
 
     private void getWarehouseByLocation() {
         WarehouseDao warehouseDao = new WarehouseDao();
