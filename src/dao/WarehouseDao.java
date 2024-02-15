@@ -169,4 +169,24 @@ public class WarehouseDao {
 
         return warehouseInfoList;
     }
+
+    public int warehouseDelete(int warehouseId) {
+        String sql = "DELETE FROM warehouse WHERE id = ?";
+        int row = 0;
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+
+            preparedStatement.setInt(1, warehouseId);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("재고가 있는 창고는 삭제할 수 없습니다.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return row;
+    }
 }
