@@ -3,6 +3,7 @@ package service;
 import config.GetTexts;
 import dao.ExpenseDao;
 import dao.SalesDao;
+import util.UserManager;
 import vo.Expense;
 import vo.Sales;
 
@@ -15,8 +16,17 @@ import java.util.List;
 public class FinanceServiceImpl implements FinanceService {
     ExpenseDao expenseDao = new ExpenseDao();
     SalesDao salesDao = new SalesDao();
+
+    /**
+     * 창고 지출내역조회
+     */
     @Override
     public void getExpenseRecords() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("지출 내역을 조회하고 싶은 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
         List<Expense> expenses = expenseDao.expenseSelect(warehouseNo);
@@ -31,8 +41,16 @@ public class FinanceServiceImpl implements FinanceService {
 
     }
 
+    /**
+     * 해당 연도 창고 지출내역 조회
+     */
     @Override
     public void getYearlyExpenseRecords() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("조회하고 싶은 연도를 입력하세요.");
         String year = GetTexts.getInstance().readLine();
         System.out.print("조회하고 싶은 창고번호를 입력하세요.");
@@ -44,9 +62,16 @@ public class FinanceServiceImpl implements FinanceService {
     public void getExpenseGraph() {
 
     }
-
+    /**
+     * 지출 내역 등록
+     */
     @Override
     public void addExpenseRecord() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         Expense expense = new Expense();
         System.out.print("창고 아이디를 입력하세요.");
         int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
@@ -74,8 +99,16 @@ public class FinanceServiceImpl implements FinanceService {
         System.out.println("지출 내역이 등록되었습니다.");
     }
 
+    /**
+     * 지출 내역 수정
+     */
     @Override
     public void modifyExpenseRecord() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("수정하고 싶은 지출 내역 번호를 입력하세요: ");
         int id = Integer.parseInt(GetTexts.getInstance().readLine());
         Expense expense = expenseDao.expenseSelectOne(id);
@@ -119,9 +152,16 @@ public class FinanceServiceImpl implements FinanceService {
     }
 
 
-
+    /**
+     * 지출 내역 삭제
+     */
     @Override
     public void removeExpenseRecord() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("삭제하고싶은 지출내역번호를 입력하세요. 취소하고싶다면 0입력 ");
         int id = Integer.parseInt(GetTexts.getInstance().readLine());
         if(id == 0)
@@ -134,8 +174,16 @@ public class FinanceServiceImpl implements FinanceService {
         }
     }
 
+    /**
+     * 창고 전체기간 매출내역 조회
+     */
     @Override
     public void getSalesRecords() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("매출 내역을 조회하고 싶은 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
         ArrayList<Sales> salesArrayList = salesDao.salesSelect(warehouseNo);
@@ -155,8 +203,16 @@ public class FinanceServiceImpl implements FinanceService {
 
     }
 
+    /**
+     * 당해 년도 매출, 지출, 순이익, 순이익 증감율 조회
+     */
     @Override
     public void getTotalSettlementRecords() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("총 정산내역을 조회할 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
         System.out.print("총 정산내역을 조회할 년도를 입력하세요.");
