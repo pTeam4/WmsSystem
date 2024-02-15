@@ -44,33 +44,37 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         switch (menuno) {
             case 1 -> {
-                WarehouseDao warehouseDao = new WarehouseDao();
-                List<Warehouse> warehouses = warehouseDao.warehouseSelect();
-
-                System.out.println(
-                        "\n-------------------------------------------------------------------------------------------"
-                );
-                System.out.printf(
-                        "%-6s%-20s%-20s%-20s%n", "ID", "Name", "Location", "Type"
-                );
-                System.out.println(
-                        "-------------------------------------------------------------------------------------------"
-                );
-                for (Warehouse warehouse : warehouses) {
-                    System.out.printf(
-                            "%-6s%-20s%-20s%-20s%n",
-                            warehouse.getId(),
-                            warehouse.getName(),
-                            warehouse.getLocation(),
-                            warehouse.getType()
-                    );
-                }
-                System.out.println(
-                        "-------------------------------------------------------------------------------------------"
-                );
+                getAllWarehouse();
             }
 //            case 2 -> getWarehouseByLocation();
         }
+    }
+
+    public void getAllWarehouse() {
+        WarehouseDao warehouseDao = new WarehouseDao();
+        List<Warehouse> warehouses = warehouseDao.warehouseSelect();
+
+        System.out.println(
+                "\n-------------------------------------------------------------------------------------------"
+        );
+        System.out.printf(
+                "%-6s%-20s%-20s%-20s%n", "ID", "Name", "Location", "Type"
+        );
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
+        for (Warehouse warehouse : warehouses) {
+            System.out.printf(
+                    "%-6s%-20s%-20s%-20s%n",
+                    warehouse.getId(),
+                    warehouse.getName(),
+                    warehouse.getLocation(),
+                    warehouse.getType()
+            );
+        }
+        System.out.println(
+                "-------------------------------------------------------------------------------------------"
+        );
     }
 
     @Override
@@ -80,7 +84,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void getStock() {
-        getWarehouse();
+        getAllWarehouse();
 
         System.out.print("재고를 조회할 창고 ID를 입력하세요: ");
         int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
