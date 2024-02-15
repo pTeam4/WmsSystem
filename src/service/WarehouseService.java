@@ -4,6 +4,7 @@ public interface WarehouseService {
     public void addWarehouse();
 
     public void getWarehouse();
+    public void getWarehouseByLocation();
 
     public void warehouseStatusList();
 
