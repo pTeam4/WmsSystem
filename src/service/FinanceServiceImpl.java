@@ -54,7 +54,7 @@ public class FinanceServiceImpl implements FinanceService {
         String type = GetTexts.getInstance().readLine();
         System.out.print("지출 비용을 입력하세요.");
         int cost = Integer.parseInt(GetTexts.getInstance().readLine());
-        System.out.print("수정할 지출 일자를 yyyy-MM-dd 형식으로 입력하세요: ");
+        System.out.print("지출 일자를 yyyy-MM-dd 형식으로 입력하세요: ");
         String dateString = GetTexts.getInstance().readLine();
         java.sql.Date expenseDate = null;
         if (!dateString.isEmpty()) {
