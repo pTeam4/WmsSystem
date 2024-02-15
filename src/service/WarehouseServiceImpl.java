@@ -35,30 +35,42 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void getWarehouse() {
-        WarehouseDao warehouseDao = new WarehouseDao();
-        List<Warehouse> warehouses = warehouseDao.warehouseSelect();
+        getWarehouseSubMenu();
+    }
 
-        System.out.println(
-                "\n-------------------------------------------------------------------------------------------"
-        );
-        System.out.printf(
-                "%-6s%-20s%-20s%-20s%n", "ID", "Name", "Location", "Type"
-        );
-        System.out.println(
-                "-------------------------------------------------------------------------------------------"
-        );
-        for (Warehouse warehouse : warehouses) {
-            System.out.printf(
-                    "%-6s%-20s%-20s%-20s%n",
-                    warehouse.getId(),
-                    warehouse.getName(),
-                    warehouse.getLocation(),
-                    warehouse.getType()
-            );
+    private void getWarehouseSubMenu() {
+        System.out.println("1. 전체 조회 | 2. 지역별 조회");
+        int menuno = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        switch (menuno) {
+            case 1 -> {
+                WarehouseDao warehouseDao = new WarehouseDao();
+                List<Warehouse> warehouses = warehouseDao.warehouseSelect();
+
+                System.out.println(
+                        "\n-------------------------------------------------------------------------------------------"
+                );
+                System.out.printf(
+                        "%-6s%-20s%-20s%-20s%n", "ID", "Name", "Location", "Type"
+                );
+                System.out.println(
+                        "-------------------------------------------------------------------------------------------"
+                );
+                for (Warehouse warehouse : warehouses) {
+                    System.out.printf(
+                            "%-6s%-20s%-20s%-20s%n",
+                            warehouse.getId(),
+                            warehouse.getName(),
+                            warehouse.getLocation(),
+                            warehouse.getType()
+                    );
+                }
+                System.out.println(
+                        "-------------------------------------------------------------------------------------------"
+                );
+            }
+//            case 2 -> getWarehouseByLocation();
         }
-        System.out.println(
-                "-------------------------------------------------------------------------------------------"
-        );
     }
 
     @Override
