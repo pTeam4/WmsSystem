@@ -66,6 +66,11 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         StockDao stockDao = new StockDao();
         List<StockInfo> stockInfoList = stockDao.stockSelect(warehouseId);
+
+        printStockList(stockInfoList);
+    }
+
+    private void printStockList(List<StockInfo> stockInfoList) {
         int totalQuantity = 0;
 
         System.out.println(
