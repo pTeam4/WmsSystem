@@ -4,6 +4,7 @@ import config.GetTexts;
 import dao.StockDao;
 import dao.WarehouseDao;
 import dto.StockInfo;
+import dto.WarehouseInfo;
 import vo.Warehouse;
 
 import java.util.List;
@@ -20,8 +21,18 @@ public class WarehouseServiceImpl implements WarehouseService {
         System.out.print("창고 위치를 입력하세요: ");
         String location = GetTexts.getInstance().readLine();
 
-        System.out.print("창고 종류를 입력하세요: ");
-        String type = GetTexts.getInstance().readLine();
+        System.out.print("창고 종류를 선택하세요: ");
+        System.out.println("1. 일반 | 2. 식품 | 3. 의류");
+
+        int typeNo = Integer.parseInt(GetTexts.getInstance().readLine());
+        String type = "";
+
+        switch (typeNo) {
+            case 1 -> type = "일반 창고";
+            case 2 -> type = "식품 창고";
+            case 3 -> type = "의류 창고";
+            default -> System.out.println("잘못된 입력입니다.");
+        }
 
         warehouse.setName(name);
         warehouse.setLocation(location);
@@ -30,7 +41,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         int row = warehouseDao.warehouseInsert(warehouse);
         System.out.printf("창고 %d개가 등록되었습니다.%n", row);
 
-        getWarehouse();
+        getAllWarehouse();
     }
 
     @Override
@@ -48,6 +59,109 @@ public class WarehouseServiceImpl implements WarehouseService {
             }
             case 2 -> getWarehouseByLocation();
         }
+
+        System.out.println("1. 창고 정보 | 2. 나가기");
+        int subMenuNo = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        switch (subMenuNo) {
+            case 1 -> getWarehouseInfo();
+            case 2 -> {
+                return;
+            }
+        }
+    }
+
+    private void getWarehouseInfo() {
+        WarehouseDao warehouseDao = new WarehouseDao();
+
+        System.out.print("창고 ID를 입력하세요: ");
+        int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        List<WarehouseInfo> warehouseInfoList = warehouseDao.warehouseSelectWithStock(warehouseId);
+
+        if (warehouseInfoList.isEmpty()) {
+            Warehouse warehouse = warehouseDao.warehouseSelectOne(warehouseId);
+
+            System.out.println(
+                    "\n-------------------------------"
+            );
+            System.out.printf("""
+                            ID : %d
+                            Name : %s
+                            Location : %s
+                            Type : %s
+                            """,
+                    warehouse.getId(),
+                    warehouse.getName(),
+                    warehouse.getLocation(),
+                    warehouse.getType());
+            System.out.println(
+                    "-------------------------------"
+            );
+            System.out.println("창고가 비어있습니다.");
+            System.out.println(
+                    "-------------------------------\n"
+            );
+
+            warehouseEditMenu(warehouseId);
+        } else {
+            int totalQuantity = 0;
+
+            System.out.println(
+                    "\n-------------------------------"
+            );
+            System.out.printf("""
+                        ID : %d
+                        Name : %s
+                        Location : %s
+                        Type : %s
+                        """,
+                    warehouseInfoList.get(0).getWarehouseId(),
+                    warehouseInfoList.get(0).getWarehouseName(),
+                    warehouseInfoList.get(0).getWarehouseLocation(),
+                    warehouseInfoList.get(0).getWarehouseType());
+            System.out.println(
+                    "-------------------------------"
+            );
+            System.out.printf(
+                    "%-20s%-20s%n", "Product Name", "Quantity"
+            );
+            System.out.println(
+                    "-------------------------------"
+            );
+            for (WarehouseInfo warehouseInfo : warehouseInfoList) {
+                totalQuantity += warehouseInfo.getStockQuantity();
+
+                System.out.printf("%-20s%-20d%n",
+                        warehouseInfo.getProductName(),
+                        warehouseInfo.getStockQuantity());
+            }
+            System.out.println(
+                    "-------------------------------"
+            );
+            System.out.printf("총 재고량 : %d%n", totalQuantity);
+            System.out.println(
+                    "-------------------------------\n"
+            );
+
+            warehouseEditMenu(warehouseId);
+        }
+    }
+
+    private void warehouseEditMenu(int warehouseId) {
+        System.out.println("1. 창고 삭제 | 2. 창고 수정 | 3. 나가기");
+        int menuNo = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        switch (menuNo) {
+            case 1 -> {
+                WarehouseDao warehouseDao = new WarehouseDao();
+                int row = warehouseDao.warehouseDelete(warehouseId);
+
+                System.out.printf("창고 %d개가 삭제되었습니다.", row);
+
+                getAllWarehouse();
+            }
+        }
     }
 
     private void getWarehouseByLocation() {
@@ -58,7 +172,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         List<Warehouse> warehouseList = warehouseDao.warehouseSelectByLocation(location);
 
-        if (!warehouseList.isEmpty()){
+        if (!warehouseList.isEmpty()) {
             System.out.println(
                     "\n-----------------------------------------------------------------------"
             );

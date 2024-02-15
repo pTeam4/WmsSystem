@@ -46,8 +46,18 @@ public class StorageServiceImpl implements StorageService {
         System.out.print("상품 브랜드을 입력하세요: ");
         String brand = GetTexts.getInstance().readLine();
 
-        System.out.print("상품 분류를 입력하세요: ");
-        String type = GetTexts.getInstance().readLine();
+        System.out.print("상품 분류를 선택하세요: ");
+        System.out.println("1. 일반 | 2. 식품 | 3. 의류");
+
+        int typeNo = Integer.parseInt(GetTexts.getInstance().readLine());
+        String type = "";
+
+        switch (typeNo) {
+            case 1 -> type = "일반";
+            case 2 -> type = "식품";
+            case 3 -> type = "의류";
+            default -> System.out.println("잘못된 입력입니다.");
+        }
 
         System.out.print("상품 정가를 입력하세요: ");
         int price = Integer.parseInt(GetTexts.getInstance().readLine());
