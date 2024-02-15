@@ -9,7 +9,7 @@ public class MemberMenu {
     public static void memberMainMenu() {
         LoginService loginService = new LoginServiceImpl();
         int menuno = 0;
-        System.out.println("1. 회원 관리 2. 로그 아웃 3. 창고 관리 4. 거래처 관리 5. 출고 관리 6. 입고 관리 7. 배차 관리 8. 안전 점검 관리 9. 재무 관리 10. 고객 센터 11. 견적 관리 12. 시스템 종료");
+        System.out.println("1. 회원 관리\t\t2. 로그 아웃\t\t3. 창고 관리 \n4. 거래처 관리\t5. 출고 관리\t\t6. 입고 관리 \n7. 배차 관리\t\t8. 안전 점검 관리\t9. 재무 관리 \n10. 고객 센터\t\t11. 견적 관리\t\t12. 시스템 종료");
         try {
             menuno = Integer.parseInt(GetTexts.getInstance().readLine());
         } catch (NumberFormatException e) {

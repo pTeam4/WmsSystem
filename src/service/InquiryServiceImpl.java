@@ -72,7 +72,8 @@ public class InquiryServiceImpl implements InquiryService {
         notice.setUserId(userId);
         notice.setContent(content);
         notice.setTitle(title);
-        noticeDao.noticeInsert(notice);
+        int row = noticeDao.noticeInsert(notice);
+        if (row != 0) System.out.println("공지가 등록되었습니다.");
     }
 
     @Override
@@ -118,7 +119,8 @@ public class InquiryServiceImpl implements InquiryService {
         notice.setUserId(userId);
         notice.setContent(content);
         notice.setTitle(title);
-        noticeDao.noticeUpdate(notice);
+        int row = noticeDao.noticeUpdate(notice);
+        if (row != 0) System.out.println("공지가 수정되었습니다.");
     }
 
     @Override
@@ -215,7 +217,8 @@ public class InquiryServiceImpl implements InquiryService {
         inquiry.setPostContent(postContent);
         inquiry.setUserId(userId);
         inquiry.setUserName(userName);
-        inquiryDao.inquiryInsert(inquiry);
+        int row = inquiryDao.inquiryInsert(inquiry);
+        if (row != 0)System.out.println("문의글이 등록되었습니다.");
     }
 
     @Override

@@ -9,7 +9,7 @@ public class InquiryServiceMenu {
     public static void inquiryServiceMenu() {
         InquiryService inquiryService = new InquiryServiceImpl();
         int menuno = 0;
-        System.out.println("1. 공지사항 조회 2. 공지사항 등록 3. 공지사항 수정 4. 공지사항 삭제 5. 문의게시판 조회 6. 문의게시판 글쓰기 7. 문의게시판 게시물 수정 8. 문의게시판 게시물 삭제 9. 이전메뉴로 돌아가기");
+        System.out.println("1. 공지사항 조회\t\t\t2. 공지사항 등록\t\t\t3. 공지사항 수정\n4. 공지사항 삭제\t\t\t5. 문의게시판 조회\t\t\t6. 문의게시판 글쓰기\n7. 문의게시판 게시물 수정\t8. 문의게시판 게시물 삭제\t9. 이전메뉴로 돌아가기");
         try {
             menuno = Integer.parseInt(GetTexts.getInstance().readLine());
         } catch (NumberFormatException e) {
