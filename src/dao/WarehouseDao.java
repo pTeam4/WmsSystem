@@ -4,10 +4,7 @@ import config.JdbcConnection;
 import dto.WarehouseInfo;
 import vo.Warehouse;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +97,7 @@ public class WarehouseDao {
         return warehouseList;
     }
 
-    public List<WarehouseInfo> warehouseSelectOne(int warehouseId) {
+    public List<WarehouseInfo> warehouseSelectWithStock(int warehouseId) {
         String sql = "SELECT w.id, w.name, w.location, w.type, p.name, s.quantity" +
                 " FROM warehouse w" +
                 " JOIN stock s" +
