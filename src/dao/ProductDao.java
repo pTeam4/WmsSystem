@@ -47,18 +47,18 @@ public class ProductDao {
         return result;
     }
     public int productUpdate(int productId, Product product) {
-        String sql = "UPDATE Product SET (name, brand, type, price, sale_price, quantity) WHERE id = ? " +
-                "VALUES (?, ?, ?, ?, ?, ? )";
+        String sql = "UPDATE Product SET name=?, brand=?, type=?, price=?, sale_price=?, quantity=? WHERE id = ?";
+
         int updatedRows = 0;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, productId);
-            preparedStatement.setString(2, product.getName());
-            preparedStatement.setString(3, product.getBrand());
-            preparedStatement.setString(4, product.getType());
-            preparedStatement.setInt(5, product.getPrice());
-            preparedStatement.setInt(6, product.getSalePrice());
-            preparedStatement.setInt(7, product.getQuantity());
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setString(2, product.getBrand());
+            preparedStatement.setString(3, product.getType());
+            preparedStatement.setInt(4, product.getPrice());
+            preparedStatement.setInt(5, product.getSalePrice());
+            preparedStatement.setInt(6, product.getQuantity());
+            preparedStatement.setInt(7, productId);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
