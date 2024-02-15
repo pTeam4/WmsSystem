@@ -19,6 +19,7 @@ public class StorageServiceImpl implements StorageService {
     private String generateQrCodeContent(Stock stock, StockMovement stockMovement) {
         return "Warehouse ID: " + stock.getWarehouseId() + "\nProduct ID: " + stockMovement.getProductId() + "\nUser ID: " + stockMovement.getUserId() + "\nRequest Datetime: " + stockMovement.getRequestDatetime() + "\nApproved Datetime: " + stockMovement.getApprovedDatetime();
     }
+
     private Blob convertBase64ToBlob(String base64Image) {
         try {
             // Convert Base64 encoded string to byte array
@@ -31,6 +32,7 @@ public class StorageServiceImpl implements StorageService {
             return null;
         }
     }
+
     @Override
     public void requestStorage() {
         Product product = new Product();
@@ -86,7 +88,7 @@ public class StorageServiceImpl implements StorageService {
 
             List<StockMovement> stockMovements = stockMovementDao.stockMovementSelectByStatus(MovementStatus.REQUESTED.getCode());
 
-            for (StockMovement stockMovement : stockMovements) System.out.println(stockMovement.toString());
+            printStockMovement(stockMovements);
 
             System.out.printf("""
                     메뉴를 선택하세요.
@@ -105,6 +107,36 @@ public class StorageServiceImpl implements StorageService {
                 }
             }
         }
+    }
+
+    private void printStockMovement(List<StockMovement> stockMovements) {
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------"
+        );
+        System.out.printf(
+                "%-6s%-6s%-20s%-6s%-25s%-25s%n",
+                "id",
+                "Product ID",
+                "User ID",
+                "Status",
+                "Request Date Time",
+                "Approved Date Time"
+        );
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------"
+        );
+        for (StockMovement stockMovement : stockMovements) {
+            System.out.printf(
+                    "%-6s%-6s%-20s%-6s%-25s%-25s%n",
+                    stockMovement.getId(),
+                    stockMovement.getProductId(),
+                    stockMovement.getUserId(),
+                    stockMovement.getStatusCode(),
+                    stockMovement.getRequestDatetime(),
+                    stockMovement.getApprovedDatetime()
+            );
+        }
+
     }
 
     @Override
