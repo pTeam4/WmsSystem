@@ -103,7 +103,7 @@ public class WarehouseServiceImpl implements WarehouseService {
                     "-------------------------------\n"
             );
 
-//            warehouseEditMenu(warehouseId);
+            warehouseEditMenu(warehouseId);
         } else {
             int totalQuantity = 0;
 
@@ -144,7 +144,23 @@ public class WarehouseServiceImpl implements WarehouseService {
                     "-------------------------------\n"
             );
 
-//            warehouseEditMenu(warehouseId);
+            warehouseEditMenu(warehouseId);
+        }
+    }
+
+    private void warehouseEditMenu(int warehouseId) {
+        System.out.println("1. 창고 삭제 | 2. 창고 수정 | 3. 나가기");
+        int menuNo = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        switch (menuNo) {
+            case 1 -> {
+                WarehouseDao warehouseDao = new WarehouseDao();
+                int row = warehouseDao.warehouseDelete(warehouseId);
+
+                System.out.printf("창고 %d개가 삭제되었습니다.", row);
+
+                getAllWarehouse();
+            }
         }
     }
 
