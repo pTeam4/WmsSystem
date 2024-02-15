@@ -123,12 +123,31 @@ public class StockMovementDao {
 
             rows = preparedStatement.executeUpdate();
 
+            stockMovementUpdateAllApprovedDatetime(newStatus);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return rows;
     }
+
+    private void stockMovementUpdateAllApprovedDatetime(String status) {
+        String sql = "UPDATE stock_movement SET approved_datetime = CURRENT_TIMESTAMP " +
+                "WHERE status_code = ? AND approved_datetime IS NULL";
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+
+            preparedStatement.setString(1, status);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<StockMovement> getAllStockMovements(int productId) {
         String SELECT_STOCK_MOVEMENT_QUERY = "SELECT id, productId, userId, requestDatetime, approvedDatetime FROM stockmovement WHERE productid = ? ";
 
