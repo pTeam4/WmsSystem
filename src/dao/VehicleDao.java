@@ -1,7 +1,6 @@
 package dao;
 
 import config.JdbcConnection;
-import vo.ShippingOrders;
 import vo.Vehicle;
 
 import java.sql.Connection;
@@ -39,7 +38,6 @@ public class VehicleDao {
 
                 vehicleList.add(vehicle);
             }
-            /*            pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,7 +55,6 @@ public class VehicleDao {
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, shippingOrdersId);
             pstmt.executeUpdate();
-            /*pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -74,7 +71,6 @@ public class VehicleDao {
             pstmt.setString(1, vehicleNum);
             pstmt.setInt(2, shippingOrdersId);
             pstmt.executeUpdate();
-            /*pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,11 +86,8 @@ public class VehicleDao {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, vehicleNum);
             pstmt.executeUpdate();
-            /*pstmt.close();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 }
