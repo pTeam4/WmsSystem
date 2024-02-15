@@ -28,8 +28,9 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setType(type);
 
         int row = warehouseDao.warehouseInsert(warehouse);
-
         System.out.printf("창고 %d개가 등록되었습니다.%n", row);
+
+        getWarehouse();
     }
 
     @Override
