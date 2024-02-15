@@ -8,7 +8,7 @@ public class VendorServiceMenu {
     public static void vendorServiceMenu() {
         VendorService vendorService = new VendorServiceImpl();
         int menuno = 0;
-        System.out.println("1. 요금 안내 2. 거래처 업무 3. 계약 업무");
+        System.out.println("1. 요금 안내 2. 거래처 업무 3. 계약 업무 4. 이전메뉴로 돌아가기");
         try {
             menuno = Integer.parseInt(GetTexts.getInstance().readLine());
         } catch (NumberFormatException e) {
@@ -25,7 +25,7 @@ public class VendorServiceMenu {
                 ContractServiceMenu.contractServiceMenu();
             }
             case 4 -> {
-                VendorServiceMenu.vendorServiceMenu();
+                MemberMenu.memberMainMenu();
             }
             default -> {
                 System.out.println("잘못 입력하셨습니다.");

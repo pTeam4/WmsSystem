@@ -33,6 +33,11 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     public void addNotice() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() != 1)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         Notice notice = new Notice();
         System.out.println("[새 공지사항 입력]");
         System.out.println("공지 유형 선택 1. 긴급 2. 정기 공지 3. 이용 안내");
@@ -77,6 +82,11 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     public void modifyNotice() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() != 1)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.println("수정할 공지사항 번호를 입력하세요.");
         int no = Integer.parseInt(GetTexts.getInstance().readLine());
         Notice notice = noticeDao.noticeSelectOne(no);
@@ -123,6 +133,11 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     public void removeNotice() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() != 1)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("삭제할 공지사항 번호를 입력하세요. ");
         int no = Integer.parseInt(GetTexts.getInstance().readLine());
         int row = noticeDao.noticeDelete(no);

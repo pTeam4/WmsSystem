@@ -3,6 +3,7 @@ package service;
 import config.GetTexts;
 import dao.ExpenseDao;
 import dao.SalesDao;
+import util.UserManager;
 import vo.Expense;
 import vo.Sales;
 
@@ -17,6 +18,11 @@ public class FinanceServiceImpl implements FinanceService {
     SalesDao salesDao = new SalesDao();
     @Override
     public void getExpenseRecords() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("지출 내역을 조회하고 싶은 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
         List<Expense> expenses = expenseDao.expenseSelect(warehouseNo);
@@ -33,6 +39,11 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public void getYearlyExpenseRecords() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("조회하고 싶은 연도를 입력하세요.");
         String year = GetTexts.getInstance().readLine();
         System.out.print("조회하고 싶은 창고번호를 입력하세요.");
@@ -47,6 +58,11 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public void addExpenseRecord() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         Expense expense = new Expense();
         System.out.print("창고 아이디를 입력하세요.");
         int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
@@ -75,6 +91,11 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public void modifyExpenseRecord() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("수정하고 싶은 지출 내역 번호를 입력하세요: ");
         int id = Integer.parseInt(GetTexts.getInstance().readLine());
         Expense expense = expenseDao.expenseSelectOne(id);
@@ -121,6 +142,11 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public void removeExpenseRecord() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("삭제하고싶은 지출내역번호를 입력하세요. 취소하고싶다면 0입력 ");
         int id = Integer.parseInt(GetTexts.getInstance().readLine());
         if(id == 0)
@@ -134,6 +160,11 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public void getSalesRecords() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("매출 내역을 조회하고 싶은 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
         ArrayList<Sales> salesArrayList = salesDao.salesSelect(warehouseNo);
@@ -155,6 +186,11 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public void getTotalSettlementRecords() {
+        if(UserManager.getInstance().getCurrentUser().getPermission() == 3 && UserManager.getInstance().getCurrentUser().getPermission() == 2)
+        {
+            System.out.println("권한이 없습니다.");
+            return;
+        }
         System.out.print("총 정산내역을 조회할 창고번호를 입력하세요.");
         int warehouseNo = Integer.parseInt(GetTexts.getInstance().readLine());
         System.out.print("총 정산내역을 조회할 년도를 입력하세요.");

@@ -48,8 +48,6 @@ public class UserDao {
     public List<User> userSelect() {
         String sql = "SELECT * FROM user";
         List<User> users = new ArrayList<>();
-        UserManager userManager = UserManager.getInstance();
-        User user = new User();
         try (
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 ResultSet resultSet = preparedStatement.executeQuery();
