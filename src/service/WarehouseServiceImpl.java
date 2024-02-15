@@ -58,6 +58,16 @@ public class WarehouseServiceImpl implements WarehouseService {
             }
             case 2 -> getWarehouseByLocation();
         }
+
+        System.out.println("1. 창고 정보 | 2. 나가기");
+        int subMenuNo = Integer.parseInt(GetTexts.getInstance().readLine());
+
+        switch (subMenuNo) {
+//            case 1 -> warehouseSelectOne();
+            case 2 -> {
+                return;
+            }
+        }
     }
 
     private void getWarehouseByLocation() {
