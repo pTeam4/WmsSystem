@@ -179,7 +179,7 @@ public class WarehouseDao {
         ) {
 
             preparedStatement.setInt(1, warehouseId);
-            preparedStatement.executeUpdate();
+            row = preparedStatement.executeUpdate();
 
         } catch (SQLIntegrityConstraintViolationException e) {
             System.out.println("재고가 있는 창고는 삭제할 수 없습니다.");
