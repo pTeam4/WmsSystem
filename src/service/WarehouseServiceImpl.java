@@ -58,8 +58,13 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void getStock() {
+        getWarehouse();
+
+        System.out.print("재고를 조회할 창고 ID를 입력하세요: ");
+        int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
+
         StockDao stockDao = new StockDao();
-        List<StockInfo> stockInfoList = stockDao.stockSelect();
+        List<StockInfo> stockInfoList = stockDao.stockSelect(warehouseId);
 
         System.out.println(
                 "-------------------------------------------------------------------------------------------"
