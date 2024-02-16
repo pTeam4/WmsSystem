@@ -19,7 +19,7 @@ import static dao.QrBarcodeDao.saveQrCodeImage;
 public class StorageServiceImpl implements StorageService {
     //qrcode용 필드 객체들 2개 있어요
     private String generateQrCodeContent(Stock stock, StockMovement stockMovement) {
-        return "Warehouse ID: " + stock.getWarehouseId() + "\nProduct ID: " + stockMovement.getProductId() + "\nUser ID: " + stockMovement.getUserId() + "\nRequest Datetime: " + stockMovement.getRequestDatetime() + "\nApproved Datetime: " + stockMovement.getApprovedDatetime();
+        return "Warehouse ID: " + stock.getWarehouseId() + "\nProduct ID: " + stock.getProductId() + "\nUser ID: " + stockMovement.getUserId() + "\nRequest Datetime: " + stockMovement.getRequestDatetime() + "\nApproved Datetime: " + stockMovement.getApprovedDatetime();
     }
 
     private Blob convertBase64ToBlob(String base64Image) {
