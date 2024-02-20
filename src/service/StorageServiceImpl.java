@@ -165,7 +165,7 @@ public class StorageServiceImpl implements StorageService {
         System.out.println("QR 코드를 생성 할 Product ID를 입력하세요.:");
         int productId = Integer.parseInt(GetTexts.getInstance().readLine());
 
-        List<Stock> stocks = stockDao.getAllStocks(productId);
+        List<Stock> stocks = stockDao.stockSelectOne(productId);
         List<StockMovement> stockMovements = stockMovementDao.getAllStockMovements(productId);
         if (!stocks.isEmpty() && !stockMovements.isEmpty()) {
             for (Stock stock : stocks) {
