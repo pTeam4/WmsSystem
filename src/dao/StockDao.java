@@ -87,7 +87,7 @@ public class StockDao {
         return stockInfoList;
     }
 
-    public List<Stock> getAllStocks(int productId) {
+    public List<Stock> stockSelectOne(int productId) {
         String sql = "SELECT id, warehouse_Id, product_Id, quantity FROM stock WHERE product_Id = ? ";
         List<Stock> stocks = new ArrayList<>();
 
