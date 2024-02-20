@@ -98,8 +98,6 @@ public class QrBarcodeDao {
                 System.out.println("No QR code image found for the provided product ID.");
             }
             resultSet.close();
-            preparedStatement.close();
-            connection.close();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
             System.out.println("Failed to retrieve and save QR code image.");
