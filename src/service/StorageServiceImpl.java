@@ -1,6 +1,6 @@
 package service;
 
-import config.GetTexts;
+import util.GetTexts;
 import dao.*;
 import util.MovementStatus;
 
@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-
-import static dao.QrBarcodeDao.saveQrCodeImage;
 
 public class StorageServiceImpl implements StorageService {
     //qrcode용 필드 객체들 2개 있어요

@@ -2,7 +2,7 @@ package view;
 
 import service.UserService;
 import service.UserServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 public class UserServiceMenu {
     public static void userServiceMenu() {

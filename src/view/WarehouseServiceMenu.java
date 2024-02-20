@@ -1,10 +1,9 @@
 package view;
 
-import service.StorageService;
 import service.WarehouseService;
 import service.WarehouseServiceImpl;
 
-import config.GetTexts;
+import util.GetTexts;
 
 //창고관리 서비스
 public class WarehouseServiceMenu {

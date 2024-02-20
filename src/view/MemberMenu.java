@@ -3,7 +3,7 @@ package view;
 import service.LoginService;
 import service.LoginServiceImpl;
 
-import config.GetTexts;
+import util.GetTexts;
 
 public class MemberMenu {
     public static void memberMainMenu() {

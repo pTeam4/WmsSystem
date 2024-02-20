@@ -2,7 +2,7 @@ package view;
 
 import service.EstimateService;
 import service.EstimateServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 //견적 메뉴
 public class EstimateServiceMenu {

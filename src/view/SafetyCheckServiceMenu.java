@@ -2,7 +2,7 @@ package view;
 
 import service.SafetyCheckService;
 import service.SafetyCheckServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 //안전점검메뉴
 public class SafetyCheckServiceMenu {

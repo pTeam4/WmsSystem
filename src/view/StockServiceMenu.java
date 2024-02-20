@@ -2,7 +2,7 @@ package view;
 
 import service.WarehouseService;
 import service.WarehouseServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 public class StockServiceMenu {
     public static void stockServiceMenu(){

@@ -2,7 +2,7 @@ package view;
 
 import service.VendorService;
 import service.VendorServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 public class FeeInformationServiceMenu {
 

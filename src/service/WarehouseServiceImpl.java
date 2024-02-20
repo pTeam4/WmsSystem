@@ -1,6 +1,6 @@
 package service;
 
-import config.GetTexts;
+import util.GetTexts;
 import dao.StockDao;
 import dao.WarehouseDao;
 import dto.StockInfo;

@@ -2,7 +2,7 @@ package view;
 
 import service.VehicleService;
 import service.VehicleServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 public class VehicleServiceMenu {
     public static void vehicleServiceMenu() {

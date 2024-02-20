@@ -2,7 +2,7 @@ package view;
 
 import service.FinanceService;
 import service.FinanceServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 //재무 관리 메뉴
 public class FinanceServiceMenu {

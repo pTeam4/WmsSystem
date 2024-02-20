@@ -2,7 +2,7 @@ package view;
 
 import service.StorageService;
 import service.StorageServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 //출고 관리 메뉴
 public class StorageServiceMenu {

@@ -1,6 +1,6 @@
 package dao;
 
-import config.GetTexts;
+import util.GetTexts;
 import util.JdbcConnection;
 import dto.UserPermission;
 import vo.User;

@@ -1,7 +1,7 @@
 package view;
 
 import service.*;
-import config.GetTexts;
+import util.GetTexts;
 
 public class NonMemberMenu {
     private static LoginService loginService = new LoginServiceImpl();

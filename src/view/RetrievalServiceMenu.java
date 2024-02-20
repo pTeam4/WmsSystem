@@ -3,7 +3,7 @@ package view;
 
 import service.RetrievalService;
 import service.RetrievalServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 public class RetrievalServiceMenu {
     public static void retrievalServiceMenu() {

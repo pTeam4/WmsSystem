@@ -2,7 +2,7 @@ package view;
 
 import service.InquiryService;
 import service.InquiryServiceImpl;
-import config.GetTexts;
+import util.GetTexts;
 
 //고객센터 메뉴
 public class InquiryServiceMenu {

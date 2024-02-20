@@ -1,6 +1,6 @@
 package service;
 
-import config.GetTexts;
+import util.GetTexts;
 import dao.UserDao;
 import dto.UserPermission;
 import util.UserManager;
