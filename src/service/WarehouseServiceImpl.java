@@ -46,10 +46,6 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void getWarehouse() {
-        getWarehouseSubMenu();
-    }
-
-    private void getWarehouseSubMenu() {
         System.out.println("1. 전체 조회 | 2. 지역별 조회");
         int menuno = Integer.parseInt(GetTexts.getInstance().readLine());
 
