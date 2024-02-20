@@ -92,6 +92,7 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void approveStorageRequest() {
         User user = UserManager.getInstance().getCurrentUser();
+        StockDao stockDao = new StockDao();
 
         if (user.getPermission() == 1) {
             StockMovementDao stockMovementDao = new StockMovementDao();
@@ -100,6 +101,40 @@ public class StorageServiceImpl implements StorageService {
             printStockMovement(stockMovements);
 
             approveStorageRequestSubMenu(stockMovementDao);
+
+            List<Stock> stockList = stockDao.stockSelect();
+
+            storageStatus();
+
+            System.out.println(
+                    "\n----------------------------------------------------------------------------"
+            );
+            System.out.println("Stock Table");
+            System.out.println(
+                    "----------------------------------------------------------------------------"
+            );
+            System.out.printf(
+                    "%-6s%-15s%-15s%-15s%n",
+                    "ID",
+                    "Warehouse ID",
+                    "Product ID",
+                    "Quantity"
+            );
+            System.out.println(
+                    "----------------------------------------------------------------------------"
+            );
+            for (Stock stock : stockList) {
+                System.out.printf(
+                        "%-6s%-15s%-15s%-15s%n",
+                        stock.getId(),
+                        stock.getWarehouseId(),
+                        stock.getProductId(),
+                        stock.getQuantity()
+                );
+            }
+            System.out.println(
+                    "----------------------------------------------------------------------------\n"
+            );
         }
     }
 
