@@ -283,9 +283,15 @@ public class StorageServiceImpl implements StorageService {
     public void storageStatus() {
         StockMovementDao stockMovementDao = new StockMovementDao();
         List<StockMovement> storageNow = stockMovementDao.getStockMovementsNow();
-        System.out.println("-------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "----------------------------------------------------------------------------------------------"
+        );
+        System.out.println("Stock_Movement");
+        System.out.println(
+                "----------------------------------------------------------------------------------------------"
+        );
         System.out.printf(
-                "%-6s%-25s%-20s%-20s%-16s%-16s%n",
+                "%-6s%-15s%-20s%-20s%-16s%-16s%n",
                 "id",
                 "product_id",
                 "user_id",
@@ -293,11 +299,12 @@ public class StorageServiceImpl implements StorageService {
                 "Request_time",
                 "Approved_time"
         );
-        System.out.println("-------------------------------------------------------------------------------------------------");
-
+        System.out.println(
+                "----------------------------------------------------------------------------------------------"
+        );
         for (StockMovement s : storageNow) {
             System.out.printf(
-                    "%-6s%-25s%-20s%-20s%-16s%-16s%n",
+                    "%-6s%-15s%-20s%-20s%-16s%-16s%n",
                     s.getId(),
                     s.getProductId(),
                     s.getUserId(),
@@ -306,7 +313,9 @@ public class StorageServiceImpl implements StorageService {
                     s.getApprovedDatetime()
             );
         }
-        System.out.println("-------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "----------------------------------------------------------------------------------------------\n"
+        );
     }
 
 
