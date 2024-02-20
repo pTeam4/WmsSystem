@@ -19,6 +19,33 @@ public class StockDao {
         this.connection = JdbcConnection.getInstance().getConnection();
     }
 
+    public List<Stock> stockSelect() {
+        String sql = "SELECT * FROM stock";
+        List<Stock> stockList = new ArrayList<>();
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                ResultSet resultSet = preparedStatement.executeQuery()
+        ) {
+
+            while (resultSet.next()) {
+                Stock stock = new Stock();
+
+                stock.setId(resultSet.getInt("id"));
+                stock.setWarehouseId(resultSet.getInt("warehouse_id"));
+                stock.setProductId(resultSet.getInt("product_id"));
+                stock.setQuantity(resultSet.getInt("quantity"));
+
+                stockList.add(stock);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return stockList;
+    }
+
     public List<StockInfo> stockSelectInfo(int warehouseId) {
         String sql = "SELECT s.id, p.name, s.quantity, w.name, w.location" +
                 " FROM stock s" +
