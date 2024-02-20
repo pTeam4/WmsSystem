@@ -73,6 +73,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     private void getWarehouseInfo() {
         WarehouseDao warehouseDao = new WarehouseDao();
+        Warehouse warehouse;
 
         System.out.print("창고 ID를 입력하세요: ");
         int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
@@ -80,24 +81,10 @@ public class WarehouseServiceImpl implements WarehouseService {
         List<WarehouseInfo> warehouseInfoList = warehouseDao.warehouseSelectWithStock(warehouseId);
 
         if (warehouseInfoList.isEmpty()) {
-            Warehouse warehouse = warehouseDao.warehouseSelectOne(warehouseId);
+            warehouse = warehouseDao.warehouseSelectOne(warehouseId);
 
-            System.out.println(
-                    "\n-------------------------------"
-            );
-            System.out.printf("""
-                            ID : %d
-                            Name : %s
-                            Location : %s
-                            Type : %s
-                            """,
-                    warehouse.getId(),
-                    warehouse.getName(),
-                    warehouse.getLocation(),
-                    warehouse.getType());
-            System.out.println(
-                    "-------------------------------"
-            );
+            printWarehouseInfo(warehouse);
+
             System.out.println("창고가 비어있습니다.");
             System.out.println(
                     "-------------------------------\n"
@@ -105,24 +92,16 @@ public class WarehouseServiceImpl implements WarehouseService {
 
             warehouseEditMenu(warehouseId);
         } else {
+            warehouse = new Warehouse();
+            warehouse.setId(warehouseInfoList.get(0).getWarehouseId());
+            warehouse.setName(warehouseInfoList.get(0).getWarehouseName());
+            warehouse.setLocation(warehouseInfoList.get(0).getWarehouseLocation());
+            warehouse.setType(warehouseInfoList.get(0).getWarehouseType());
+
             int totalQuantity = 0;
 
-            System.out.println(
-                    "\n-------------------------------"
-            );
-            System.out.printf("""
-                        ID : %d
-                        Name : %s
-                        Location : %s
-                        Type : %s
-                        """,
-                    warehouseInfoList.get(0).getWarehouseId(),
-                    warehouseInfoList.get(0).getWarehouseName(),
-                    warehouseInfoList.get(0).getWarehouseLocation(),
-                    warehouseInfoList.get(0).getWarehouseType());
-            System.out.println(
-                    "-------------------------------"
-            );
+            printWarehouseInfo(warehouse);
+
             System.out.printf(
                     "%-20s%-20s%n", "Product Name", "Quantity"
             );
@@ -146,6 +125,25 @@ public class WarehouseServiceImpl implements WarehouseService {
 
             warehouseEditMenu(warehouseId);
         }
+    }
+
+    private void printWarehouseInfo(Warehouse warehouse) {
+        System.out.println(
+                "\n-------------------------------"
+        );
+        System.out.printf("""
+                        ID : %d
+                        Name : %s
+                        Location : %s
+                        Type : %s
+                        """,
+                warehouse.getId(),
+                warehouse.getName(),
+                warehouse.getLocation(),
+                warehouse.getType());
+        System.out.println(
+                "-------------------------------"
+        );
     }
 
     private void warehouseEditMenu(int warehouseId) {
