@@ -19,7 +19,7 @@ public class StockDao {
         this.connection = JdbcConnection.getInstance().getConnection();
     }
 
-    public List<StockInfo> stockSelect(int warehouseId) {
+    public List<StockInfo> stockSelectInfo(int warehouseId) {
         String sql = "SELECT s.id, p.name, s.quantity, w.name, w.location" +
                 " FROM stock s" +
                 " JOIN product p" +

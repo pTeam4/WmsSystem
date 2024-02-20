@@ -236,7 +236,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         int warehouseId = Integer.parseInt(GetTexts.getInstance().readLine());
 
         StockDao stockDao = new StockDao();
-        List<StockInfo> stockInfoList = stockDao.stockSelect(warehouseId);
+        List<StockInfo> stockInfoList = stockDao.stockSelectInfo(warehouseId);
 
         printStockList(stockInfoList);
     }
