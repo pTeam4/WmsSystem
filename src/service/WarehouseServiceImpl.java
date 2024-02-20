@@ -98,30 +98,9 @@ public class WarehouseServiceImpl implements WarehouseService {
             warehouse.setLocation(warehouseInfoList.get(0).getWarehouseLocation());
             warehouse.setType(warehouseInfoList.get(0).getWarehouseType());
 
-            int totalQuantity = 0;
-
             printWarehouseInfo(warehouse);
 
-            System.out.printf(
-                    "%-20s%-20s%n", "Product Name", "Quantity"
-            );
-            System.out.println(
-                    "-------------------------------"
-            );
-            for (WarehouseInfo warehouseInfo : warehouseInfoList) {
-                totalQuantity += warehouseInfo.getStockQuantity();
-
-                System.out.printf("%-20s%-20d%n",
-                        warehouseInfo.getProductName(),
-                        warehouseInfo.getStockQuantity());
-            }
-            System.out.println(
-                    "-------------------------------"
-            );
-            System.out.printf("총 재고량 : %d%n", totalQuantity);
-            System.out.println(
-                    "-------------------------------\n"
-            );
+            printStockInWarehouse(warehouseInfoList);
 
             warehouseEditMenu(warehouseId);
         }
@@ -132,17 +111,43 @@ public class WarehouseServiceImpl implements WarehouseService {
                 "\n-------------------------------"
         );
         System.out.printf("""
-                        ID : %d
-                        Name : %s
-                        Location : %s
-                        Type : %s
-                        """,
+                            ID : %d
+                            Name : %s
+                            Location : %s
+                            Type : %s
+                            """,
                 warehouse.getId(),
                 warehouse.getName(),
                 warehouse.getLocation(),
                 warehouse.getType());
         System.out.println(
                 "-------------------------------"
+        );
+    }
+
+    private void printStockInWarehouse(List<WarehouseInfo> warehouseInfoList) {
+        int totalQuantity = 0;
+
+        System.out.printf(
+                "%-20s%-20s%n", "Product Name", "Quantity"
+        );
+        System.out.println(
+                "-------------------------------"
+        );
+
+        for (WarehouseInfo warehouseInfo : warehouseInfoList) {
+            totalQuantity += warehouseInfo.getStockQuantity();
+
+            System.out.printf("%-20s%-20d%n",
+                    warehouseInfo.getProductName(),
+                    warehouseInfo.getStockQuantity());
+        }
+        System.out.println(
+                "-------------------------------"
+        );
+        System.out.printf("총 재고량 : %d%n", totalQuantity);
+        System.out.println(
+                "-------------------------------\n"
         );
     }
 
