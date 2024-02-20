@@ -1,6 +1,6 @@
 package dao;
 
-import config.JdbcConnection;
+import util.JdbcConnection;
 import vo.Inquiry;
 
 import java.sql.*;

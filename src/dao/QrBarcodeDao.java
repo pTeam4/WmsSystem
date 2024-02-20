@@ -7,11 +7,9 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import config.JdbcConnection;
+import util.JdbcConnection;
 import vo.QrBarcode;
 
-import javax.imageio.ImageIO;
-import javax.sql.rowset.serial.SerialBlob;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.*;

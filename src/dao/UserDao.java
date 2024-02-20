@@ -1,7 +1,7 @@
 package dao;
 
 import config.GetTexts;
-import config.JdbcConnection;
+import util.JdbcConnection;
 import dto.UserPermission;
 import vo.User;
 

@@ -1,6 +1,6 @@
 package dao;
 
-import config.JdbcConnection;
+import util.JdbcConnection;
 import vo.StockMovement;
 
 import java.sql.Connection;

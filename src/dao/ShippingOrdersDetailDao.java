@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import config.JdbcConnection;
+import util.JdbcConnection;
 import vo.ShippingOrdersDetail;
 
 public class ShippingOrdersDetailDao {

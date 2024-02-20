@@ -1,12 +1,9 @@
 package dao;
 
-import config.GetTexts;
-import config.JdbcConnection;
+import util.JdbcConnection;
 import vo.Waybill;
 
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
