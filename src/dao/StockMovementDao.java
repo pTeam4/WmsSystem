@@ -98,6 +98,7 @@ public class StockMovementDao {
                     stockMovement.setUserId(resultSet.getString("user_id"));
                     stockMovement.setStatusCode(resultSet.getString("status_code"));
                     stockMovement.setRequestDatetime(resultSet.getTimestamp("request_datetime"));
+                    stockMovement.setApprovedDatetime(resultSet.getTimestamp("approved_datetime"));
 
                     stockMovements.add(stockMovement);
                 }
@@ -154,7 +155,7 @@ public class StockMovementDao {
     }
     
     public List<StockMovement> getStockMovementsNow() {
-        String SELECT_STOCK_MOVEMENT_QUERY = "SELECT id, product_Id, user_Id, status_code, request_Datetime, approved_Datetime FROM stock_movement ";
+        String SELECT_STOCK_MOVEMENT_QUERY = "SELECT * FROM stock_movement ";
 
         List<StockMovement> stockMovements = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STOCK_MOVEMENT_QUERY))

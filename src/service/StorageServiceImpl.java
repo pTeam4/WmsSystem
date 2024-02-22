@@ -320,16 +320,17 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void storageStatus() {
         StockMovementDao stockMovementDao = new StockMovementDao();
-        List<StockMovement> storageNow = stockMovementDao.getStockMovementsNow();
+        List<StockMovement> storageNow = stockMovementDao.stockMovementSelectByStatus(MovementStatus.APPROVED.getCode());
+
         System.out.println(
-                "----------------------------------------------------------------------------------------------"
+                "\n--------------------------------------------------------------------------------------------------------"
         );
         System.out.println("Stock_Movement");
         System.out.println(
-                "----------------------------------------------------------------------------------------------"
+                "--------------------------------------------------------------------------------------------------------"
         );
         System.out.printf(
-                "%-6s%-15s%-20s%-20s%-16s%-16s%n",
+                "%-6s%-15s%-15s%-15s%-30s%-30s%n",
                 "id",
                 "product_id",
                 "user_id",
@@ -338,11 +339,11 @@ public class StorageServiceImpl implements StorageService {
                 "Approved_time"
         );
         System.out.println(
-                "----------------------------------------------------------------------------------------------"
+                "--------------------------------------------------------------------------------------------------------"
         );
         for (StockMovement s : storageNow) {
             System.out.printf(
-                    "%-6s%-15s%-20s%-20s%-16s%-16s%n",
+                    "%-6s%-15s%-15s%-15s%-30s%-30s%n",
                     s.getId(),
                     s.getProductId(),
                     s.getUserId(),
@@ -352,7 +353,7 @@ public class StorageServiceImpl implements StorageService {
             );
         }
         System.out.println(
-                "----------------------------------------------------------------------------------------------\n"
+                "--------------------------------------------------------------------------------------------------------\n"
         );
     }
 
