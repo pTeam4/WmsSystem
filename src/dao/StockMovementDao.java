@@ -98,6 +98,7 @@ public class StockMovementDao {
                     stockMovement.setUserId(resultSet.getString("user_id"));
                     stockMovement.setStatusCode(resultSet.getString("status_code"));
                     stockMovement.setRequestDatetime(resultSet.getTimestamp("request_datetime"));
+                    stockMovement.setApprovedDatetime(resultSet.getTimestamp("approved_datetime"));
 
                     stockMovements.add(stockMovement);
                 }
